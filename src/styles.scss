@@ -1,0 +1,108 @@
+/*
+=============================================
+Author      : <ยุทธภูมิ ตวันนา>
+Create date : <๑๗/๐๙/๒๕๖๔>
+Modify date : <๒๑/๐๙/๒๕๖๔>
+Description : <>
+=============================================
+*/
+
+@import './variables.scss';
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    min-width: $screenMinWidth;
+    font-style: normal;
+    font-size: 18px;
+    background-color: var(--surface-200) !important;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center bottom;
+    background-size: cover;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 60px;
+    -ms-overflow-style: scrollbar;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    cursor: default;
+}
+
+body:not(.mobile).p-overflow-hidden header .topbar {
+    padding-right: 17px;
+}
+
+body:not(.mobile).p-overflow-hidden header .topbar .topbar-background {
+    right: 17px !important;
+}
+
+body:not(.mobile).opera.p-overflow-hidden header .topbar {
+    padding-right: 15px;
+}
+
+body:not(.mobile).opera.p-overflow-hidden header .topbar .topbar-background {
+    right: 15px !important;
+}
+
+body:not(.mobile).p-overflow-hidden footer .footer {
+    padding-right: 25px;
+}
+
+body:not(.mobile).p-overflow-hidden footer .footer .muit-logo {
+    right: 25px !important;
+}
+
+body:not(.mobile).opera.p-overflow-hidden footer .footer {
+    padding-right: 23px;
+}
+
+body:not(.mobile).opera.p-overflow-hidden footer .footer .muit-logo {
+    right: 23px !important;
+}
+
+.heading {
+    font-family: $fontFamilyIBMPlexSansThai;
+}
+
+.paragraph {
+    font-family: $fontFamilySarabun;
+}
+
+.backdrop {
+    z-index: 10000 !important;
+}
+
+#unsupported {
+    display: none;
+}
+
+#unsupported,
+#page-not-found {
+    & .p-card-custom {
+        min-width: 0;
+        padding: 1rem 1rem;
+        position: relative;
+        word-wrap: break-word;
+        text-align: center;
+        & .p-card-header {
+            font-weight: 600;
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        & .p-card-body .p-card-content {
+            font-weight: 400;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #6C757D;
+            & strong {
+                color: #000000;
+            }
+        }
+    }
+}

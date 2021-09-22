@@ -1,0 +1,10 @@
+{
+    "systemName": {
+        "label": "Graduates Employment Status System"
+    },
+    "error": {
+        "pageNotFound": {
+            "label": "Page not found."
+        }
+    }
+}

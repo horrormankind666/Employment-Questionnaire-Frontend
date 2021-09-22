@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <title></title>
+    <base href="/">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="MURSC Management System" />
+    <meta name="theme-color" content="#253988" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="shortcut icon" type="image/x-icon" href="mu-favicon.png" />
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <app-root></app-root>
+    <div id="unsupported">
+        <div class="p-card-custom">
+            <div class="p-card-header heading">
+                Unsupported browser
+            </div>
+            <div class="p-card-body">
+                <div class="p-card-content paragraph">
+                    You are using a browser that is not supported.<br/>
+                    This web app works on the latest versions of <strong>Google Chrome</strong>, <strong>Mozilla Firefox</strong>, <strong>Apple Safari</strong>, or <strong>Microsoft Edge</strong>.
+                </div>
+            </div>
+        </div>
+    </div>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function() {
+        var body = document.getElementsByTagName('app-root')[0];
+        var isBrowserSupport = true;
+        var userAgent = navigator.userAgent;
+        var platform = navigator.platform;
+        var isEdge = (userAgent.indexOf('Edge') > -1);
+        var isIE = (typeof document !== 'undefined' && !!document.documentMode && !isEdge);
+        var isSafari = (/^((?!chrome|android).)*safari/i.test(userAgent));
+        var isOpera = ((userAgent.indexOf("Opera") > -1) || (userAgent.indexOf('OPR') > -1));
+        var isWindow = (platform.indexOf('Win') > -1)
+        var isTablet = false;
+        var isMobile = false;
+
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent))
+            isTablet = true;
+
+        if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(userAgent))
+            isMobile = true;
+
+
+        if (isIE || (isSafari && isWindow)) {
+            isBrowserSupport = false;
+
+            if (isSafari && isWindow && (isTablet || isMobile))
+                isBrowserSupport = true;
+        }
+
+        if (isTablet || isMobile)
+            document.getElementsByTagName('body')[0].classList.add('mobile');
+
+        if (isOpera)
+            document.getElementsByTagName('body')[0].classList.add('opera');
+
+        if (!body.hasAttribute('ng-version') || !isBrowserSupport)
+            document.getElementById('unsupported').style.display = 'block';
+    }, false);
+</script>
+</html>
