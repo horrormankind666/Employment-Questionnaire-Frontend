@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๑/๐๙/๒๕๖๔>
+Modify date : <๑๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -11,23 +11,46 @@ Description : <>
 
 import { Routes } from '@angular/router';
 
+import { AuthGuardService } from './auth-guard.service';
+import { GetQuestionnaireDoneAndSetResolve } from './app-routing-resolve.service';
+
 import { PageNotFoundComponent } from './page-not-found.component';
-import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
+import { PageEmptyComponent } from './page-empty.component';
+import { QuestionnaireHomeComponent } from './questionnaire/home/questionnaire-home.component';
+import { QuestionnaireFilloutComponent } from './questionnaire/fillout/questionnaire-fillout.component';
 
 export const appRouting: Routes = [
     {
         path: 'Questionnaire',
-        component: QuestionnaireComponent
-        /*
-        canActivate: [AuthGuardService],
-        data: {
-            signin: true,
-            role: ['*']
-        },
-        resolve: {
-            MenuByRoleResolve
-        }
-        */
+        children: [
+            {
+                path: '',
+                component: QuestionnaireHomeComponent,
+                canActivate: [AuthGuardService],
+                runGuardsAndResolvers: 'always',
+                data: {
+                    signin: true,
+                    role: ['*'],
+                    hasHearderSubtitle: false
+                },
+                resolve: {
+                }
+            },
+            {
+                path: ':CUID',
+                component: QuestionnaireFilloutComponent,
+                canActivate: [AuthGuardService],
+                runGuardsAndResolvers: 'always',
+                data: {
+                    signin: true,
+                    role: ['*'],
+                    hasHearderSubtitle: false
+                },
+                resolve: {
+                    questionnaireDoneAndSet: GetQuestionnaireDoneAndSetResolve
+                }
+            }
+        ]
     },
     {
         path: '',
@@ -36,15 +59,8 @@ export const appRouting: Routes = [
     },
     {
         path: '**',
-        component: PageNotFoundComponent
-        /*
+        component: PageNotFoundComponent,
         canActivate: [AuthGuardService],
-        data: {
-            role: ['*']
-        },
-        resolve: {
-            MenuByRoleResolve
-        }
-        */
+        runGuardsAndResolvers: 'always'
     }
 ];

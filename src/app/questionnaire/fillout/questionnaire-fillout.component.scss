@@ -1,0 +1,47 @@
+/*
+=============================================
+Author      : <ยุทธภูมิ ตวันนา>
+Create date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๑๒/๑๐/๒๕๖๔>
+Description : <>
+=============================================
+*/
+
+@import '../../../variables.scss';
+
+#questionnaire-fillout-page.page-container {
+    width: 1200px !important;
+    margin: 0 auto;
+    & .page-header {
+        & .toolbar {
+            & .p-button {
+                width: auto;
+            }
+        }
+    }
+    /*
+    & .page-body {
+        & ::ng-deep .p-card {
+            & .p-card-header {
+                height: 17px;
+                font-size: 0.685rem;
+                font-weight: $fontStyleMedium;
+                color: var(--surface-500);
+                margin-bottom: 0.5rem;
+            }
+            & .p-card-body {
+                & .p-card-content {
+                    display: none;
+                }
+            }
+            & .p-card-footer {
+                & .p-button {
+                    height: 44px;
+                    font-size: 0.89rem;
+                    font-weight: $fontStyleMedium;
+                }
+            }
+        }
+    }
+    */
+}

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๑/๐๙/๒๕๖๔>
+Modify date : <๑๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -17,8 +17,10 @@ html {
 body {
     min-width: $screenMinWidth;
     font-style: normal;
-    font-size: 18px;
-    background-color: var(--surface-200) !important;
+    font-size: 1rem;
+    font-weight: $fontStyleRegular;
+    color: $textColor;
+    background-color: $backgroundColor !important;
     background-image: none;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -26,79 +28,406 @@ body {
     background-size: cover;
     padding: 0;
     margin: 0;
-    margin-bottom: 60px;
+    margin-bottom: 70px;
     -ms-overflow-style: scrollbar;
     overflow-x: hidden;
     overflow-y: scroll;
     cursor: default;
+    &:not(.mobile) {
+        &.p-overflow-hidden {
+            & header .topbar,
+            & main {
+                padding-right: 17px;
+                & .topbar-background {
+                    right: 17px !important;
+                }
+            }
+            & .full-screen:not(.backdrop) {
+                right: 17px;
+            }
+            & footer .footer {
+                padding-right: 29px;
+                & .muit-logo {
+                    right: 29px !important;
+                }
+            }
+            &.opera {
+                & header .topbar,
+                & main {
+                    padding-right: 15px;
+                    & .topbar-background {
+                        right: 15px !important;
+                    }
+                }
+                & .full-screen:not(.backdrop) {
+                    right: 15px;
+                }
+                & footer .footer {
+                    padding-right: 27px;
+                    & .muit-logo {
+                        right: 27px !important;
+                    }
+                }
+            }
+        }
+    }
 }
 
-body:not(.mobile).p-overflow-hidden header .topbar {
-    padding-right: 17px;
-}
-
-body:not(.mobile).p-overflow-hidden header .topbar .topbar-background {
-    right: 17px !important;
-}
-
-body:not(.mobile).opera.p-overflow-hidden header .topbar {
-    padding-right: 15px;
-}
-
-body:not(.mobile).opera.p-overflow-hidden header .topbar .topbar-background {
-    right: 15px !important;
-}
-
-body:not(.mobile).p-overflow-hidden footer .footer {
-    padding-right: 25px;
-}
-
-body:not(.mobile).p-overflow-hidden footer .footer .muit-logo {
-    right: 25px !important;
-}
-
-body:not(.mobile).opera.p-overflow-hidden footer .footer {
-    padding-right: 23px;
-}
-
-body:not(.mobile).opera.p-overflow-hidden footer .footer .muit-logo {
-    right: 23px !important;
-}
-
-.heading {
-    font-family: $fontFamilyIBMPlexSansThai;
+.heading,
+.p-component {
+    font-family: $fontFamilyNoto !important;
 }
 
 .paragraph {
-    font-family: $fontFamilySarabun;
+    font-family: $fontFamilySarabun !important;
 }
 
-.backdrop {
-    z-index: 10000 !important;
+.vertical-middle {
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
 }
 
-#unsupported {
+.backdrop,
+.p-dialog-mask {
+    border-radius: 0;
+    z-index: 10051 !important;
+}
+
+.p-button {
+    color: $textColor;
+    display: inline-block !important;
+    &:enabled:focus {
+        outline: 0 none !important;
+        outline-offset: 0 !important;
+    }
+    &:focus,
+    &:not(.p-button-raised):enabled:focus {
+        box-shadow: none !important;
+    }
+    & .p-button-label {
+        display: none;
+    }
+    &.p-button-custom {
+        width: 100%;
+        height: 44px;
+        font-size: 1rem;
+        font-weight: $fontStyleMedium;
+        color: $textColor !important;
+        background-color: transparent !important;
+        border: 2px solid $textColor !important;
+        border-radius: 4px !important;
+        &:hover {
+            background-color: var(--surface-400) !important;
+        }
+    }
+}
+
+.p-divider.p-divider-horizontal::before {
+    border-bottom: 1px solid var(--surface-0);
+}
+
+.p-tooltip {
+    padding: 0 !important;
+    & .p-tooltip-arrow {
+        display: none;
+    }
+    & .p-tooltip-text {
+        width: max-content;
+        font-size: 0.875rem;
+        font-weight: $fontStyleLight;
+        background-color: #05192D !important;
+        box-shadow: none !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+}
+
+.p-dialog-mask.p-component-overlay {
+    padding: 1rem;
+}
+
+.p-dialog {
+    width: 100%;
+    max-width: 50rem;
+    max-height: 100% !important;
+    border-radius: 1rem !important;
+    & .p-dialog-header {
+        border-top-right-radius: 0.75rem !important;
+        border-top-left-radius: 0.75rem !important;
+    }
+    & .p-dialog-content {
+        width: 100%;
+        height: 100%;
+        line-height: 1.75;
+        font-size: 1.125rem;
+        background-color: transparent !important;
+        border-radius: 0;
+        padding: 1rem 0 75px 0 !important;
+        overflow: hidden;
+        & > * {
+            width: 100%;
+        }
+        & .description {
+            font-size: 1rem;
+            color: var(--surface-800);
+            margin-top: 0.5rem;
+        }
+        &.child {
+            height: 100%;
+            padding: 1rem 1.5rem 1rem 1.5rem !important;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            &::-webkit-scrollbar {
+                width: 0;
+                background-color: transparent;
+            }
+        }
+        &:not(.child) {
+            border-bottom-right-radius: 0.75rem !important;
+            border-bottom-left-radius: 0.75rem !important;
+            display: flex;
+        }
+        & .p-dialog-footer {
+            width: 100%;
+            border-bottom-right-radius: 0.75rem !important;
+            border-bottom-left-radius: 0.75rem !important;
+            padding: 1rem 1.5rem 0 1.5rem !important;
+            overflow: hidden;
+            white-space: nowrap;
+            position: absolute;
+            & .p-button {
+                min-width: 100px;
+                height: 42px;
+            }
+        }
+    }
+    &.modal-error {
+        & .p-dialog-header {
+            display: none;
+        }
+        & .p-dialog-content {
+            border-top-right-radius: 0.75rem !important;
+            border-top-left-radius: 0.75rem !important;
+            &.child {
+                padding-top: 0 !important;
+            }
+        }
+        & .p-dialog-content,
+        & .p-dialog-footer {
+            color: var(--surface-0);
+            background-color: #D32F2F !important;
+        }
+        & .p-dialog-footer {
+            border-top: 1px solid #C02929;
+            & .p-button {
+                background-color: #C02929;
+                border-color: #C02929;
+            }
+        }
+    }
+}
+
+.p-dataview {
+    & .p-dataview-loading-overlay {
+        height: auto !important;
+        background-color: transparent !important;
+        justify-content: left !important;
+        & .p-dataview-loading-icon {
+            color: var(--text-color-secondary);
+        }
+    }
+    & .p-dataview-emptymessage {
+        display: none;
+    }
+    & .p-dataview-content {
+        min-height: 60px;
+        background-color: transparent !important;
+    }
+    &.p-dataview-list {
+        & .p-dataview-content > .p-grid > div {
+            border: 0 !important;
+        }
+    }
+}
+
+.p-card {
+    color: $textColor;
+    border: 2px solid rgba(158, 99, 99, 0.2);
+    border-radius: 1rem !important;
+    box-shadow: none !important;
+    padding: 1rem 1.5rem !important;
+    &:hover {
+        background-color: rgb(255, 212, 59);
+        border-color: rgba(255, 212, 59, 1);
+    }
+    & .p-card-body {
+        padding: 0 !important;
+        & .p-card-title {
+            font-size: 1.35rem;
+            font-weight: $fontStyleSemibold;
+            color: $textColor;
+        }
+        & .p-card-subtitle {
+            min-height: 28px;
+            line-height: 1.6;
+            color: $textColor;
+            font-weight: $fontStyleLight;
+            margin-bottom: 0;
+        }
+    }
+    & .p-card-footer {
+        padding-top: 1.5rem !important;
+    }
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-info.p-overlaypanel {
+    width: 300px;
+    background-color: var(--surface-900);
+    text-align: center;
+    border-radius: 0.75rem;
+    top: 34px !important;
+    left: -16.25rem !important;
+    &::before,
+    &::after {
+        display: none;
+    }
+    & .p-overlaypanel-content {
+        padding: 0;
+        & .p-avatar {
+            width: 80px !important;
+            height: 80px !important;
+            font-size: 2.5rem !important;
+            font-weight: $fontStyleSemibold;
+            color: var(--surface-0);
+            border: 2px solid var(--surface-0);
+            padding: 0;
+            cursor: default !important;
+        }
+        & .p-divider.p-divider-horizontal {
+            padding: 0;
+            margin: 0;
+            &::before {
+                border-top-color: var(--surface-800);
+                border-bottom-width: 0;
+            }
+        }
+        & .signout-btn {
+            width: 100%;
+            height: 50px;
+            min-height: 50px;
+            border-radius: 0.75rem !important;
+            border-top-right-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+            &:enabled:hover {
+                background-color: var(--surface-800);
+            }
+        }
+    }
+}
+
+.page-container {
+    width: 100%;
+    padding-top: 1rem;
+    position: relative;
+    word-wrap: break-word;
+    & .page-header {
+        width: 100%;
+        height: 35px;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        display: table;
+        table-layout: fixed;
+        & .title {
+            width: 100%;
+            height: 100%;
+            line-height: 1.5;
+            font-size: 1.75rem;
+            font-weight: $fontStyleSemibold;
+            padding-right: 1rem;
+            display: table-cell;
+            vertical-align: top;
+            & ul {
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+                display: table;
+                table-layout: fixed;
+                & > li {
+                    height: 100%;
+                    display: table-cell;
+                }
+                & i {
+                    width: 25px;
+                    font-size: 1.05rem;
+                    position: relative;
+                    top: -1px;
+                }
+            }
+        }
+        & .toolbar {
+            width: 100%;
+            height: 100%;
+            display: table-cell;
+            vertical-align: top;
+            position: relative;
+            & .toolbar-btn {
+                display: inline-block;
+                position: relative;
+                top: 1px;
+                & .p-button {
+                    height: 40px;
+                    width: 40px;
+                    font-size: 1rem;
+                    font-weight: $fontStyleRegular;
+                    border: 0 !important;
+                    border-radius: 50% !important;
+                    padding: 0;
+                    & i {
+                        font-size: 1.25rem;
+                        position: relative;
+                        top: 2px;
+                    }
+                }
+                & .p-tooltip {
+                    top: 45px !important;
+                    right: 0 !important;
+                    left: auto !important;
+                }
+            }
+        }
+    }
+    & .page-body {
+        width: 100%;
+        font-weight: $fontStyleRegular;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        margin-top: 1rem;
+    }
+}
+
+#unsupported-page {
     display: none;
 }
 
-#unsupported,
-#page-not-found {
-    & .p-card-custom {
-        min-width: 0;
+#unsupported-page,
+#not-found-page {
+    &.page-container {
         padding: 1rem 1rem;
-        position: relative;
-        word-wrap: break-word;
-        text-align: center;
-        & .p-card-header {
-            font-weight: 600;
-            font-size: 2rem;
-            line-height: 1.2;
+        & .page-header {
+            height: auto !important;
             margin-bottom: 1rem;
         }
-        & .p-card-body .p-card-content {
-            font-weight: 400;
-            font-size: 1.1rem;
+        & .page-body {
             line-height: 1.6;
+            font-size: 1.1rem;
             color: #6C757D;
             & strong {
                 color: #000000;

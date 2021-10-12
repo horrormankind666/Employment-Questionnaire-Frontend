@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๙/๐๙/๒๕๖๔>
-Modify date : <๒๙/๐๙/๒๕๖๔>
+Modify date : <๑๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -14,9 +14,9 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-page-not-found',
     template:  `
-        <div id="page-not-found">
-            <div class="p-card-custom">
-                <div class="p-card-header heading text-2xl mb-0">
+        <div id="not-found-page" class="page-container">
+            <div class="page-header h-auto ">
+                <div class="title heading text-center text-2xl">
                     {{ 'error.pageNotFound.label' | translate | titlecase }}
                 </div>
             </div>

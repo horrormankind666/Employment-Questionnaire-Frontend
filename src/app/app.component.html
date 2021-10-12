@@ -1,2 +1,83 @@
-<ngx-loading [show]="appService.env.loading.isShow"></ngx-loading>
-<router-outlet></router-outlet>
+<ngx-loading [show]="appService.env.isLoading"></ngx-loading>
+<div class="w-full" *ngIf="!appService.env.isFirstload">
+    <header>
+        <div class="topbar">
+            <div class="topbar-background"></div>
+            <div class="topbar-left">
+                <div class="owner-logo" [class]="appService.env.lang"></div>
+            </div>
+            <div class="topbar-right">
+                <div class="systemname-logo" [class]="appService.env.lang"></div>
+                <ul class="topbar-items vertical-middle">
+                    <li>
+                        <div class="flags-icon vertical-middle text-xl">
+                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'en'" (click)="appService.setDefaultLang('th')">
+                                <i class="flag-icon flag-icon-th" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'th'" (click)="appService.setDefaultLang('en')">
+                                <i class="flag-icon flag-icon-gb" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <button pButton type="button" label="" class="signin-btn vertical-middle" *ngIf="!appService.env.authenInfo.isAuthenticated" (click)="signIn()">
+                            <span>{{ 'signin.label' | translate | titlecase }}</span>
+                        </button>
+                        <div #userInfo class="user-info vertical-middle" *ngIf="appService.env.authenInfo.isAuthenticated">
+                            <p-avatar
+                                label="{{ authService.getUserInfo !== null ? authService.getUserInfo.initials : '' }}"
+                                shape="circle"
+                                [style]="{ 'background-color': avatarBackgroundColor }"
+                                pTooltip="{{ 'myAccount.label' | translate | titlecase }}"
+                                [tooltipDisabled]="toggle.profile.active"
+                                [appendTo]="userInfo"
+                                (click)="profile.toggle($event)">
+                            </p-avatar>
+                            <p-overlayPanel #profile
+                                [dismissable]="true"
+                                [showCloseIcon]="false"
+                                [appendTo]="profileInfo"
+                                [showTransitionOptions]="'0ms'"
+                                [hideTransitionOptions]="'0ms'"
+                                (onShow)="toggle.profile.active = true"
+                                (onHide)="toggle.profile.active = false"
+                                styleClass="profile-info">
+                                <ng-template pTemplate >
+                                    <div class="p-3">
+                                        <p-avatar
+                                            label="{{ authService.getUserInfo !== null ? authService.getUserInfo.initials : '' }}"
+                                            shape="circle"
+                                            [style]="{ 'background-color': avatarBackgroundColor }">
+                                        </p-avatar>
+                                        <div class="block mt-2">
+                                            <div class="text-truncate font-normal text-white text-lg">{{ authService.getUserInfo !== null ? ((authService.getUserInfo.givenName | titlecase) + ' ' + (authService.getUserInfo.familyName | titlecase)) : '' }}</div>
+                                            <div class="text-truncate font-light mt-1 text-white text-base">{{ authService.getUserInfo !== null ? (authService.getUserInfo.email | lowercase) : '' }}</div>
+                                        </div>
+                                    </div>
+                                    <p-divider></p-divider>
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="signOut()">
+                                        <span>{{ 'signout.label' | translate | titlecase }}</span>
+                                    </button>
+                                </ng-template>
+                            </p-overlayPanel>
+                            <div #profileInfo></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
+        <router-outlet></router-outlet>
+    </main>
+    <footer>
+        <p-divider></p-divider>
+        <div #footer class="footer heading">
+            <div #copyright class="copyright text-truncate text-base font-light">
+                <span *ngIf="appService.env.lang === 'th'"><i class="fas fa-copyright" aria-hidden="true"></i> สงวนลิขสิทธิ์ พ.ศ.{{ appService.env.devYear + 543 }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + (today.getFullYear() + 543)) : '' }} มหาวิทยาลัยมหิดล</span>
+                <span *ngIf="appService.env.lang === 'en'">Copyright <i class="fas fa-copyright" aria-hidden="true"></i> {{ appService.env.devYear }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + today.getFullYear()) : '' }} Mahidol University.</span>
+            </div>
+            <div #muitLogo class="muit-logo"></div>
+        </div>
+    </footer>
+</div>

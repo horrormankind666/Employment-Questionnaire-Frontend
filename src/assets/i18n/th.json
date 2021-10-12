@@ -1,10 +1,64 @@
 {
     "systemName": {
-        "label": "ระบบภาวะการมีงานทำของบัณฑิต"
+        "label": "ระบบภาวะการมีงานทำของบัณฑิต",
+        "questionnaireSet": {
+            "label": "ชุดแบบสอบถามภาวะการมีงานทำของบัณฑิต"
+        }
     },
     "error": {
         "pageNotFound": {
             "label": "ไม่พบหน้านี้"
+        },
+        "unauthorized": {
+            "label": "ไม่พบการเข้าระบบ"
+        },
+        "token": {
+            "invalid": {
+                "label": "Token ไม่ถูกต้อง"
+            },
+            "expired": {
+                "label": "Token หมดอายุ"
+            }
+        },
+        "databaseConnectionFail": {
+            "label": "การเชื่อมต่อฐานข้อมูลล้มเหลว"
+        },
+        "userNotFound": {
+            "label": "ไม่พบผู้ใช้งาน"
+        }
+    },
+    "myAccount": {
+        "label": "บัญชีของฉัน"
+    },
+    "signin": {
+        "label": "เข้าสู่ระบบ",
+        "please": {
+            "label": "กรุณาเข้าระบบ",
+            "again": {
+                "label": "กรุณาเข้าระบบอีกครั้ง"
+            }
+        }
+    },
+    "signout": {
+        "label": "ออกจากระบบ",
+        "confirm": {
+          "label": "ยืนยันต้องการออกจากระบบ"
+        }
+    },
+    "close": {
+        "label": "ปิด"
+    },
+    "reload": {
+        "label": "รีโหลด"
+    },
+    "questionnaire": {
+        "fillout": {
+            "label": "ทำแบบสอบถาม"
+        },
+        "error": {
+            "notFound": {
+                "label": "ไม่พบแบบสอบถาม"
+            }
         }
     }
 }

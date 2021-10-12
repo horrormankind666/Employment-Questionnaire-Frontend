@@ -1,0 +1,248 @@
+/*
+=============================================
+Author      : <ยุทธภูมิ ตวันนา>
+Create date : <๒๔/๐๙/๒๕๖๔>
+Modify date : <๑๐/๑๐/๒๕๖๔>
+Description : <>
+=============================================
+*/
+
+@import '../variables.scss';
+
+$imagePath: ('../' + $imagePath);
+
+.owner-logo,
+.systemname-logo,
+.muit-logo {
+    background-image: url($imagePath + '/label.png');
+}
+
+.owner-logo {
+    width: 223px;
+    height: 100%;
+    &.th {
+        background-position: 0 0;
+    }
+    &.en {
+        background-position: 0 -70px;
+    }
+}
+
+.systemname-logo {
+    width: 524px;
+    height: 100%;
+    &.th {
+        background-position: -223px 0;
+    }
+    &.en {
+        background-position: -223px -70px;
+    }
+}
+
+.muit-logo {
+    width: 55px;
+    height: 100%;
+    background-position: 0 -140px;
+}
+
+header .topbar {
+    width: 100%;
+    min-width: $screenMinWidth;
+    height: $headerMaxHeight;
+    background-color: $themeColor;
+    display: table;
+    table-layout: fixed;
+    position: fixed;
+    z-index: 10050;
+    transition: background 0.3s linear 0s;
+    & .topbar-background {
+        width: 114px;
+        height: 100%;
+        background-image: url($imagePath + '/header-background.png');
+        background-position: bottom right;
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    & .topbar-left {
+        width: 260px;
+        height: 100%;
+        padding-left: 1rem;
+        display: table-cell;
+        transition: width 0.3s;
+    }
+    & .topbar-right {
+        width: 100%;
+        height: 100%;
+        padding-right: 1rem;
+        display: table-cell;
+        vertical-align: middle;
+        & .systemname-logo {
+            float: left;
+            position: relative;
+            left: 50%;
+            transform: translate(-73.5%, 0);
+        }
+    }
+    & .topbar-items {
+        height: 40px;
+        float: right;
+        padding-left: 0;
+        margin: 0;
+        list-style-type: none;
+        & > li {
+            height: 100%;
+            float: left;
+            position: relative;
+            margin-left: 8px;
+        }
+        & .flags-icon {
+            & i {
+                border-radius: 0.2rem;
+            }
+        }
+        & .signin-btn {
+            width: 90px;
+            height: 100%;
+            background-color: $themeColor;
+            padding: 0;
+            border-color: rgb(247, 243, 235);
+            border-width: 2px;
+            border-radius: 1.5rem;
+        }
+        & .user-info {
+            height: 100%;
+            position: relative;
+            & ::ng-deep .p-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+                font-weight: $fontStyleSemibold;
+                color: var(--surface-0);
+                border: 2px solid var(--surface-0);
+                padding: 0;
+                cursor: pointer;
+                & .p-avatar-text {
+                    position: relative;
+                    top: 1px;
+                }
+            }
+            & ::ng-deep .p-tooltip {
+                top: 45px !important;
+                right: 0 !important;
+                left: auto !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1054px) {
+    .systemname-logo {
+        width: 367px;
+        &.th {
+            background-position: -223px -140px;
+        }
+        &.en {
+            background-position: -223px -210px;
+        }
+    }
+
+    header .topbar {
+        & .topbar-right {
+            & .systemname-logo {
+                transform: translate(-83%, 0);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 898px) {
+    .systemname-logo {
+        width: 283px;
+        &.th {
+            background-position: -223px -280px;
+        }
+        &.en {
+            background-position: -223px -350px;
+        }
+    }
+
+    header .topbar {
+        & .topbar-right {
+            & .systemname-logo {
+                transform: translate(-94%, 0);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 819px) {
+    .owner-logo {
+        width: 67px;
+    }
+
+    header .topbar {
+        & .topbar-left {
+            width: 83px;
+        }
+        & .topbar-right {
+            & .systemname-logo {
+                left: 0;
+                transform: none;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .systemname-logo {
+        width: 95px;
+        &.th {
+            background-position: -223px -420px;
+        }
+        &.en {
+            background-position: -223px -490px;
+        }
+    }
+}
+
+main {
+    padding-top: $headerMaxHeight;
+}
+
+footer {
+    width: 100%;
+    min-width: $screenMinWidth;
+    position: absolute;
+    bottom: 0;
+    & ::ng-deep .p-divider.p-divider-horizontal {
+        padding: 0;
+        margin: 0;
+        &::before {
+            top: -2px;
+        }
+    }
+    & .footer {
+        height: $footerMaxHeight;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        display: block;
+        overflow: hidden;
+        & .copyright {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            float: left;
+            & i {
+                position: relative;
+                top: 1px;
+            }
+        }
+        & .muit-logo {
+            float: right;
+            position: absolute;
+            right: 1rem;
+        }
+    }
+}

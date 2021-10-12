@@ -1,0 +1,49 @@
+<div id="questionnaire-home-page" class="page-container">
+    <div class="page-header h-auto">
+        <div class="title heading">
+            <ul>
+                <li>
+                    <i class="fas fa-th-large"></i>
+                </li>
+                <li>
+                    {{ 'systemName.questionnaireSet.label' | translate | titlecase }}
+                </li>
+            </ul>
+        </div>
+        <div class="toolbar">
+            <div #reloadBtn class="toolbar-btn">
+                <button pButton type="button" class="p-button-custom" [disabled]="loading"
+                    pTooltip="{{ 'reload.label' | translate | titlecase }}"
+                    [tooltipDisabled]="loading"
+                    [appendTo]="reloadBtn"
+                    (click)="getDataSource()">
+                    <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <p-dataView [value]="dsQuestionnaireSets" [loading]="loading" loadingIcon="fas fa-spin fa-spinner" layout="grid">
+            <ng-template let-item pTemplate="gridItem">
+                <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="item.showStatus === 'Y'">
+                    <p-card>
+                        <ng-template pTemplate="header">
+                            Last updated on {{ item.doneDate }}
+                        </ng-template>
+                        <ng-template pTemplate="title">
+                            {{ item.name[appService.env.lang] }}
+                        </ng-template>
+                        <ng-template pTemplate="subtitle">
+                            <span class="paragraph">{{ item.description[appService.env.lang] }}</span>
+                        </ng-template>
+                        <ng-template pTemplate="footer" *ngIf="item.cancelStatus === 'N'">
+                            <button pButton type="button" class="p-button-custom" (click)="getQuestionnaire(item.ID)">
+                                <span>{{ 'questionnaire.fillout.label' | translate | lowercase }}</span>
+                            </button>
+                        </ng-template>
+                    </p-card>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>
+</div>

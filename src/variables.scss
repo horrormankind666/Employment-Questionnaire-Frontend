@@ -2,14 +2,16 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๑๘/๐๙/๒๕๖๔>
+Modify date : <๑๑/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
 
 $fontFamilyIBMPlexSansThai: 'IBM Plex Sans Thai', sans-serif;
 $fontFamilyPrompt: 'Prompt', sans-serif;
+$fontFamilyKanit: 'Kanit', sans-serif;
 $fontFamilySarabun: 'Sarabun', sans-serif;
+$fontFamilyNoto: 'Noto Sans Thai', 'Noto Sans Display', sans-serif;
 $fontStyleThin: 100;
 $fontStyleExtralight: 200;
 $fontStyleLight: 300;
@@ -50,3 +52,5 @@ $sidebarMaxWidth: 260px;
 $imagePath: 'assets/images';
 $themeColor: rgb(37, 57, 136);
 $backgroundColor: rgb(247, 243, 235);
+$textColor: rgb(5, 25, 45);
+

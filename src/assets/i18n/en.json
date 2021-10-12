@@ -1,10 +1,64 @@
 {
     "systemName": {
-        "label": "Graduates Employment Status System"
+        "label": "Graduates Employment Status System",
+        "questionnaireSet": {
+            "label": "Survey set on employment status of graduates"
+        }
     },
     "error": {
         "pageNotFound": {
             "label": "Page not found."
+        },
+        "unauthorized": {
+            "label": "Unauthorized."
+        },
+        "token": {
+            "invalid": {
+                "label": "Token invalid."
+            },
+            "expired": {
+                "label": "Token expired."
+            }
+        },
+        "databaseConnectionFail": {
+            "label": "Database connection fail."
+        },
+        "userNotFound": {
+            "label": "User not found."
+        }
+    },
+    "myAccount": {
+        "label": "My account"
+    },
+    "signin": {
+        "label": "Sign in",
+        "please": {
+            "label": "Please sign in.",
+            "again": {
+                "label": "Please sign in again."
+            }
+        }
+    },
+    "signout": {
+        "label": "Sign out",
+        "confirm": {
+          "label": "Confirm your would like to sign out."
+        }
+    },
+    "close": {
+        "label": "Close"
+    },
+    "reload": {
+        "label": "Reload"
+    },
+    "questionnaire": {
+        "fillout": {
+            "label": "Fill out a questionnaire"
+        },
+        "error": {
+            "notFound": {
+                "label": "Questionnaire not found."
+            }
         }
     }
 }

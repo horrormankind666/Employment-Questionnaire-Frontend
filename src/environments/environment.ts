@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๑/๐๙/๒๕๖๔>
+Modify date : <๑๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -12,13 +12,20 @@ Description : <>
 export const environment = {
     environmentName: 'development',
     production: false,
+    devYear: 2021,
     lang: 'th',
-    apiURL: 'localhost:5000/API',
-    loading: {
-        isShow: false,
-        isPage: false,
-        isModal: false,
-        isCheck: false,
-        isSave: false
+    apiURL: 'http://localhost:5000/API',
+    isFirstload: false,
+    isLoading: false,
+    authenInfo: {
+        isAuthenticated: false,
+        isRole: false,
+        message: ''
+    },
+    localStorageKey: {
+        bearerToken: 'EmploymentQuestionnaireBearerToken'
+    },
+    route: {
+        path: ''
     }
 };

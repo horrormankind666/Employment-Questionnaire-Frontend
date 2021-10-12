@@ -23,7 +23,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/employment",
+                        "outputPath": "dist/Questionnaire",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -38,7 +38,12 @@
                             "src/styles.scss",
                             "node_modules/primeng/resources/themes/saga-blue/theme.css",
                             "node_modules/primeng/resources/primeng.css",
-                            "node_modules/primeflex/primeflex.css"
+                            "node_modules/primeflex/primeflex.css",
+                            "node_modules/flag-icon-css/css/flag-icon.css",
+                            "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss",
+                            "node_modules/@fortawesome/fontawesome-free/scss/solid.scss",
+                            "node_modules/@fortawesome/fontawesome-free/scss/regular.scss",
+                            "node_modules/@fortawesome/fontawesome-free/scss/brands.scss"
                         ],
                         "scripts": [],
                         "serviceWorker": true,
@@ -117,5 +122,5 @@
             }
         }
     },
-    "defaultProject": "graduates_employment_status_system"
+    "defaultProject": "employment_questionnaire"
 }
