@@ -51,7 +51,19 @@
     "reload": {
         "label": "Reload"
     },
+    "notice": {
+        "label": "Notice"
+    },
+    "previous": {
+        "label": "Previous"
+    },
+    "next": {
+        "label": "Next"
+    },
     "questionnaire": {
+        "explore": {
+            "label": "Explore the Questionnaire Sets"
+        },
         "fillout": {
             "label": "Fill out a questionnaire"
         },

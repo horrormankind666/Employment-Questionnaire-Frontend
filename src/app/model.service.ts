@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๒๐/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -14,6 +14,10 @@ import { Injectable } from '@angular/core';
 import { AppService } from './app.service';
 
 export namespace Schema {
+    export interface Any {
+        [key: string]: any;
+    }
+
     export interface BearerToken {
         CUID: string,
         token: string
@@ -137,17 +141,8 @@ namespace Instance {
         ) {
         }
 
-        setNULL(): Schema.QuestionnaireDoneAndSet {
-            let ds: Schema.QuestionnaireDoneAndSet = {
-                questionnaireDone: null,
-                questionnaireSet: null,
-                questionnaireSection: [],
-                questionnaireQuestion: [],
-                questionnaireAnswerSet: [],
-                questionnaireAnswer: []
-            }
-
-            return ds;
+        setListDefault(): Schema.QuestionnaireDoneAndSet[] {
+            return [];
         }
 
         private async getDataSource(action: string, query?: string): Promise<[]> {
@@ -182,17 +177,46 @@ namespace Instance {
 
             try {
                 let ds: Schema.QuestionnaireDoneAndSet[] = await this.getDataSource('get', query);
-                
+
                 return ds[0];
             }
             catch(error) {
                 console.log(error);
 
-                return this.setNULL();
+                return this.setListDefault()[0];
             }
         }
     }
+
+    export class QuestionnaireSet {
+        setListDefault(): Schema.QuestionnaireSet[] {
+            return [];
+        }
+
+        setDefault(): Schema.QuestionnaireSet | null {
+            return null;
+        }
+    }
+
+    export class QuestionnaireSection {
+        setListDefault(): Schema.QuestionnaireSection[] {
+            return [];
+        }
+    }
+
+    export class QuestionnaireQuestion {
+        setListDefault(): Schema.QuestionnaireQuestion[] {
+            return [];
+        }
+    }
+
+    export class QuestionnaireAnswerSet {
+        setListDefault(): Schema.QuestionnaireAnswerSet[] {
+            return [];
+        }
+    }
 }
+
 
 @Injectable({
     providedIn: 'root'
@@ -204,4 +228,8 @@ export class ModelService {
     }
 
     questionnaireDoneAndSet = new Instance.QuestionnaireDoneAndSet(this.appService);
+    questionnaireSet = new Instance.QuestionnaireSet();
+    questionnaireSection = new Instance.QuestionnaireSection();
+    questionnaireQuestion = new Instance.QuestionnaireQuestion();
+    questionnaireAnswerSet = new Instance.QuestionnaireAnswerSet();
 }

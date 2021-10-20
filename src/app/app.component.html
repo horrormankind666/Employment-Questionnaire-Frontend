@@ -21,7 +21,7 @@
                     </li>
                     <li>
                         <button pButton type="button" label="" class="signin-btn vertical-middle" *ngIf="!appService.env.authenInfo.isAuthenticated" (click)="signIn()">
-                            <span>{{ 'signin.label' | translate | titlecase }}</span>
+                            {{ 'signin.label' | translate | titlecase }}
                         </button>
                         <div #userInfo class="user-info vertical-middle" *ngIf="appService.env.authenInfo.isAuthenticated">
                             <p-avatar
@@ -29,19 +29,19 @@
                                 shape="circle"
                                 [style]="{ 'background-color': avatarBackgroundColor }"
                                 pTooltip="{{ 'myAccount.label' | translate | titlecase }}"
-                                [tooltipDisabled]="toggle.profile.active"
+                                [tooltipDisabled]="profile.panel.toggle"
                                 [appendTo]="userInfo"
-                                (click)="profile.toggle($event)">
+                                (click)="profilePanel.toggle($event)">
                             </p-avatar>
-                            <p-overlayPanel #profile
+                            <p-overlayPanel #profilePanel
                                 [dismissable]="true"
                                 [showCloseIcon]="false"
-                                [appendTo]="profileInfo"
+                                [appendTo]="profileTemplate"
                                 [showTransitionOptions]="'0ms'"
                                 [hideTransitionOptions]="'0ms'"
-                                (onShow)="toggle.profile.active = true"
-                                (onHide)="toggle.profile.active = false"
-                                styleClass="profile-info">
+                                (onShow)="profile.panel.toggle = true"
+                                (onHide)="profile.panel.toggle = false"
+                                styleClass="profile-template">
                                 <ng-template pTemplate >
                                     <div class="p-3">
                                         <p-avatar
@@ -56,11 +56,11 @@
                                     </div>
                                     <p-divider></p-divider>
                                     <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="signOut()">
-                                        <span>{{ 'signout.label' | translate | titlecase }}</span>
+                                        {{ 'signout.label' | translate | titlecase }}
                                     </button>
                                 </ng-template>
                             </p-overlayPanel>
-                            <div #profileInfo></div>
+                            <div #profileTemplate></div>
                         </div>
                     </li>
                 </ul>

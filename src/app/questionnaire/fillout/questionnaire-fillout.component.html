@@ -1,19 +1,155 @@
 <div id="questionnaire-fillout-page" class="page-container">
-    <div class="page-header h-auto">
-        <!--
-        <div class="title heading">
-            <div class="text-2xl" *ngIf="dsQuestionnaireDoneAndSet.questionnaireSet === null">
+    <div class="page-header block h-auto">
+        <div *ngIf="questionnaireSet.datasource === null">
+            <div class="title block heading text-center text-2xl pt-3">
                 {{ 'questionnaire.error.notFound.label' | translate | titlecase }}
             </div>
-            <div *ngIf="dsQuestionnaireDoneAndSet.questionnaireSet !== null">
-                aaa
+            <div class="toolbar block text-center h-auto pt-0 mt-3">
+                <ng-container *ngTemplateOutlet="questionnaireSetExploreTemplate"></ng-container>
             </div>
         </div>
-        -->
-        <div class="toolbar">
-            <button pButton type="button" class="p-button-custom">
-                <span>{{ 'questionnaire.fillout.label' | translate | lowercase }}</span>
-            </button>
+        <div *ngIf="questionnaireSet.datasource !== null">
+            <div class="toolbar block fixed z-2">
+                <div class="inline-block left">
+                    <ng-container *ngTemplateOutlet="questionnaireSetExploreTemplate"></ng-container>
+                </div>
+                <div class="inline-block absolute right">
+                    <div class="questionnairesection-nav"
+                        [ngClass]="{
+                            'active': questionnaireSection.panel.toggle
+                        }">
+                        <div #previousButton class="previous">
+                            <button pButton type="button" class="button button-outlined"
+                                [disabled]="questionnaireSection.orderList.activeIndex === 0"
+                                pTooltip="{{ 'previous.label' | translate | titlecase }}"
+                                [tooltipDisabled]="questionnaireSection.orderList.activeIndex === 0"
+                                [appendTo]="previousButton"
+                                (click)="questionnaireSection.navigate.previous()">
+                                <i class="fas fa-long-arrow-alt-left"></i>
+                            </button>
+                        </div>
+                        <div class="selected">
+                            <button pButton type="button" class="button button-outlined" (click)="questionnaireSectionPanel.toggle($event)"
+                                [ngClass]="{
+                                    'active': questionnaireSection.panel.toggle
+                                }">
+                                {{
+                                    (questionnaireSection.datasource[questionnaireSection.orderList.activeIndex].titleName[appService.env.lang] | titlecase) +
+                                    ' ' +
+                                    questionnaireSection.datasource[questionnaireSection.orderList.activeIndex].no +
+                                    ' / ' +
+                                    questionnaireSection.datasource.length
+                                }}
+                            </button>
+                        </div>
+                        <div #nextButton class="next">
+                            <button pButton type="button" class="button button-outlined"
+                                [disabled]="(questionnaireSection.orderList.activeIndex + 1) === questionnaireSection.datasource.length"
+                                pTooltip="{{ 'next.label' | translate | titlecase }}"
+                                [tooltipDisabled]="(questionnaireSection.orderList.activeIndex + 1) === questionnaireSection.datasource.length"
+                                [appendTo]="nextButton"
+                                (click)="questionnaireSection.navigate.next()">
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </button>
+                        </div>
+                        <p-overlayPanel #questionnaireSectionPanel
+                            [dismissable]="true"
+                            [showCloseIcon]="false"
+                            [appendTo]="questionnaireSectionTemplate"
+                            [showTransitionOptions]="'0ms'"
+                            [hideTransitionOptions]="'0ms'"
+                            (onShow)="questionnaireSection.panel.toggle = true"
+                            (onHide)="questionnaireSection.panel.toggle = false"
+                            styleClass="questionnairesection-template">
+                            <ng-template pTemplate >
+                                <p-orderList
+                                    [value]="questionnaireSection.datasource"
+                                    (onSelectionChange)="
+                                        questionnaireSectionPanel.hide();
+                                        questionnaireSection.orderList.selection($event.value)
+                                    ">
+                                    <ng-template let-section pTemplate="item">
+                                        {{ (section.titleName[appService.env.lang] | titlecase) + ' ' + section.no }}
+                                    </ng-template>
+                                </p-orderList>
+                            </ng-template>
+                        </p-overlayPanel>
+                        <div #questionnaireSectionTemplate></div>
+                    </div>
+                </div>
+            </div>
+            <div class="title block heading">
+                <p-panel [showHeader]="false">
+                    <div class="questionnaireset">
+                        <div class="name" *ngIf="questionnaireSet.datasource.name !== null">
+                            {{ questionnaireSet.datasource.name[appService.env.lang] }}
+                        </div>
+                        <div class="description paragraph" *ngIf="questionnaireSet.datasource.description !== null">
+                            {{ questionnaireSet.datasource.description[appService.env.lang] }}
+                        </div>
+                        <div *ngIf="questionnaireSet.datasource.cancelStatus === 'N' && questionnaireSection.orderList.activeIndex === 0">
+                            <p-divider></p-divider>
+                            <div class="notice paragraph" *ngIf="questionnaireSet.datasource.notice !== null">
+                                <span class="text-pink-500 font-semibold">{{ 'notice.label' | translate | titlecase }}&nbsp;</span>
+                                {{ questionnaireSet.datasource.notice[appService.env.lang] }}
+                            </div>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>
         </div>
     </div>
+    <div class="page-body">
+        <p-dataView
+            class="questionnairesections"
+            [value]="questionnaireSection.datasource"
+            [loading]="questionnaireSection.dataView.isLoading"
+            loadingIcon="fas fa-spin fa-spinner"
+            layout="grid">
+            <ng-template let-section pTemplate="gridItem">
+                <div class="questionnairesection-tabpanel" *ngIf="!questionnaireSection.dataView.isLoading"
+                    [ngClass]="{
+                        'block': section.ID === questionnaireSection.datasource[questionnaireSection.orderList.activeIndex].ID,
+                        'hidden': section.ID !== questionnaireSection.datasource[questionnaireSection.orderList.activeIndex].ID
+                    }">
+                    <div class="questionnairesection">
+                        <p-panel [showHeader]="false">
+                            <div class="name">
+                                <span class="titlename">{{ (section.titleName[appService.env.lang] | titlecase) + ' ' +  section.no }}</span>
+                                &nbsp;&nbsp;{{ section.name[appService.env.lang] }}
+                            </div>
+                        </p-panel>
+                    </div>
+                    <div class="questionnairequestions" *ngFor="let question of questionnaireQuestion[section.ID].datasource">
+                        <p-panel [showHeader]="false">
+                            <div class="questionnairequestion paragraph">
+                                <ul class="table">
+                                    <li>
+                                        <div class="no">
+                                            {{ question.no + '.' }}
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="name">
+                                            {{ question.name[appService.env.lang] }}
+                                        </div>
+                                        <div class="questionnaireanswerset" *ngFor="let answerset of questionnaireAnswerSet[question.ID].datasource">
+                                            <div class="titlename" *ngIf="answerset.titleName[appService.env.lang] !=== null">
+                                                {{ answerset.titleName[appService.env.lang] }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </p-panel>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>
 </div>
+<ng-template #questionnaireSetExploreTemplate>
+    <button pButton type="button" class="button button-outlined text-left" (click)="router.navigate(['Questionnaire'])">
+        <i class="fas fa-bars"></i>&nbsp;&nbsp;{{ 'questionnaire.explore.label' | translate }}
+    </button>
+</ng-template>

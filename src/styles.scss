@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๒๐/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -34,7 +34,8 @@ body {
     overflow-y: scroll;
     cursor: default;
     &:not(.mobile) {
-        &.p-overflow-hidden {
+        &.p-overflow-hidden,
+        &.overflow-hidden {
             & header .topbar,
             & main {
                 padding-right: 17px;
@@ -73,6 +74,10 @@ body {
     }
 }
 
+.fixed {
+    min-width: $screenMinWidth;
+}
+
 .heading,
 .p-component {
     font-family: $fontFamilyNoto !important;
@@ -86,6 +91,17 @@ body {
     position: relative;
     top: 50%;
     transform: translate(0, -50%);
+}
+
+ul.table {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: table;
+    table-layout: fixed;
+    & > li {
+        display: table-cell;
+    }
 }
 
 .backdrop,
@@ -108,15 +124,37 @@ body {
     & .p-button-label {
         display: none;
     }
-    &.p-button-custom {
+    &.button {
         width: 100%;
-        height: 44px;
+        height: 41px;
         font-size: 1rem;
-        font-weight: $fontStyleMedium;
+        font-weight: $fontStyleSemibold;
         color: $textColor !important;
-        background-color: transparent !important;
-        border: 2px solid $textColor !important;
         border-radius: 4px !important;
+        &:disabled {
+            opacity: 1;
+            & > * {
+                opacity: 0.6;
+            }
+        }
+        &.button-outlined {
+            background-color: transparent !important;
+            border: 2px solid $textColor !important;
+            &.button-success {
+                border-color: $successColor !important;
+                &:hover {
+                    background-color: $successColor !important;
+                }
+            }
+        }
+        &.button-rounded {
+            border-radius: 50% !important;
+        }
+        &.button-text {
+            background-color: transparent !important;
+            border: 0 !important;
+        }
+        &.active,
         &:hover {
             background-color: var(--surface-400) !important;
         }
@@ -236,6 +274,7 @@ body {
         justify-content: left !important;
         & .p-dataview-loading-icon {
             color: var(--text-color-secondary);
+            position: relative;
         }
     }
     & .p-dataview-emptymessage {
@@ -263,6 +302,7 @@ body {
         border-color: rgba(255, 212, 59, 1);
     }
     & .p-card-body {
+        line-height: 1.7;
         padding: 0 !important;
         & .p-card-title {
             font-size: 1.35rem;
@@ -271,7 +311,6 @@ body {
         }
         & .p-card-subtitle {
             min-height: 28px;
-            line-height: 1.6;
             color: $textColor;
             font-weight: $fontStyleLight;
             margin-bottom: 0;
@@ -282,55 +321,45 @@ body {
     }
 }
 
-.text-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.p-panel {
+    & .p-panel-header {
+        border-color: #DADCE0 !important;
+        border-top-right-radius: 8px !important;
+        border-top-left-radius: 8px !important;
+    }
+    & .p-panel-content {
+        color: $textColor !important;
+        border-color: #DADCE0 !important;
+        border-bottom-right-radius: 8px !important;
+        border-bottom-left-radius: 8px !important;
+        padding: 1rem 1.5rem !important;
+    }
 }
 
-.profile-info.p-overlaypanel {
-    width: 300px;
-    background-color: var(--surface-900);
-    text-align: center;
-    border-radius: 0.75rem;
-    top: 34px !important;
-    left: -16.25rem !important;
+.p-overlaypanel {
     &::before,
     &::after {
         display: none;
     }
-    & .p-overlaypanel-content {
-        padding: 0;
-        & .p-avatar {
-            width: 80px !important;
-            height: 80px !important;
-            font-size: 2.5rem !important;
-            font-weight: $fontStyleSemibold;
-            color: var(--surface-0);
-            border: 2px solid var(--surface-0);
-            padding: 0;
-            cursor: default !important;
-        }
-        & .p-divider.p-divider-horizontal {
-            padding: 0;
-            margin: 0;
-            &::before {
-                border-top-color: var(--surface-800);
-                border-bottom-width: 0;
-            }
-        }
-        & .signout-btn {
-            width: 100%;
-            height: 50px;
-            min-height: 50px;
-            border-radius: 0.75rem !important;
-            border-top-right-radius: 0 !important;
-            border-top-left-radius: 0 !important;
-            &:enabled:hover {
-                background-color: var(--surface-800);
-            }
+}
+
+.p-orderlist {
+    & .p-orderlist-item {
+        color: $textColor !important;
+        &:focus {
+            box-shadow: none !important;
         }
     }
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .page-container {
@@ -354,16 +383,7 @@ body {
             padding-right: 1rem;
             display: table-cell;
             vertical-align: top;
-            & ul {
-                padding: 0;
-                margin: 0;
-                list-style-type: none;
-                display: table;
-                table-layout: fixed;
-                & > li {
-                    height: 100%;
-                    display: table-cell;
-                }
+            & .table {
                 & i {
                     width: 25px;
                     font-size: 1.05rem;
@@ -387,8 +407,6 @@ body {
                     width: 40px;
                     font-size: 1rem;
                     font-weight: $fontStyleRegular;
-                    border: 0 !important;
-                    border-radius: 50% !important;
                     padding: 0;
                     & i {
                         font-size: 1.25rem;

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๑๕/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -59,9 +59,9 @@ export class AppComponent implements OnInit {
 
     avatarBackgroundColor: string = this.appService.getRandomColor();
     today: Date = new Date();
-    toggle: any = {
-        profile: {
-            active: false
+    profile = {
+        panel: {
+            toggle: false
         }
     };
 

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๑๖/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -16,23 +16,25 @@ Description : <>
         }
     }
     & .page-body {
-        & ::ng-deep .p-card {
-            & .p-card-header {
-                height: 17px;
-                font-size: 0.685rem;
-                font-weight: $fontStyleMedium;
-                color: var(--surface-500);
-                margin-bottom: 0.5rem;
-            }
-            & .p-card-body {
-                & .p-card-content {
-                    display: none;
+        & .questionnairesets {
+            & ::ng-deep .p-card {
+                & .p-card-header {
+                    height: 17px;
+                    font-size: 0.685rem;
+                    font-weight: $fontStyleMedium;
+                    color: var(--surface-500);
+                    margin-bottom: 0.25rem;
                 }
-            }
-            & .p-card-footer {
-                & .p-button {
-                    height: 41px;
-                    font-size: 0.89rem;
+                & .p-card-body {
+                    & .p-card-content {
+                        display: none;
+                    }
+                }
+                & .p-card-footer {
+                    & .p-button {
+                        height: 41px;
+                        font-size: 0.87rem;
+                    }
                 }
             }
         }

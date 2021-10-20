@@ -36,18 +36,20 @@ export class ModalService {
         let dialogRef: DynamicDialogRef | undefined;
 
         if (!checkHasOpenModal || this.openDialogRef.length === 0) {
-            dialogRef = this.dialogService.open(component, {
-                data: {
-                    content: content,
-                    description: description,
-                    btnMsg: btnMsg
-                },
-                closeOnEscape: false,
-                styleClass: styleClass,
-                transitionOptions: '0ms'
-            });
+            setTimeout(() => {
+                dialogRef = this.dialogService.open(component, {
+                    data: {
+                        content: content,
+                        description: description,
+                        btnMsg: btnMsg
+                    },
+                    closeOnEscape: false,
+                    styleClass: styleClass,
+                    transitionOptions: '0ms'
+                });
 
-            this.openDialogRef.push(dialogRef);
+                this.openDialogRef.push(dialogRef);
+            }, 1000);
         }
 
         return dialogRef;

@@ -1,7 +1,7 @@
 <div id="questionnaire-home-page" class="page-container">
     <div class="page-header h-auto">
         <div class="title heading">
-            <ul>
+            <ul class="table">
                 <li>
                     <i class="fas fa-th-large"></i>
                 </li>
@@ -11,34 +11,40 @@
             </ul>
         </div>
         <div class="toolbar">
-            <div #reloadBtn class="toolbar-btn">
-                <button pButton type="button" class="p-button-custom" [disabled]="loading"
+            <div #reloadButton class="toolbar-btn">
+                <button pButton type="button" class="button button-rounded button-text"
+                    [disabled]="questionnaireSet.dataView.isLoading"
                     pTooltip="{{ 'reload.label' | translate | titlecase }}"
-                    [tooltipDisabled]="loading"
-                    [appendTo]="reloadBtn"
-                    (click)="getDataSource()">
+                    [tooltipDisabled]="questionnaireSet.dataView.isLoading"
+                    [appendTo]="reloadButton"
+                    (click)="questionnaireSet.getDataSource()">
                     <i class="fas fa-sync-alt" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
     </div>
     <div class="page-body">
-        <p-dataView [value]="dsQuestionnaireSets" [loading]="loading" loadingIcon="fas fa-spin fa-spinner" layout="grid">
-            <ng-template let-item pTemplate="gridItem">
-                <div class="col-12 sm:col-6 md:col-4 lg:col-3" *ngIf="item.showStatus === 'Y'">
+        <p-dataView
+            class="questionnairesets"
+            [value]="questionnaireSet.datasource"
+            [loading]="questionnaireSet.dataView.isLoading"
+            loadingIcon="fas fa-spin fa-spinner"
+            layout="grid">
+            <ng-template let-set pTemplate="gridItem">
+                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
                     <p-card>
                         <ng-template pTemplate="header">
-                            Last updated on {{ item.doneDate }}
+                            Last updated on {{ set.doneDate }}
                         </ng-template>
                         <ng-template pTemplate="title">
-                            {{ item.name[appService.env.lang] }}
+                            {{ set.name[appService.env.lang] }}
                         </ng-template>
                         <ng-template pTemplate="subtitle">
-                            <span class="paragraph">{{ item.description[appService.env.lang] }}</span>
+                            <span class="paragraph">{{ set.description[appService.env.lang] }}</span>
                         </ng-template>
-                        <ng-template pTemplate="footer" *ngIf="item.cancelStatus === 'N'">
-                            <button pButton type="button" class="p-button-custom" (click)="getQuestionnaire(item.ID)">
-                                <span>{{ 'questionnaire.fillout.label' | translate | lowercase }}</span>
+                        <ng-template pTemplate="footer" *ngIf="set.cancelStatus === 'N'">
+                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(set.ID)">
+                                {{ 'questionnaire.fillout.label' | translate | lowercase }}
                             </button>
                         </ng-template>
                     </p-card>

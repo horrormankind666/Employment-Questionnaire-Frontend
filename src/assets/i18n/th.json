@@ -51,7 +51,19 @@
     "reload": {
         "label": "รีโหลด"
     },
+    "notice": {
+        "label": "คำชี้แจง"
+    },
+    "previous": {
+        "label": "ก่อนหน้า"
+    },
+    "next": {
+        "label": "ถัดไป"
+    },
     "questionnaire": {
+        "explore": {
+            "label": "เลือกชุดแบบสอบถาม"
+        },
         "fillout": {
             "label": "ทำแบบสอบถาม"
         },

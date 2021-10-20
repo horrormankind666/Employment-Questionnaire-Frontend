@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๑๙/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -14,6 +14,31 @@ import { Router } from '@angular/router';
 
 import { AppService } from '../../app.service';
 import { Schema, ModelService } from '../../model.service';
+
+class QuestionnaireSet {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.QuestionnaireSet[] = this.modelService.questionnaireSet.setListDefault();
+    dataView = {
+        isLoading: false
+    };
+
+    getDataSource(): void {
+        this.dataView.isLoading = true;
+        this.datasource = this.modelService.questionnaireSet.setListDefault();
+
+        this.modelService.questionnaireDoneAndSet.getList()
+            .then((result: Schema.QuestionnaireSet[]) => {
+                setTimeout(() => {
+                    this.datasource = result;
+                    this.dataView.isLoading = false;
+                }, 1000);
+            });
+    }
+}
 
 @Component({
     selector: 'app-questionnaire-home',
@@ -28,24 +53,10 @@ export class QuestionnaireHomeComponent implements OnInit {
     ) {
     }
 
-    dsQuestionnaireSets: Schema.QuestionnaireSet[] = [];
-    loading: boolean = false;
+    questionnaireSet = new QuestionnaireSet(this.modelService);
 
     ngOnInit(): void {
-        this.getDataSource();
-    }
-
-    getDataSource(): void {
-        this.dsQuestionnaireSets = [];
-        this.loading = true;
-
-        this.modelService.questionnaireDoneAndSet.getList()
-            .then((result: Schema.QuestionnaireSet[]) => {
-                setTimeout(() => {
-                    this.dsQuestionnaireSets = result;
-                    this.loading = false;
-                }, 1000);
-            });
+        this.questionnaireSet.getDataSource();
     }
 
     getQuestionnaire(ID: string) {

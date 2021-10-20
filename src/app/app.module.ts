@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๑๘/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -32,6 +33,8 @@ import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import { DataViewModule } from 'primeng/dataview';
 import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
+import { OrderListModule } from 'primeng/orderlist';
 import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 
 import { DynamicComponentDirective } from './app.directive';
@@ -71,8 +74,10 @@ export function httpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         RouterModule.forRoot(appRouting, {
             useHash: true,
-            onSameUrlNavigation: 'reload'
+            onSameUrlNavigation: 'reload',
+            scrollPositionRestoration: 'top'
         }),
+        FormsModule,
         TranslateModule.forRoot({
             loader: {
               provide: TranslateLoader,
@@ -104,6 +109,8 @@ export function httpLoaderFactory(http: HttpClient) {
         TooltipModule,
         DataViewModule,
         CardModule,
+        PanelModule,
+        OrderListModule,
         DynamicDialogModule
     ],
     exports: [

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๒๐/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -11,37 +11,264 @@ Description : <>
 
 #questionnaire-fillout-page.page-container {
     width: 1200px !important;
+    padding-top: 0;
     margin: 0 auto;
+    & ::ng-deep .p-panel {
+        & .p-panel-content {
+            line-height: 1.7;
+            font-size: 1.125rem;
+            text-align: left;
+            border-top: 1px solid #DADCE0 !important;
+            border-radius: 8px;
+            & .questionnaireset {
+                text-align: center;
+                & .name {
+                    font-size: 1.45rem;
+                    font-weight: $fontStyleSemibold;
+                }
+                & .description {
+                    font-size: 1.2rem;
+                    font-weight: $fontStyleLight;
+                    margin-top: 0.25rem;
+                }
+                & .p-divider.p-divider-horizontal {
+                    &::before {
+                        border-top-color: var(--surface-400);
+                        border-top-style: dashed;
+                        border-bottom-width: 0;
+                    }
+                }
+            }
+            & .questionnairequestion {
+                & .table {
+                    & .no {
+                        width: 33px;
+                        font-weight: $fontStyleMedium;
+                        padding-right: 0.5rem;
+                        display: block;
+                    }
+                    & .name {
+                        font-weight: $fontStyleMedium;
+                    }
+                }
+                & .questionnaireanswerset {
+                    font-size: 1rem;
+                    font-size: $fontStyleRegular;
+                    margin-top: 1rem;
+                }
+            }
+        }
+    }
+    & .questionnairesection {
+        & ::ng-deep .p-panel {
+            & .p-panel-content {
+                background-color: #E5E1DA;
+                border: 0 !important;
+                & .name {
+                    font-size: 1.25rem;
+                    font-weight: $fontStyleSemibold;
+                    & .titlename {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
     & .page-header {
+        padding-right: 0;
+        padding-left: 0;
         & .toolbar {
+            width: 1200px;
+            height: 73px;
+            background-color: $backgroundColor !important;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
             & .p-button {
-                width: auto;
+                width: 305px;
+                padding-top: 0;
+                padding-right: 1.5rem;
+                padding-bottom: 0;
+                padding-left: 1.5rem;
+            }
+            & .right {
+                right: 1rem;
+                & .questionnairesection-nav {
+                    display: table;
+                    table-layout: fixed;
+                    & .previous,
+                    & .selected,
+                    & .next {
+                        display: table-cell !important;
+                        & .p-button {
+                            width: 100% !important;
+                        }
+                    }
+                    & .previous,
+                    & .next {
+                        width: 36px;
+                        & .p-button {
+                            padding-right: 0;
+                            padding-left: 0;
+                        }
+                    }
+                    & .previous {
+                        & .p-button {
+                            border-right: 0 !important;
+                            border-top-right-radius: 0 !important;
+                            border-bottom-right-radius: 0 !important;
+                        }
+                        & ::ng-deep .p-tooltip {
+                            top: 46px !important;
+                            right: auto !important;
+                            left: 0 !important;
+                        }
+                    }
+                    & .selected {
+                        width: 145px !important ;
+                        & .p-button {
+                            border-radius: 0 !important;
+                            padding-right: 1rem;
+                            padding-left: 1rem;
+                        }
+                    }
+                    & .next {
+                        & .p-button {
+                            border-left: 0 !important;
+                            border-top-left-radius: 0 !important;
+                            border-bottom-left-radius: 0 !important;
+                        }
+                        & ::ng-deep .p-tooltip {
+                            top: 46px !important;
+                            right: 0 !important;
+                            left: auto !important
+                        }
+                    }
+                    &.active {
+                        & .previous {
+                            & .p-button {
+                                border-bottom-left-radius: 0 !important;
+                            }
+                        }
+                        & .next {
+                            & .p-button {
+                                border-bottom-right-radius: 0 !important;
+                            }
+                        }
+                    }
+                }
+                & ::ng-deep .questionnairesection-template.p-overlaypanel  {
+                    width: 217px;
+                    background-color: $backgroundColor;
+                    text-align: center;
+                    border: 2px solid $textColor;
+                    border-top: 0;
+                    border-radius: 0.75rem;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    top: 31px !important;
+                    left: 0 !important;
+                    & .p-overlaypanel-content {
+                        padding: 0;
+                    }
+                    & ::ng-deep .p-orderlist {
+                        & .p-orderlist-controls {
+                            display: none;
+                        }
+                        & .p-orderlist-list {
+                            background-color: transparent;
+                            border: 0;
+                            border-bottom-right-radius: 0;
+                            border-bottom-left-radius: 0;
+                        }
+                    }
+                }
             }
         }
+        & .title {
+            padding-top: 73px;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
     }
-    /*
     & .page-body {
-        & ::ng-deep .p-card {
-            & .p-card-header {
-                height: 17px;
-                font-size: 0.685rem;
-                font-weight: $fontStyleMedium;
-                color: var(--surface-500);
-                margin-bottom: 0.5rem;
+        & .questionnairesection-tabpanel {
+            width: 100%;
+            & .questionnairequestions {
+                margin-top: 1rem;
             }
-            & .p-card-body {
-                & .p-card-content {
-                    display: none;
-                }
+        }
+    }
+}
+
+@media screen and (max-width: 1216px) {
+    #questionnaire-fillout-page.page-container {
+        width: 100% !important;
+        & .page-header {
+            & .toolbar {
+                width: 100% !important;
             }
-            & .p-card-footer {
-                & .p-button {
-                    height: 44px;
-                    font-size: 0.89rem;
-                    font-weight: $fontStyleMedium;
+        }
+    }
+}
+
+@media screen and (max-width: 678px) {
+    #questionnaire-fillout-page.page-container {
+        & ::ng-deep .p-panel {
+            & .p-panel-content {
+                & .questionnaireset {
+                    text-align: left;
                 }
             }
         }
     }
-    */
+}
+
+@media screen and (max-width: 585px) {
+    #questionnaire-fillout-page.page-container {
+        & .page-header {
+            & .toolbar.fixed {
+                height: 122px;
+                & .left,
+                & .right {
+                    display: block !important;
+                    position: relative !important;
+                    right: 0
+                }
+                & .left {
+                    & .p-button {
+                        width: 100%;
+                    }
+                }
+                & .right {
+                    margin-top: 0.5rem;
+                    & .questionnairesection-nav {
+                        width: 100%;
+                        & .selected {
+                            width: 100% !important ;
+                        }
+                    }
+                    & ::ng-deep .questionnairesection-template.p-overlaypanel  {
+                        width: 100%;
+                    }
+                }
+            }
+            & .title {
+                padding-top: 122px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 388px) {
+    #questionnaire-fillout-page.page-container {
+        & .page-header {
+            & .toolbar {
+                & .p-button {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
