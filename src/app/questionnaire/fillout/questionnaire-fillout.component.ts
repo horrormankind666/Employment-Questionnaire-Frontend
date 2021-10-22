@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๐/๑๐/๒๕๖๔>
+Modify date : <๒๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -21,7 +21,7 @@ class QuestionnaireDoneAndSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireDoneAndSet = this.modelService.questionnaireDoneAndSet.setListDefault()[0];
+    datasource: Schema.QuestionnaireDoneAndSet = this.modelService.qtnDoneAndSet.setListDefault()[0];
 }
 
 class QuestionnaireSet {
@@ -30,7 +30,7 @@ class QuestionnaireSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireSet | null = this.modelService.questionnaireSet.setDefault();
+    datasource: Schema.QuestionnaireSet | null = this.modelService.qtnSet.setDefault();
 }
 
 class QuestionnaireSection {
@@ -39,7 +39,7 @@ class QuestionnaireSection {
     ) {
     }
 
-    datasource: Schema.QuestionnaireSection[] = this.modelService.questionnaireSection.setListDefault();
+    datasource: Schema.QuestionnaireSection[] = this.modelService.qtnSection.setListDefault();
     dataView = {
         isLoading: false
     };
@@ -77,7 +77,7 @@ class QuestionnaireQuestion {
     ) {
     }
 
-    datasource: Schema.QuestionnaireQuestion[] = this.modelService.questionnaireQuestion.setListDefault();
+    datasource: Schema.QuestionnaireQuestion[] = this.modelService.qtnQuestion.setListDefault();
 }
 
 class QuestionnaireAnswerSet {
@@ -86,7 +86,22 @@ class QuestionnaireAnswerSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireAnswerSet[] = this.modelService.questionnaireAnswerSet.setListDefault();
+    datasource: Schema.QuestionnaireAnswerSet[] = this.modelService.qtnAnswerSet.setListDefault();
+}
+
+class QuestionnaireAnswer {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.QuestionnaireAnswer[] = this.modelService.qtnAnswer.setListDefault();
+    formField = {
+        singleChoice: null,
+        multipleChoice: [],
+        shortAnswerText: {},
+        longAnswerText: {}
+    };
 }
 
 @Component({
@@ -103,30 +118,47 @@ export class QuestionnaireFilloutComponent implements OnInit {
     ) {
     }
 
-    questionnaireDoneAndSet = new QuestionnaireDoneAndSet(this.modelService);
-    questionnaireSet = new QuestionnaireSet(this.modelService);
-    questionnaireSection = new QuestionnaireSection(this.modelService);
-    questionnaireQuestion: Schema.Any = {};
-    questionnaireAnswerSet: Schema.Any = {};
+    qtnDoneAndSet = new QuestionnaireDoneAndSet(this.modelService);
+    qtnSet = new QuestionnaireSet(this.modelService);
+    qtnSection = new QuestionnaireSection(this.modelService);
+    qtnQuestion: Schema.Any = {};
+    qtnAnswerSet: Schema.Any = {};
+    qtnAnswer: Schema.Any = {};
+    inputType = {
+        singleChoice: 'single choice',
+        multipleChoice: 'multiple choice',
+        shortAnswerText: 'short answer text',
+        longAnswerText: 'long answer text',
+        personalDetail: 'personal detail',
+        homeAddress: 'home address',
+        workplaceAddress: 'workplace address',
+        dropdownProvince: 'dropdown province',
+        institute: 'institute'
+    };
 
     ngOnInit(): void {
-        this.questionnaireSection.dataView.isLoading = true;
-        this.questionnaireDoneAndSet.datasource = this.route.snapshot.data.questionnaireDoneAndSet;
-        this.questionnaireSet.datasource = this.questionnaireDoneAndSet.datasource.questionnaireSet;
-        this.questionnaireSection.datasource = this.questionnaireDoneAndSet.datasource.questionnaireSection;
+        this.qtnSection.dataView.isLoading = true;
+        this.qtnDoneAndSet.datasource = this.route.snapshot.data.qtnDoneAndSetDataSource;
+        this.qtnSet.datasource = this.qtnDoneAndSet.datasource.questionnaireSet;
+        this.qtnSection.datasource = this.qtnDoneAndSet.datasource.questionnaireSection;
 
-        this.questionnaireSection.datasource.forEach((section: Schema.QuestionnaireSection) => {
-            this.questionnaireQuestion[section.ID] = new QuestionnaireQuestion(this.modelService);
-            this.questionnaireQuestion[section.ID].datasource = this.questionnaireDoneAndSet.datasource.questionnaireQuestion.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === section.ID);
+        this.qtnSection.datasource.forEach((qtnsection: Schema.QuestionnaireSection) => {
+            this.qtnQuestion[qtnsection.ID] = new QuestionnaireQuestion(this.modelService);
+            this.qtnQuestion[qtnsection.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireQuestion.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
 
-            this.questionnaireQuestion[section.ID].datasource.forEach((question: Schema.QuestionnaireQuestion) => {
-                this.questionnaireAnswerSet[question.ID] = new QuestionnaireAnswerSet(this.modelService);
-                this.questionnaireAnswerSet[question.ID].datasource = this.questionnaireDoneAndSet.datasource.questionnaireAnswerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === question.ID);
+            this.qtnQuestion[qtnsection.ID].datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
+                this.qtnAnswerSet[qtnquestion.ID] = new QuestionnaireAnswerSet(this.modelService);
+                this.qtnAnswerSet[qtnquestion.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireAnswerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
+
+                this.qtnAnswerSet[qtnquestion.ID].datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
+                    this.qtnAnswer[qtnanswerset.ID] = new QuestionnaireAnswer(this.modelService);
+                    this.qtnAnswer[qtnanswerset.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireAnswer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
+                });
             });
         });
 
         setTimeout(() => {
-            this.questionnaireSection.dataView.isLoading = false;
-        }, 1000);
+            this.qtnSection.dataView.isLoading = false;
+        }, (this.qtnSet.datasource !== null ? 1000 : 0));
     }
 }

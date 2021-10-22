@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๐/๑๐/๒๕๖๔>
+Modify date : <๒๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -113,8 +113,8 @@ export namespace Schema {
     export interface QuestionnaireAnswer {
         ID: string,
         empQuestionnaireAnswerSetID: string,
-        defaultAnswerSet: string,
         no: number,
+        choiceOrder: string,
         name: any,
         description: any,
         inputType: string,
@@ -215,6 +215,12 @@ namespace Instance {
             return [];
         }
     }
+
+    export class QuestionnaireAnswer {
+        setListDefault(): Schema.QuestionnaireAnswer[] {
+            return [];
+        }
+    }
 }
 
 
@@ -227,9 +233,10 @@ export class ModelService {
     ) {
     }
 
-    questionnaireDoneAndSet = new Instance.QuestionnaireDoneAndSet(this.appService);
-    questionnaireSet = new Instance.QuestionnaireSet();
-    questionnaireSection = new Instance.QuestionnaireSection();
-    questionnaireQuestion = new Instance.QuestionnaireQuestion();
-    questionnaireAnswerSet = new Instance.QuestionnaireAnswerSet();
+    qtnDoneAndSet = new Instance.QuestionnaireDoneAndSet(this.appService);
+    qtnSet = new Instance.QuestionnaireSet();
+    qtnSection = new Instance.QuestionnaireSection();
+    qtnQuestion = new Instance.QuestionnaireQuestion();
+    qtnAnswerSet = new Instance.QuestionnaireAnswerSet();
+    qtnAnswer = new Instance.QuestionnaireAnswer();
 }

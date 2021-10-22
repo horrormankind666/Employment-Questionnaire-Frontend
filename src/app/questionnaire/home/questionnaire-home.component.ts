@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๑๙/๑๐/๒๕๖๔>
+Modify date : <๒๑/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -21,16 +21,16 @@ class QuestionnaireSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireSet[] = this.modelService.questionnaireSet.setListDefault();
+    datasource: Schema.QuestionnaireSet[] = this.modelService.qtnSet.setListDefault();
     dataView = {
         isLoading: false
     };
 
     getDataSource(): void {
         this.dataView.isLoading = true;
-        this.datasource = this.modelService.questionnaireSet.setListDefault();
+        this.datasource = this.modelService.qtnSet.setListDefault();
 
-        this.modelService.questionnaireDoneAndSet.getList()
+        this.modelService.qtnDoneAndSet.getList()
             .then((result: Schema.QuestionnaireSet[]) => {
                 setTimeout(() => {
                     this.datasource = result;
@@ -53,10 +53,10 @@ export class QuestionnaireHomeComponent implements OnInit {
     ) {
     }
 
-    questionnaireSet = new QuestionnaireSet(this.modelService);
+    qtnSet = new QuestionnaireSet(this.modelService);
 
     ngOnInit(): void {
-        this.questionnaireSet.getDataSource();
+        this.qtnSet.getDataSource();
     }
 
     getQuestionnaire(ID: string) {

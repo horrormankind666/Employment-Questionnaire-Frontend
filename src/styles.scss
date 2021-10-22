@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๐/๑๐/๒๕๖๔>
+Modify date : <๒๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -83,7 +83,8 @@ body {
     font-family: $fontFamilyNoto !important;
 }
 
-.paragraph {
+.paragraph,
+.p-inputtext {
     font-family: $fontFamilySarabun !important;
 }
 
@@ -94,6 +95,7 @@ body {
 }
 
 ul.table {
+    width: 100%;
     padding: 0;
     margin: 0;
     list-style-type: none;
@@ -332,7 +334,7 @@ ul.table {
         border-color: #DADCE0 !important;
         border-bottom-right-radius: 8px !important;
         border-bottom-left-radius: 8px !important;
-        padding: 1rem 1.5rem !important;
+        padding: 1rem 1.5rem 1.5rem 1.5rem !important;
     }
 }
 
@@ -350,6 +352,73 @@ ul.table {
             box-shadow: none !important;
         }
     }
+}
+
+.p-inputtext,
+.p-radiobutton-box,
+.p-checkbox-box {
+    border: 2px solid $inputColor !important;
+    border-radius: 4px !important;
+    &.p-highlight {
+        background-color: $inputColorActive !important;
+        border-color: $inputColorActive !important;
+        & .p-radiobutton-icon {
+            background-color: $inputColorActive !important;
+            border: 1px solid var(--surface-0) !important;
+        }
+        & .p-checkbox-icon {
+            font-size: 0.75rem !important;
+        }
+    }
+    &:not(.p-disabled) {
+        &:focus,
+        &.p-focus {
+            box-shadow: none !important;
+        }
+        &:focus,
+        &:hover {
+            border-color: $inputColorActive !important;
+        }
+    }
+}
+
+.p-radiobutton,
+.p-checkbox {
+    & .p-radiobutton-box {
+        border-radius: 50% !important;
+        &.p-highlight {
+            background-color: var(--surface-0) !important;
+        }
+    }
+    & .p-radiobutton-box,
+    & .p-checkbox-box {
+        &:not(.p-disabled) {
+            &:hover {
+                box-shadow: 0 0 0 0.5rem rgba(0, 155, 216, 0.05) !important;
+            }
+            &.p-highlight {
+                &:hover {
+                    box-shadow: 0 0 0 0.5rem rgba(0, 155, 216, 0.1) !important;
+                }
+            }
+        }
+    }
+}
+
+.p-inputtext {
+    height: 48px;
+    line-height: 1.5;
+    font-size: 1rem !important;
+    color: $textColor !important;
+    background-color: var(--surface-0);
+    padding: 10px 12px 13px 12px !important;
+    margin: 0 !important;
+    display: table-cell;
+    vertical-align: baseline;
+}
+
+.p-inputtextarea {
+    min-height: 119px;
 }
 
 .overflow-hidden {
@@ -378,7 +447,7 @@ ul.table {
             width: 100%;
             height: 100%;
             line-height: 1.5;
-            font-size: 1.75rem;
+            font-size: 1.65rem;
             font-weight: $fontStyleSemibold;
             padding-right: 1rem;
             display: table-cell;
@@ -401,7 +470,6 @@ ul.table {
             & .toolbar-btn {
                 display: inline-block;
                 position: relative;
-                top: 1px;
                 & .p-button {
                     height: 40px;
                     width: 40px;

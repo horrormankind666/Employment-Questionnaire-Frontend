@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๒๑/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -15,7 +15,6 @@ import { AuthGuardService } from './auth-guard.service';
 import { GetQuestionnaireDoneAndSetResolve } from './app-routing-resolve.service';
 
 import { PageNotFoundComponent } from './page-not-found.component';
-import { PageEmptyComponent } from './page-empty.component';
 import { QuestionnaireHomeComponent } from './questionnaire/home/questionnaire-home.component';
 import { QuestionnaireFilloutComponent } from './questionnaire/fillout/questionnaire-fillout.component';
 
@@ -47,7 +46,7 @@ export const appRouting: Routes = [
                     hasHearderSubtitle: false
                 },
                 resolve: {
-                    questionnaireDoneAndSet: GetQuestionnaireDoneAndSetResolve
+                    qtnDoneAndSetDataSource: GetQuestionnaireDoneAndSetResolve
                 }
             }
         ]

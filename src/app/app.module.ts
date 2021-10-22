@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๘/๑๐/๒๕๖๔>
+Modify date : <๒๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -25,6 +25,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 
+import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -35,7 +36,10 @@ import { DataViewModule } from 'primeng/dataview';
 import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
 import { OrderListModule } from 'primeng/orderlist';
-import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { DynamicComponentDirective } from './app.directive';
 
@@ -101,6 +105,7 @@ export function httpLoaderFactory(http: HttpClient) {
                 }
             }
         }),
+        DynamicDialogModule,
         TableModule,
         ButtonModule,
         AvatarModule,
@@ -111,7 +116,10 @@ export function httpLoaderFactory(http: HttpClient) {
         CardModule,
         PanelModule,
         OrderListModule,
-        DynamicDialogModule
+        RadioButtonModule,
+        CheckboxModule,
+        InputTextModule,
+        InputTextareaModule
     ],
     exports: [
         CommonModule,

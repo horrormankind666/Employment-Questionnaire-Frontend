@@ -1,23 +1,23 @@
 <div id="questionnaire-home-page" class="page-container">
     <div class="page-header h-auto">
         <div class="title heading">
-            <ul class="table">
+            <ul class="table w-auto">
                 <li>
                     <i class="fas fa-th-large"></i>
                 </li>
                 <li>
-                    {{ 'systemName.questionnaireSet.label' | translate | titlecase }}
+                    {{ 'systemName.questionnaire.set.label' | translate | titlecase }}
                 </li>
             </ul>
         </div>
         <div class="toolbar">
             <div #reloadButton class="toolbar-btn">
                 <button pButton type="button" class="button button-rounded button-text"
-                    [disabled]="questionnaireSet.dataView.isLoading"
+                    [disabled]="qtnSet.dataView.isLoading"
                     pTooltip="{{ 'reload.label' | translate | titlecase }}"
-                    [tooltipDisabled]="questionnaireSet.dataView.isLoading"
+                    [tooltipDisabled]="qtnSet.dataView.isLoading"
                     [appendTo]="reloadButton"
-                    (click)="questionnaireSet.getDataSource()">
+                    (click)="qtnSet.getDataSource()">
                     <i class="fas fa-sync-alt" aria-hidden="true"></i>
                 </button>
             </div>
@@ -26,24 +26,24 @@
     <div class="page-body">
         <p-dataView
             class="questionnairesets"
-            [value]="questionnaireSet.datasource"
-            [loading]="questionnaireSet.dataView.isLoading"
+            [value]="qtnSet.datasource"
+            [loading]="qtnSet.dataView.isLoading"
             loadingIcon="fas fa-spin fa-spinner"
             layout="grid">
-            <ng-template let-set pTemplate="gridItem">
+            <ng-template let-qtnset pTemplate="gridItem">
                 <div class="col-12 sm:col-6 md:col-4 lg:col-3">
                     <p-card>
                         <ng-template pTemplate="header">
-                            Last updated on {{ set.doneDate }}
+                            Last updated on {{ qtnset.doneDate }}
                         </ng-template>
                         <ng-template pTemplate="title">
-                            {{ set.name[appService.env.lang] }}
+                            {{ qtnset.name[appService.env.lang] }}
                         </ng-template>
                         <ng-template pTemplate="subtitle">
-                            <span class="paragraph">{{ set.description[appService.env.lang] }}</span>
+                            <span class="paragraph">{{ qtnset.description[appService.env.lang] }}</span>
                         </ng-template>
-                        <ng-template pTemplate="footer" *ngIf="set.cancelStatus === 'N'">
-                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(set.ID)">
+                        <ng-template pTemplate="footer" *ngIf="qtnset.cancelStatus === 'N'">
+                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(qtnset.ID)">
                                 {{ 'questionnaire.fillout.label' | translate | lowercase }}
                             </button>
                         </ng-template>

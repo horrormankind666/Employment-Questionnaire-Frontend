@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๒๑/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -26,7 +26,7 @@ export class GetQuestionnaireDoneAndSetResolve implements Resolve<Schema.Questio
     }
 
     resolve(route: ActivatedRouteSnapshot): Observable<Schema.QuestionnaireDoneAndSet> | Promise<Schema.QuestionnaireDoneAndSet> | Schema.QuestionnaireDoneAndSet {
-        return this.modelService.questionnaireDoneAndSet.get(route.params['CUID']).then((result: Schema.QuestionnaireDoneAndSet) => {
+        return this.modelService.qtnDoneAndSet.get(route.params['CUID']).then((result: Schema.QuestionnaireDoneAndSet) => {
             return result;
         });
     }

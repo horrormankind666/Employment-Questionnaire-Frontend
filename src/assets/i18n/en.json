@@ -1,8 +1,10 @@
 {
     "systemName": {
         "label": "Graduates Employment Status System",
-        "questionnaireSet": {
-            "label": "Survey set on employment status of graduates"
+        "questionnaire": {
+            "set": {
+                "label": "Survey set on employment status of graduates"
+            }
         }
     },
     "error": {

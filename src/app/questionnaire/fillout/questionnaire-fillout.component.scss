@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๐/๑๐/๒๕๖๔>
+Modify date : <๒๒/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -15,8 +15,8 @@ Description : <>
     margin: 0 auto;
     & ::ng-deep .p-panel {
         & .p-panel-content {
-            line-height: 1.7;
-            font-size: 1.125rem;
+            line-height: 1.75;
+            font-size: 1.05em;
             text-align: left;
             border-top: 1px solid #DADCE0 !important;
             border-radius: 8px;
@@ -25,11 +25,15 @@ Description : <>
                 & .name {
                     font-size: 1.45rem;
                     font-weight: $fontStyleSemibold;
+                    line-height: 1.7;
                 }
                 & .description {
                     font-size: 1.2rem;
                     font-weight: $fontStyleLight;
                     margin-top: 0.25rem;
+                }
+                & .notice {
+                    font-size: 1.125rem;
                 }
                 & .p-divider.p-divider-horizontal {
                     &::before {
@@ -40,21 +44,67 @@ Description : <>
                 }
             }
             & .questionnairequestion {
-                & .table {
-                    & .no {
-                        width: 33px;
-                        font-weight: $fontStyleMedium;
-                        padding-right: 0.5rem;
-                        display: block;
+                color: #000000;
+                font-size: 1.175rem;
+                line-height: 1.85;
+                margin-bottom: 1.5rem;
+                & .no {
+                    width: 34px;
+                    font-weight: $fontStyleMedium;
+                    padding-right: 0.5rem;
+                }
+                & .name {
+                    font-weight: $fontStyleMedium;
+                }
+            }
+            & .questionnaireanswerset {
+                font-weight: $fontStyleMedium;
+                margin-top: 1.25rem;
+            }
+            & .questionnaireanswer {
+                margin-top: 0.75rem;
+                & ::ng-deep {
+                    & .p-radiobutton,
+                    & .p-checkbox {
+                        height: 24px;
                     }
-                    & .name {
-                        font-weight: $fontStyleMedium;
+                    @media screen and (min--moz-device-pixel-ratio: 0) {
+                        & .p-radiobutton,
+                        & .p-checkbox {
+                            height: 23px;
+                        }
                     }
                 }
-                & .questionnaireanswerset {
-                    font-size: 1rem;
-                    font-size: $fontStyleRegular;
-                    margin-top: 1rem;
+                & .choice {
+                    & .inputtype {
+                        width: 34px;
+                        & i {
+                            width: 20px;
+                            text-align: center;
+                        }
+                    }
+                    & .choiceorder {
+                        width: 36px;
+                        font-weight: $fontStyleLight;
+                    }
+                    & .name {
+                        font-weight: $fontStyleLight;
+                    }
+                    & .specify {
+                        margin-top: 0.75rem;
+                    }
+                }
+                & .text {
+                    margin-top: 1.25rem;
+                    & .inputtype {
+                        & .p-fluid {
+                            & label {
+                                font-weight: $fontStyleLight;
+                                padding-bottom: 0.5rem;
+                                display: block;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -85,7 +135,7 @@ Description : <>
             padding-right: 1rem;
             padding-left: 1rem;
             & .p-button {
-                width: 305px;
+                width: 310px;
                 padding-top: 0;
                 padding-right: 1.5rem;
                 padding-bottom: 0;
@@ -196,6 +246,12 @@ Description : <>
             width: 100%;
             & .questionnairequestions {
                 margin-top: 1rem;
+                & ::ng-deep .p-panel {
+                    & .p-panel-content {
+                        padding-right: 1.25rem !important;
+                        padding-bottom: 1.25rem !important;
+                    }
+                }
             }
         }
     }
@@ -224,7 +280,7 @@ Description : <>
     }
 }
 
-@media screen and (max-width: 585px) {
+@media screen and (max-width: 590px) {
     #questionnaire-fillout-page.page-container {
         & .page-header {
             & .toolbar.fixed {
@@ -259,7 +315,6 @@ Description : <>
         }
     }
 }
-
 
 @media screen and (max-width: 388px) {
     #questionnaire-fillout-page.page-container {
