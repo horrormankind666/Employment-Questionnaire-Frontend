@@ -13,11 +13,11 @@
         <div class="toolbar">
             <div #reloadButton class="toolbar-btn">
                 <button pButton type="button" class="button button-rounded button-text"
-                    [disabled]="qtnSet.dataView.isLoading"
+                    [disabled]="questionnaire.set.dataView.isLoading"
                     pTooltip="{{ 'reload.label' | translate | titlecase }}"
-                    [tooltipDisabled]="qtnSet.dataView.isLoading"
+                    [tooltipDisabled]="questionnaire.set.dataView.isLoading"
                     [appendTo]="reloadButton"
-                    (click)="qtnSet.getDataSource()">
+                    (click)="questionnaire.set.getDataSource()">
                     <i class="fas fa-sync-alt" aria-hidden="true"></i>
                 </button>
             </div>
@@ -26,8 +26,8 @@
     <div class="page-body">
         <p-dataView
             class="questionnairesets"
-            [value]="qtnSet.datasource"
-            [loading]="qtnSet.dataView.isLoading"
+            [value]="questionnaire.set.datasource"
+            [loading]="questionnaire.set.dataView.isLoading"
             loadingIcon="fas fa-spin fa-spinner"
             layout="grid">
             <ng-template let-qtnset pTemplate="gridItem">

@@ -27,6 +27,9 @@
         },
         "userNotFound": {
             "label": "User not found."
+        },
+        "noItemsFound": {
+            "label": "No items found"
         }
     },
     "myAccount": {
@@ -62,6 +65,11 @@
     "next": {
         "label": "Next"
     },
+    "placeholder": {
+        "selectItem": {
+            "label": "Select item"
+        }
+    },
     "questionnaire": {
         "explore": {
             "label": "Explore the Questionnaire Sets"
@@ -73,6 +81,81 @@
             "notFound": {
                 "label": "Questionnaire not found."
             }
+        }
+    },
+    "institute": {
+        "name": {
+            "label": "Name"
+        },
+        "faculty": {
+            "label": "Faculty"
+        },
+        "majorSubject": {
+            "label": "Major subject"
+        }
+    },
+    "personalDetail": {
+        "fullName": {
+            "label": "Name and surname"
+        },
+        "IDCard": {
+            "label": "ID Card Number"
+        },
+        "studentCode": {
+            "label": "Student number/code"
+        }
+    },
+    "address": {
+        "houseNo": {
+            "label": "House no"
+        },
+        "adddressNo": {
+            "label": "Address no"
+        },
+        "moo": {
+            "label": "Moo"
+        },
+        "village": {
+            "label": "Village"
+        },
+        "building": {
+            "label": "Building"
+        },
+        "floors": {
+            "label": "Floors"
+        },
+        "soi": {
+            "label": "Soi/Alley"
+        },
+        "road": {
+            "label": "Road"
+        },
+        "country": {
+            "label": "Country"
+        },
+        "province": {
+            "label": "Province"
+        },
+        "district": {
+            "label": "District"
+        },
+        "subdistrict": {
+            "label": "Sub-district"
+        },
+        "zipcode": {
+            "label": "Zip code"
+        },
+        "telephone": {
+            "label": "Tel."
+        },
+        "mobilePhone": {
+            "label": "Mobile Phone"
+        },
+        "fax": {
+            "label": "Fax"
+        },
+        "email": {
+            "label": "e-mail"
         }
     }
 }

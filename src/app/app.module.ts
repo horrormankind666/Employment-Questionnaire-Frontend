@@ -2,26 +2,26 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๒/๑๐/๒๕๖๔>
+Modify date : <๒๙/๑๐/๒๕๖๔>
 Description : <>
 =============================================
 */
 
 'use strict';
 
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
 import { JwtModule } from '@auth0/angular-jwt';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 
@@ -40,6 +40,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { DynamicComponentDirective } from './app.directive';
 
@@ -82,6 +83,7 @@ export function httpLoaderFactory(http: HttpClient) {
             scrollPositionRestoration: 'top'
         }),
         FormsModule,
+        ReactiveFormsModule,
         TranslateModule.forRoot({
             loader: {
               provide: TranslateLoader,
@@ -105,6 +107,7 @@ export function httpLoaderFactory(http: HttpClient) {
                 }
             }
         }),
+        NgSelectModule,
         DynamicDialogModule,
         TableModule,
         ButtonModule,
@@ -119,7 +122,8 @@ export function httpLoaderFactory(http: HttpClient) {
         RadioButtonModule,
         CheckboxModule,
         InputTextModule,
-        InputTextareaModule
+        InputTextareaModule,
+        InputNumberModule
     ],
     exports: [
         CommonModule,
@@ -131,6 +135,8 @@ export function httpLoaderFactory(http: HttpClient) {
     bootstrap: [
         AppComponent
     ],
+    schemas:
+        [CUSTOM_ELEMENTS_SCHEMA],
     entryComponents: [
         ModalErrorComponent
     ]

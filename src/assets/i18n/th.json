@@ -27,6 +27,9 @@
         },
         "userNotFound": {
             "label": "ไม่พบผู้ใช้งาน"
+        },
+        "noItemsFound": {
+            "label": "ไม่พบรายการ"
         }
     },
     "myAccount": {
@@ -62,6 +65,11 @@
     "next": {
         "label": "ถัดไป"
     },
+    "placeholder": {
+        "selectItem": {
+            "label": "เลือกรายการ"
+        }
+    },
     "questionnaire": {
         "explore": {
             "label": "เลือกชุดแบบสอบถาม"
@@ -73,6 +81,81 @@
             "notFound": {
                 "label": "ไม่พบแบบสอบถาม"
             }
+        }
+    },
+    "institute": {
+        "name": {
+            "label": "ชื่อสถาบัน"
+        },
+        "faculty": {
+            "label": "วิทยาเขต/คณะ"
+        },
+        "majorSubject": {
+            "label": "สาขาวิชา"
+        }
+    },
+    "personalDetail": {
+        "fullName": {
+            "label": "ชื่อและนามสกุล"
+        },
+        "IDCard": {
+            "label": "เลขประจำตัวประชาชน"
+        },
+        "studentCode": {
+            "label": "เลขประจำตัวนักศึกษา"
+        }
+    },
+    "address": {
+        "houseNo": {
+            "label": "เลขที่"
+        },
+        "adddressNo": {
+            "label": "ที่ตั้งเลขที่"
+        },
+        "moo": {
+            "label": "หมู่ที่"
+        },
+        "village": {
+            "label": "หมู่บ้าน"
+        },
+        "building": {
+            "label": "อาคาร/ตึก"
+        },
+        "floors": {
+            "label": "ชั้น"
+        },
+        "soi": {
+            "label": "ตรอก/ซอย"
+        },
+        "road": {
+            "label": "ถนน"
+        },
+        "country": {
+            "label": "ประเทศ"
+        },
+        "province": {
+            "label": "จังหวัด"
+        },
+        "district": {
+            "label": "อำเภอ/เขต"
+        },
+        "subdistrict": {
+            "label": "ตำบล/แขวง"
+        },
+        "zipcode": {
+            "label": "รหัสไปรษณีย์"
+        },
+        "telephone": {
+            "label": "โทรศัพท์"
+        },
+        "mobilePhone": {
+            "label": "โทรศัพท์มือถือ"
+        },
+        "fax": {
+            "label": "โทรสาร"
+        },
+        "email": {
+            "label": "อีเมล์"
         }
     }
 }

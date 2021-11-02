@@ -2,11 +2,12 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๒/๑๐/๒๕๖๔>
+Modify date : <๐๒/๑๑/๒๕๖๔>
 Description : <>
 =============================================
 */
 
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import './variables.scss';
 
 html {
@@ -84,7 +85,9 @@ body {
 }
 
 .paragraph,
-.p-inputtext {
+.p-inputtext,
+.ng-select,
+.ng-select .ng-select-container .ng-value-container .ng-input > input {
     font-family: $fontFamilySarabun !important;
 }
 
@@ -92,6 +95,18 @@ body {
     position: relative;
     top: 50%;
     transform: translate(0, -50%);
+}
+
+::placeholder {
+    color: $textColor !important;
+    opacity: 0.5;
+}
+::-webkit-input-placeholder,
+:-moz-placeholder,
+::-moz-placeholder,
+:-ms-input-placeholder {
+    color: $textColor !important;
+    opacity: 0.5;
 }
 
 ul.table {
@@ -405,10 +420,14 @@ ul.table {
     }
 }
 
-.p-inputtext {
+.p-inputtext,
+.ng-select .ng-select-container,
+.ng-select .ng-select-container .ng-value-container .ng-input {
     height: 48px;
+    min-height: 48px;
     line-height: 1.5;
     font-size: 1rem !important;
+    font-weight: $fontStyleRegular !important;
     color: $textColor !important;
     background-color: var(--surface-0);
     padding: 10px 12px 13px 12px !important;
@@ -419,6 +438,86 @@ ul.table {
 
 .p-inputtextarea {
     min-height: 119px;
+    font-weight: $fontStyleRegular !important;
+}
+
+.ng-select {
+    font-weight: $fontStyleRegular;
+    & .ng-select-container {
+        border: 2px solid $inputColor !important;
+        border-radius: 4px;
+        &:hover {
+            border-color: $inputColorActive !important;
+        }
+    }
+    & .ng-value-container {
+        padding-right: 0.5rem;
+        padding-left: 0 !important;
+        & .ng-placeholder {
+            color: $textColor !important;
+            opacity: 0.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        & .ng-input {
+            background-color: transparent !important;
+            height: 100%;
+            min-height: 0;
+            top: 0 !important;
+            & > input {
+                font-size: inherit;
+            }
+        }
+    }
+    & .ng-arrow-wrapper {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0.5rem;
+    }
+    & .ng-dropdown-panel {
+        border-width: 2px;
+        &.ng-select-top {
+            border-bottom: 0;
+            margin-bottom: 0;
+        }
+        &.ng-select-bottom {
+            border-top: 0;
+            margin-top: 0;
+        }
+        & .ng-dropdown-panel-items {
+            max-height: 240px;
+            & .ng-option {
+                font-size: 1rem;
+                font-weight: $fontStyleRegular;
+                color: $textColor;
+                padding: 10px 12px;
+                white-space: normal;
+                word-break: break-all;
+                word-wrap: break-word;
+                &.ng-option-selected {
+                    & .ng-option-label {
+                        font-weight: $fontStyleMedium;
+                    }
+                }
+            }
+        }
+    }
+    &.ng-select-opened .ng-select-container,
+    &.ng-select-focused:not(.ng-select-opened),
+    &.ng-select-focused:not(.ng-select-opened) > .ng-select-container,
+    & .ng-dropdown-panel {
+        border-color: $inputColorActive !important;
+        outline: 0;
+        box-shadow: 0 0 0 0;
+    }
+    &.ng-select-opened {
+        & .ng-select-container,
+        & .ng-dropdown-panel {
+            z-index: 1 !important;
+        }
+    }
+
 }
 
 .overflow-hidden {

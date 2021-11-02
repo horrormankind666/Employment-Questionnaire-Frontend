@@ -11,7 +11,7 @@
     "private": true,
     "dependencies": {
         "@angular/animations": "~12.2.0",
-        "@angular/cdk": "^12.2.8",
+        "@angular/cdk": "^12.2.12",
         "@angular/common": "~12.2.0",
         "@angular/compiler": "~12.2.0",
         "@angular/core": "~12.2.0",
@@ -22,6 +22,7 @@
         "@angular/service-worker": "~12.2.0",
         "@auth0/angular-jwt": "^5.0.2",
         "@fortawesome/fontawesome-free": "^5.15.4",
+        "@ng-select/ng-select": "^7.3.0",
         "@ngx-translate/core": "^13.0.0",
         "@ngx-translate/http-loader": "^6.0.0",
         "flag-icon-css": "^3.5.0",

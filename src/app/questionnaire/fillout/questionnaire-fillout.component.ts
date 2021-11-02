@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๒/๑๐/๒๕๖๔>
+Modify date : <๐๒/๑๑/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -15,13 +15,49 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AppService } from '../../app.service';
 import { Schema, ModelService } from '../../model.service';
 
+class Country {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.Country[] = this.modelService.country.setListDefault();
+}
+
+class Province {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.Province[] = this.modelService.province.setListDefault();
+}
+
+class District {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.District[] = this.modelService.district.setListDefault();
+}
+
+class Subdistrict {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Schema.Subdistrict[] = this.modelService.subdistrict.setListDefault();
+}
+
 class QuestionnaireDoneAndSet {
     constructor(
         private modelService: ModelService
     ) {
     }
 
-    datasource: Schema.QuestionnaireDoneAndSet = this.modelService.qtnDoneAndSet.setListDefault()[0];
+    datasource: Schema.QuestionnaireDoneAndSet = this.modelService.questionnaire.doneAndSet.setListDefault()[0];
 }
 
 class QuestionnaireSet {
@@ -30,7 +66,7 @@ class QuestionnaireSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireSet | null = this.modelService.qtnSet.setDefault();
+    datasource: Schema.QuestionnaireSet | null = this.modelService.questionnaire.set.setDefault();
 }
 
 class QuestionnaireSection {
@@ -39,7 +75,7 @@ class QuestionnaireSection {
     ) {
     }
 
-    datasource: Schema.QuestionnaireSection[] = this.modelService.qtnSection.setListDefault();
+    datasource: Schema.QuestionnaireSection[] = this.modelService.questionnaire.section.setListDefault();
     dataView = {
         isLoading: false
     };
@@ -77,7 +113,7 @@ class QuestionnaireQuestion {
     ) {
     }
 
-    datasource: Schema.QuestionnaireQuestion[] = this.modelService.qtnQuestion.setListDefault();
+    datasource: Schema.QuestionnaireQuestion[] = this.modelService.questionnaire.question.setListDefault();
 }
 
 class QuestionnaireAnswerSet {
@@ -86,7 +122,7 @@ class QuestionnaireAnswerSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireAnswerSet[] = this.modelService.qtnAnswerSet.setListDefault();
+    datasource: Schema.QuestionnaireAnswerSet[] = this.modelService.questionnaire.answerSet.setListDefault();
 }
 
 class QuestionnaireAnswer {
@@ -95,12 +131,32 @@ class QuestionnaireAnswer {
     ) {
     }
 
-    datasource: Schema.QuestionnaireAnswer[] = this.modelService.qtnAnswer.setListDefault();
+    datasource: Schema.QuestionnaireAnswer[] = this.modelService.questionnaire.answer.setListDefault();
     formField = {
         singleChoice: null,
         multipleChoice: [],
         shortAnswerText: {},
-        longAnswerText: {}
+        longAnswerText: {},
+        select: {},
+        address: {
+            houseNo: {},
+            adddressNo: {},
+            moo: {},
+            building: {},
+            village: {},
+            floors: {},
+            soi: {},
+            road: {},
+            country: {},
+            province: {},
+            district: {},
+            subdistrict: {},
+            zipcode: {},
+            telephone: {},
+            mobilePhone: {},
+            fax: {},
+            email: {}
+        }
     };
 }
 
@@ -118,12 +174,18 @@ export class QuestionnaireFilloutComponent implements OnInit {
     ) {
     }
 
-    qtnDoneAndSet = new QuestionnaireDoneAndSet(this.modelService);
-    qtnSet = new QuestionnaireSet(this.modelService);
-    qtnSection = new QuestionnaireSection(this.modelService);
-    qtnQuestion: Schema.Any = {};
-    qtnAnswerSet: Schema.Any = {};
-    qtnAnswer: Schema.Any = {};
+    country = this.modelService.any.setDefault();
+    province = this.modelService.any.setDefault();
+    district = this.modelService.any.setDefault();
+    subdistrict = this.modelService.any.setDefault();
+    questionnaire = {
+        doneAndSet: new QuestionnaireDoneAndSet(this.modelService),
+        set: new QuestionnaireSet(this.modelService),
+        section: new QuestionnaireSection(this.modelService),
+        question: this.modelService.any.setDefault(),
+        answerSet: this.modelService.any.setDefault(),
+        answer: this.modelService.any.setDefault()
+    };
     inputType = {
         singleChoice: 'single choice',
         multipleChoice: 'multiple choice',
@@ -132,33 +194,82 @@ export class QuestionnaireFilloutComponent implements OnInit {
         personalDetail: 'personal detail',
         homeAddress: 'home address',
         workplaceAddress: 'workplace address',
-        dropdownProvince: 'dropdown province',
-        institute: 'institute'
+        institute: 'institute',
+        dropdown: 'dropdown'
     };
+    addressFields = [
+        { inputType: this.inputType.homeAddress, name: 'houseNo' },
+        { inputType: this.inputType.workplaceAddress, name: 'adddressNo' },
+        { inputType: '*', name: 'moo' },
+        { inputType: this.inputType.workplaceAddress, name: 'building' },
+        { inputType: this.inputType.homeAddress, name: 'village' },
+        { inputType: this.inputType.workplaceAddress, name: 'floors' },
+        { inputType: '*', name: 'soi' },
+        { inputType: '*', name: 'road' },
+        { inputType: this.inputType.workplaceAddress, name: 'country' },
+        { inputType: '*', name: 'province' },
+        { inputType: '*', name: 'district' },
+        { inputType: '*', name: 'subdistrict' },
+        { inputType: '*', name: 'zipcode' },
+        { inputType: '*', name: 'telephone' },
+        { inputType: '*', name: 'mobilePhone' },
+        { inputType: '*', name: 'fax' },
+        { inputType: '*', name: 'email' }
+    ]
 
     ngOnInit(): void {
-        this.qtnSection.dataView.isLoading = true;
-        this.qtnDoneAndSet.datasource = this.route.snapshot.data.qtnDoneAndSetDataSource;
-        this.qtnSet.datasource = this.qtnDoneAndSet.datasource.questionnaireSet;
-        this.qtnSection.datasource = this.qtnDoneAndSet.datasource.questionnaireSection;
+        this.questionnaire.section.dataView.isLoading = true;
 
-        this.qtnSection.datasource.forEach((qtnsection: Schema.QuestionnaireSection) => {
-            this.qtnQuestion[qtnsection.ID] = new QuestionnaireQuestion(this.modelService);
-            this.qtnQuestion[qtnsection.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireQuestion.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
+        this.country['master'] = new Country(this.modelService);
+        this.country['master'].datasource = this.route.snapshot.data.questionnaireDataSource.country;
 
-            this.qtnQuestion[qtnsection.ID].datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
-                this.qtnAnswerSet[qtnquestion.ID] = new QuestionnaireAnswerSet(this.modelService);
-                this.qtnAnswerSet[qtnquestion.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireAnswerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
+        this.province['master'] = new Province(this.modelService);
+        this.province['master'].datasource = this.route.snapshot.data.questionnaireDataSource.province;
 
-                this.qtnAnswerSet[qtnquestion.ID].datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
-                    this.qtnAnswer[qtnanswerset.ID] = new QuestionnaireAnswer(this.modelService);
-                    this.qtnAnswer[qtnanswerset.ID].datasource = this.qtnDoneAndSet.datasource.questionnaireAnswer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
+        this.district['master'] = new District(this.modelService);
+        this.district['master'].datasource = this.route.snapshot.data.questionnaireDataSource.district;
+
+        this.subdistrict['master'] = new Subdistrict(this.modelService);
+        this.subdistrict['master'].datasource = this.route.snapshot.data.questionnaireDataSource.subdistrict;
+
+        this.questionnaire.doneAndSet.datasource = this.route.snapshot.data.questionnaireDataSource.doneAndSet;
+        this.questionnaire.set.datasource = this.questionnaire.doneAndSet.datasource.set;
+        this.questionnaire.section.datasource = this.questionnaire.doneAndSet.datasource.section;
+
+        this.questionnaire.section.datasource.forEach((qtnsection: Schema.QuestionnaireSection) => {
+            this.questionnaire.question[qtnsection.ID] = new QuestionnaireQuestion(this.modelService);
+            this.questionnaire.question[qtnsection.ID].datasource = this.questionnaire.doneAndSet.datasource.question.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
+
+            this.questionnaire.question[qtnsection.ID].datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
+                this.questionnaire.answerSet[qtnquestion.ID] = new QuestionnaireAnswerSet(this.modelService);
+                this.questionnaire.answerSet[qtnquestion.ID].datasource = this.questionnaire.doneAndSet.datasource.answerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
+
+                this.questionnaire.answerSet[qtnquestion.ID].datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
+                    let inputType: any = {
+                        inputType: null,
+                        type: null
+                    };
+
+                    this.questionnaire.answer[qtnanswerset.ID] = new QuestionnaireAnswer(this.modelService);
+                    this.questionnaire.answer[qtnanswerset.ID].datasource = this.questionnaire.doneAndSet.datasource.answer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
+                    inputType = qtnanswerset.inputType;
+
+                    if (qtnanswerset.inputType !== null && (inputType.inputType === this.inputType.homeAddress || inputType.inputType === this.inputType.workplaceAddress)) {
+                        let qtnanswerID = this.questionnaire.answer[qtnanswerset.ID].datasource[0].ID;
+
+                        this.province[qtnanswerID] = new Province(this.modelService);
+
+                        if (inputType.inputType === this.inputType.homeAddress)
+                            this.province[qtnanswerID].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
+                    }
                 });
             });
         });
 
+        this.province['master'].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
+
         setTimeout(() => {
-            this.qtnSection.dataView.isLoading = false;
-        }, (this.qtnSet.datasource !== null ? 1000 : 0));
+            this.questionnaire.section.dataView.isLoading = false;
+        }, (this.questionnaire.set.datasource !== null ? 1000 : 0));
     }
 }

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๒/๑๐/๒๕๖๔>
+Modify date : <๐๑/๑๑/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -13,6 +13,45 @@ Description : <>
     width: 1200px !important;
     padding-top: 0;
     margin: 0 auto;
+    & .questionnaireset::ng-deep .p-panel {
+        & .p-panel-content {
+            text-align: center;
+            padding: 0 !important;
+            & .namedescription,
+            & .notice {
+                padding-top: 1rem !important;
+                padding-right: 1.5rem !important;
+                padding-left:  1.5rem !important;
+            }
+            & .namedescription,
+            & .notice {
+                padding-bottom: 1.25rem !important;
+            }
+            & .name {
+                font-size: 1.45rem;
+                font-weight: $fontStyleSemibold;
+                line-height: 1.7;
+            }
+            & .description {
+                font-size: 1.2rem;
+                font-weight: $fontStyleLight;
+                margin-top: 0.25rem;
+            }
+            & .notice {
+                font-size: 1.125rem;
+                background-color: var(--blue-100);
+                border-bottom-right-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+            & .p-divider.p-divider-horizontal {
+                &::before {
+                    border-top-color: var(--surface-400);
+                    border-top-style: dashed;
+                    border-bottom-width: 0;
+                }
+            }
+        }
+    }
     & ::ng-deep .p-panel {
         & .p-panel-content {
             line-height: 1.75;
@@ -20,48 +59,28 @@ Description : <>
             text-align: left;
             border-top: 1px solid #DADCE0 !important;
             border-radius: 8px;
-            & .questionnaireset {
-                text-align: center;
-                & .name {
-                    font-size: 1.45rem;
-                    font-weight: $fontStyleSemibold;
-                    line-height: 1.7;
-                }
-                & .description {
-                    font-size: 1.2rem;
-                    font-weight: $fontStyleLight;
-                    margin-top: 0.25rem;
-                }
-                & .notice {
-                    font-size: 1.125rem;
-                }
-                & .p-divider.p-divider-horizontal {
-                    &::before {
-                        border-top-color: var(--surface-400);
-                        border-top-style: dashed;
-                        border-bottom-width: 0;
-                    }
-                }
-            }
             & .questionnairequestion {
                 color: #000000;
                 font-size: 1.175rem;
+                font-weight: $fontStyleMedium;
                 line-height: 1.85;
                 margin-bottom: 1.5rem;
                 & .no {
                     width: 34px;
-                    font-weight: $fontStyleMedium;
                     padding-right: 0.5rem;
                 }
-                & .name {
-                    font-weight: $fontStyleMedium;
+                & .description {
+                    font-size: 0.875rem;
+                    font-weight: $fontStyleLight;
+                    opacity: 0.6;
                 }
             }
             & .questionnaireanswerset {
-                font-weight: $fontStyleMedium;
+                font-weight: $fontStyleRegular;
                 margin-top: 1.25rem;
             }
             & .questionnaireanswer {
+                font-weight: $fontStyleLight;
                 margin-top: 0.75rem;
                 & ::ng-deep {
                     & .p-radiobutton,
@@ -75,6 +94,20 @@ Description : <>
                         }
                     }
                 }
+                & .label {
+                    font-weight: $fontStyleRegular;
+                }
+                & .viewanswer {
+                    font-weight: $fontStyleRegular;
+                    opacity: 0.5;
+                    border-bottom: 1px dotted rgba(0, 0, 0, 0.4)
+                }
+                & .namedescription {
+                    & .description {
+                        font-size: 0.875rem;
+                        opacity: 0.6;
+                    }
+                }
                 & .choice {
                     & .inputtype {
                         width: 34px;
@@ -85,26 +118,22 @@ Description : <>
                     }
                     & .choiceorder {
                         width: 36px;
-                        font-weight: $fontStyleLight;
-                    }
-                    & .name {
-                        font-weight: $fontStyleLight;
                     }
                     & .specify {
-                        margin-top: 0.75rem;
+                        margin-top: 0.5rem;
                     }
                 }
                 & .text {
                     margin-top: 1.25rem;
                     & .inputtype {
                         & .p-fluid {
-                            & label {
-                                font-weight: $fontStyleLight;
+                            & .namedescription {
                                 padding-bottom: 0.5rem;
                                 display: block;
                             }
                         }
                     }
+
                 }
             }
         }
@@ -253,6 +282,31 @@ Description : <>
                     }
                 }
             }
+            & .questionnaireanswer {
+                & .institute .table,
+                & .personaldetail .table,
+                & .address .table {
+                    margin-top: 0.75rem;
+                    & .label {
+                        width: 210px;
+                    }
+                }
+                & .address .table {
+                    & .label {
+                        width: 196px;
+                    }
+                    &.country,
+                    &.province {
+                        & .label {
+                            vertical-align: top;
+                            & label {
+                                position: relative;
+                                top: 8px;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -303,6 +357,10 @@ Description : <>
                         & .selected {
                             width: 100% !important ;
                         }
+                        & .previous,
+                        & .next {
+                            width: 62px;
+                        }
                     }
                     & ::ng-deep .questionnairesection-template.p-overlaypanel  {
                         width: 100%;
@@ -311,6 +369,38 @@ Description : <>
             }
             & .title {
                 padding-top: 122px;
+            }
+        }
+        & ::ng-deep .p-panel {
+            & .p-panel-content {
+                & .questionnaireanswer {
+                    & .institute,
+                    & .personaldetail,
+                    & .address {
+                        & .table,
+                        & .label,
+                        & .viewanswer,
+                        & .editanswer {
+                            width: 100% !important;
+                            display: block;
+                        }
+                        & .viewanswer,
+                        & .editanswer {
+                            margin-top: 0.5rem;
+                        }
+                        & .table:not(:first-child) {
+                            margin-top: 1.25rem !important;
+                        }
+                    }
+                    & .address {
+                        & .country,
+                        & .province {
+                            & .label label {
+                                top: 0 !important;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

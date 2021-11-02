@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๒/๑๐/๒๕๖๔>
+Modify date : <๐๒/๑๑/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -29,6 +29,56 @@ export namespace Schema {
         familyName: string,
         email: string,
         initials: string
+    }
+
+    export interface Country {
+        ID: string,
+        name: any,
+        isoCountryCodes2Letter: string,
+        isoCountryCodes3Letter: string
+    }
+
+    export interface Province {
+        ID: string,
+        country: {
+            ID: string,
+            isoCountryCodes3Letter: string
+        },
+        name: any,
+        regional: string
+    }
+
+    export interface District {
+        ID: string,
+        country: {
+            ID: string,
+            isoCountryCodes3Letter: string
+        },
+        province: {
+            ID: string,
+            name: any
+
+        },
+        name: any,
+        zipCode: string
+    }
+
+    export interface Subdistrict {
+        ID: string,
+        country: {
+            ID: string,
+            isoCountryCodes3Letter: string
+        },
+        province: {
+            ID: string,
+            name: any
+        },
+        district: {
+            ID: string,
+            name: any,
+            zipCode: string
+        },
+        name: any
     }
 
     export interface QuestionnaireDone {
@@ -107,6 +157,7 @@ export namespace Schema {
         empQuestionnaireQuestionID: string,
         no: number,
         titleName: any,
+        inputType: string,
         actionDate: string
     }
 
@@ -118,36 +169,49 @@ export namespace Schema {
         name: any,
         description: any,
         inputType: string,
-        value: string,
         specify: string,
         gotoSection: string,
         actionDate: string
     }
 
     export interface QuestionnaireDoneAndSet {
-        questionnaireDone: QuestionnaireDone | null,
-        questionnaireSet: QuestionnaireSet | null,
-        questionnaireSection: QuestionnaireSection[],
-        questionnaireQuestion: QuestionnaireQuestion[],
-        questionnaireAnswerSet: QuestionnaireAnswerSet[],
-        questionnaireAnswer: QuestionnaireAnswer[]
+        done: QuestionnaireDone | null,
+        set: QuestionnaireSet | null,
+        section: QuestionnaireSection[],
+        question: QuestionnaireQuestion[],
+        answerSet: QuestionnaireAnswerSet[],
+        answer: QuestionnaireAnswer[]
     }
 }
 
 namespace Instance {
-    export class QuestionnaireDoneAndSet {
+    export class Any {
+        setDefault(): Schema.Any {
+            return {};
+        }
+    }
+
+    export class Country {
         constructor(
             private appService: AppService
         ) {
         }
 
-        setListDefault(): Schema.QuestionnaireDoneAndSet[] {
+        private routePrefix: string = 'Country';
+
+        setListDefault(): Schema.Country[] {
             return [];
         }
 
-        private async getDataSource(action: string, query?: string): Promise<[]> {
+        setDefault(): Schema.Country | null {
+            return null;
+        }
+
+        async getList(): Promise<Schema.Country[]> {
             try {
-                return await this.appService.getDataSource('Questionnaire/DoneAndSet', action, query, true);
+                let ds: Schema.Country[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+
+                return ds;
             }
             catch(error) {
                 console.log(error);
@@ -155,10 +219,113 @@ namespace Instance {
                 return [];
             }
         }
+    }
+
+    export class Province {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Province';
+
+        setListDefault(): Schema.Province[] {
+            return [];
+        }
+
+        setDefault(): Schema.Province | null {
+            return null;
+        }
+
+        async getList(): Promise<Schema.Province[]> {
+            try {
+                let ds: Schema.Province[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+
+                return ds;
+            }
+            catch(error) {
+                console.log(error);
+
+                return [];
+            }
+        }
+    }
+
+    export class District {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'District';
+
+        setListDefault(): Schema.District[] {
+            return [];
+        }
+
+        setDefault(): Schema.District | null {
+            return null;
+        }
+
+        async getList(): Promise<Schema.District[]> {
+            try {
+                let ds: Schema.District[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+
+                return ds;
+            }
+            catch(error) {
+                console.log(error);
+
+                return [];
+            }
+        }
+    }
+
+    export class Subdistrict {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Subdistrict';
+
+        setListDefault(): Schema.Subdistrict[] {
+            return [];
+        }
+
+        setDefault(): Schema.Subdistrict | null {
+            return null;
+        }
+
+        async getList(): Promise<Schema.Subdistrict[]> {
+            try {
+                let ds: Schema.Subdistrict[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+
+                return ds;
+            }
+            catch(error) {
+                console.log(error);
+
+                return [];
+            }
+        }
+    }
+
+    export class QuestionnaireDoneAndSet {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Questionnaire/DoneAndSet';
+
+        setListDefault(): Schema.QuestionnaireDoneAndSet[] {
+            return [];
+        }
 
         async getList(): Promise<Schema.QuestionnaireSet[]> {
             try {
-                let ds: Schema.QuestionnaireSet[] = await this.getDataSource('getlist');
+                let ds: Schema.QuestionnaireSet[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -176,7 +343,7 @@ namespace Instance {
             ].join('/');
 
             try {
-                let ds: Schema.QuestionnaireDoneAndSet[] = await this.getDataSource('get', query);
+                let ds: Schema.QuestionnaireDoneAndSet[] = await this.appService.getDataSource(this.routePrefix, 'get', query, true);
 
                 return ds[0];
             }
@@ -233,10 +400,17 @@ export class ModelService {
     ) {
     }
 
-    qtnDoneAndSet = new Instance.QuestionnaireDoneAndSet(this.appService);
-    qtnSet = new Instance.QuestionnaireSet();
-    qtnSection = new Instance.QuestionnaireSection();
-    qtnQuestion = new Instance.QuestionnaireQuestion();
-    qtnAnswerSet = new Instance.QuestionnaireAnswerSet();
-    qtnAnswer = new Instance.QuestionnaireAnswer();
+    any = new Instance.Any();
+    country = new Instance.Country(this.appService);
+    province = new Instance.Province(this.appService);
+    district = new Instance.District(this.appService);
+    subdistrict = new Instance.Subdistrict(this.appService);
+    questionnaire = {
+        doneAndSet: new Instance.QuestionnaireDoneAndSet(this.appService),
+        set: new Instance.QuestionnaireSet(),
+        section: new Instance.QuestionnaireSection(),
+        question: new Instance.QuestionnaireQuestion(),
+        answerSet: new Instance.QuestionnaireAnswerSet(),
+        answer: new Instance.QuestionnaireAnswer()
+    }
 }
