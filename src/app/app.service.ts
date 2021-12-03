@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๒/๑๐/๒๕๖๔>
+Modify date : <๐๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -36,7 +36,7 @@ export class AppService {
 
     setBearerToken() {
         let CUID: string = this.getCUID(['6unbq648oglyxf90ds']);
-        let token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSIsImtpZCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSJ9.eyJhdWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJpc3MiOiJodHRwczovL2lkcC5tYWhpZG9sLmFjLnRoL2FkZnMiLCJpYXQiOjE2MzU4MjkyNDAsIm5iZiI6MTYzNTgyOTI0MCwiZXhwIjoxNjM1ODMyODQwLCJhdXRoX3RpbWUiOjE2MzU4MjQ4NDUsIm5vbmNlIjoiNjM3NzE0MjYwNDA3MzYwMDMyLlpUYzVZamcwTW1VdE5qQTBNaTAwTVRrMkxXRTNNVGd0TldWbU5XUmlPR1V5TTJRNVpqZzRNVFJtTW1FdFpqWTRPQzAwWWpkbUxUazRNamN0TURBeU9HUTVNREZoWlRNeiIsInN1YiI6ImhRdVBXeTFnZSt0ZWtMRlQ4WmxHNEQzaXNVL2FHQTR2WkhnditLUGN3NVk9Iiwic2lkIjoiUy0xLTUtMjEtMjM2ODEzMDQxMi0zMjQ2OTQ5NDYwLTI1MzEzNzM3NDMtMzY0NTkiLCJ1cG4iOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsInVuaXF1ZV9uYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZW1haWwiOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsIndpbmFjY291bnRuYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZ2l2ZW5fbmFtZSI6Illvb3RhcG9vbSIsImZhbWlseV9uYW1lIjoiVGF2YW5uYSIsInBwaWQiOiI2dW5icTY0OG9nbHl4ZjkwZHMiLCJhcHB0eXBlIjoiQ29uZmlkZW50aWFsIiwiYXBwaWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJhdXRobWV0aG9kIjoidXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFjOmNsYXNzZXM6UGFzc3dvcmRQcm90ZWN0ZWRUcmFuc3BvcnQiLCJ2ZXIiOiIxLjAiLCJzY3AiOiJhbGxhdGNsYWltcyBvcGVuaWQiLCJjX2hhc2giOiJnZWtyaWNNZWRoTEFRdC04N3hTS0tnIn0.fnVjssYeJqe3xithwNF0teqGPnTnk-EUpSQGQ9-5a3tAQCnazj9bCttu_1C8Dy32aDe5rt_mT81tEIm5_QLjjNifcVonSZlJd4PQ3UMlaBNc04VNQczKUaLDGDZ4qSEYMTjx2CHCjmbp7wvEGO6MiewpIXpSdJjkjZ1bS8j6Sk3p9K4bUSAs4uGpITPxm5V-SDLRa1xA8V1LXVMXNrWBqRx27HJf8G7Mg1jL1uLN0reKUA2Q9taFiS3Mavn92hmq6qOFk4OaTz7kfN6P3dUMz8fLWR6P6cL2Qm2xqihVKkVXK6AJDnjbt2wdesxmiWawcH_Ny7wxPng8NVUO5qESSw';
+        let token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSIsImtpZCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSJ9.eyJhdWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJpc3MiOiJodHRwczovL2lkcC5tYWhpZG9sLmFjLnRoL2FkZnMiLCJpYXQiOjE2Mzg1MjI4OTQsIm5iZiI6MTYzODUyMjg5NCwiZXhwIjoxNjM4NTI2NDk0LCJhdXRoX3RpbWUiOjE2Mzg1MTU0MDUsIm5vbmNlIjoiNjM3NzQxMTk2OTQ1NzA4NzY3LlkySmpZelZoTkRrdE5tUXlaUzAwTXpJMUxXSmlPV1F0T0dabVlXVTVPRE14TmpNeU9UVmpPVE5rTlRRdE0yWXdPUzAwTUdRMUxUazFZMlF0TW1VMVpEVTRObUl3WkRneiIsInN1YiI6ImhRdVBXeTFnZSt0ZWtMRlQ4WmxHNEQzaXNVL2FHQTR2WkhnditLUGN3NVk9Iiwic2lkIjoiUy0xLTUtMjEtMjM2ODEzMDQxMi0zMjQ2OTQ5NDYwLTI1MzEzNzM3NDMtMzY0NTkiLCJ1cG4iOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsInVuaXF1ZV9uYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZW1haWwiOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsIndpbmFjY291bnRuYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZ2l2ZW5fbmFtZSI6Illvb3RhcG9vbSIsImZhbWlseV9uYW1lIjoiVGF2YW5uYSIsInBwaWQiOiI2dW5icTY0OG9nbHl4ZjkwZHMiLCJhcHB0eXBlIjoiQ29uZmlkZW50aWFsIiwiYXBwaWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJhdXRobWV0aG9kIjoidXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFjOmNsYXNzZXM6UGFzc3dvcmRQcm90ZWN0ZWRUcmFuc3BvcnQiLCJ2ZXIiOiIxLjAiLCJzY3AiOiJhbGxhdGNsYWltcyBvcGVuaWQiLCJjX2hhc2giOiI1dDlfNmlsZzRFdVNRYlpSMTY0WG5BIn0.b0FRxFwUAAlsXDBnaFD-HwQTL15zpbYlu_nptOfwkTKmWPZQwrfxXyQEdz5C3g892_KSsiL_88EUWNrbmeSN_zV1gdh10EsGzH92M2R0ejQHy6b3YGqc7TxghVUsnWhBV209b5BsapI5P_b77oZuTRcZetHXZ7KTmS2JKFwdQT3sjazXr21zX-UMbo-1ZRHv8ucUy2iJo8DSLNLkfEiteqDUYgBexDPwTtvF9XVOLn_P3jT9QDP6jacSZkQPgzWaJz5SujrBY-GO8v0pwU6IldX5gF8DHt5Ob20dzmuSkwLGPf7cD1KMPw8o62Zd8jPBCpS_YaFK8Tp8yMv5Z6ckAw';
         let bearerToken: string = btoa(btoa(CUID.split('').reverse().join('')) + '.' + btoa(token.split('').reverse().join('')));
 
         localStorage.setItem(this.env.localStorageKey.bearerToken, bearerToken);
@@ -230,5 +230,19 @@ export class AppService {
 
             return [];
         }
+    }
+
+    arrayFilter(array: Array<{}>, filterOptions: { field: string, value: any }): Array<{}> {
+        return (array.filter((dr: any) => dr[filterOptions.field] === filterOptions.value));
+    }
+
+    isEmail(email: string): boolean {
+        const pattern = new RegExp('^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$');
+
+        return (email ? pattern.test(email) : true);
+    }
+
+    eval(condition: string): boolean {
+        return eval(condition);
     }
 }

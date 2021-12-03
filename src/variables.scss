@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๙/๑๐/๒๕๖๔>
+Modify date : <๐๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -50,9 +50,14 @@ $footerMaxHeight: 55px;
 $navbarbrandMaxHeight: 70px;
 $sidebarMaxWidth: 260px;
 $imagePath: 'assets/images';
+$fontPath: 'assets/fonts';
 $themeColor: rgb(37, 57, 136);
 $backgroundColor: rgb(247, 243, 235);
 $textColor: rgb(5, 25, 45);
 $successColor: rgb(3, 239, 98);
+$successColorHover: rgb(101, 255, 143);
 $inputColor: rgb(229, 225, 218);
 $inputColorActive: rgb(0, 155, 216);
+$errorBackgroundColor: rgb(211, 47, 47);
+$errorBorderColor: rgb(192, 41, 41);
+$errorButtonColor: rgb(192, 41, 41);

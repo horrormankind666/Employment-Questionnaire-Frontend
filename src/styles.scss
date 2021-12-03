@@ -2,13 +2,14 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๐๒/๑๑/๒๕๖๔>
+Modify date : <๐๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
 
-@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~@ng-select/ng-select/themes/default.theme.css';
 @import './variables.scss';
+@import './fonts.scss';
 
 html {
     position: relative;
@@ -86,6 +87,7 @@ body {
 
 .paragraph,
 .p-inputtext,
+.p-inline-message,
 .ng-select,
 .ng-select .ng-select-container .ng-value-container .ng-input > input {
     font-family: $fontFamilySarabun !important;
@@ -129,6 +131,7 @@ ul.table {
 
 .p-button {
     color: $textColor;
+    border-width: 2px !important;
     display: inline-block !important;
     &:enabled:focus {
         outline: 0 none !important;
@@ -157,9 +160,9 @@ ul.table {
         &.button-outlined {
             background-color: transparent !important;
             border: 2px solid $textColor !important;
-            &.button-success {
+            &.p-button-success {
                 border-color: $successColor !important;
-                &:hover {
+                &:hover:not(:disabled) {
                     background-color: $successColor !important;
                 }
             }
@@ -172,8 +175,23 @@ ul.table {
             border: 0 !important;
         }
         &.active,
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: var(--surface-400) !important;
+        }
+        &.p-button-success {
+            background-color: $successColor !important;
+            border-color: $successColor;
+            &:hover:not(:disabled) {
+                background-color: $successColorHover !important;
+                border-color: $successColorHover !important;
+            }
+        }
+        &.p-button-gray {
+            background-color: var(--surface-300);
+            border-color: var(--surface-300);
+            &:hover:not(:disabled) {
+                border-color: var(--surface-400);
+            }
         }
     }
 }
@@ -272,13 +290,13 @@ ul.table {
         & .p-dialog-content,
         & .p-dialog-footer {
             color: var(--surface-0);
-            background-color: #D32F2F !important;
+            background-color: $errorBackgroundColor !important;
         }
         & .p-dialog-footer {
-            border-top: 1px solid #C02929;
+            border-top: 1px solid $errorBorderColor #C02929;
             & .p-button {
-                background-color: #C02929;
-                border-color: #C02929;
+                background-color: $errorButtonColor;
+                border-color: $errorBorderColor;
             }
         }
     }
@@ -319,7 +337,7 @@ ul.table {
         border-color: rgba(255, 212, 59, 1);
     }
     & .p-card-body {
-        line-height: 1.7;
+        line-height: 1.5;
         padding: 0 !important;
         & .p-card-title {
             font-size: 1.35rem;
@@ -328,6 +346,7 @@ ul.table {
         }
         & .p-card-subtitle {
             min-height: 28px;
+            line-height: 1.6;
             color: $textColor;
             font-weight: $fontStyleLight;
             margin-bottom: 0;
@@ -349,7 +368,15 @@ ul.table {
         border-color: #DADCE0 !important;
         border-bottom-right-radius: 8px !important;
         border-bottom-left-radius: 8px !important;
-        padding: 1rem 1.5rem 1.5rem 1.5rem !important;
+        padding: 1rem 1.5rem 1rem 1.5rem !important;
+    }
+    & .p-component-overlay {
+        border-radius: inherit;
+        position: absolute;
+        z-index: 1;
+    }
+    & .p-disabled {
+        opacity: 0.3;
     }
 }
 
@@ -374,6 +401,7 @@ ul.table {
 .p-checkbox-box {
     border: 2px solid $inputColor !important;
     border-radius: 4px !important;
+    transition: none !important;
     &.p-highlight {
         background-color: $inputColorActive !important;
         border-color: $inputColorActive !important;
@@ -394,6 +422,14 @@ ul.table {
         &:hover {
             border-color: $inputColorActive !important;
         }
+    }
+    &:disabled,
+    &.p-disabled,
+    &.p-disabled * {
+        background-color: var(--surface-300) !important;
+        opacity: 0.6 !important;
+        cursor: default !important;
+        pointer-events: none;
     }
 }
 
@@ -417,6 +453,10 @@ ul.table {
                 }
             }
         }
+        & .p-radiobutton-icon,
+        & .p-checkbox-icon {
+            transition-duration: 0s !important;
+        }
     }
 }
 
@@ -436,9 +476,27 @@ ul.table {
     vertical-align: baseline;
 }
 
+
+
 .p-inputtextarea {
     min-height: 119px;
     font-weight: $fontStyleRegular !important;
+}
+
+.p-inline-message {
+    border-radius: 4px !important;
+    padding: 12px 14px !important;
+    justify-content: left !important;
+    &.p-inline-message-error {
+        background-color: $errorBackgroundColor !important;
+        color: var(--surface-0) !important;
+    }
+    & .p-inline-message-icon {
+        display: none;
+    }
+    & .p-inline-message-text {
+        font-size: 0.875rem !important;
+    }
 }
 
 .ng-select {
@@ -595,6 +653,17 @@ ul.table {
         padding-right: 1rem;
         padding-left: 1rem;
         margin-top: 1rem;
+    }
+}
+
+.formfield-error {
+    & .p-inputtext {
+        border-bottom-right-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+    & .p-inline-message {
+        border-top-right-radius: 0 !important;
+        border-top-left-radius: 0 !important;
     }
 }
 

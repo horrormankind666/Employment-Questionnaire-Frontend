@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๒/๑๑/๒๕๖๔>
+Modify date : <๐๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -23,10 +23,29 @@ export namespace Schema {
         token: string
     }
 
+    export interface InputType {
+        inputType: string,
+        name: string,
+        type: string,
+        length?: number,
+        mode?: string,
+        decimalPoint?: number,
+        useGrouping?: boolean,
+        mask?: string,
+        value?: any
+    }
+
+    export interface Condition {
+        column: string,
+        operator: string,
+        value: any
+    }
+
     export interface User {
         PPID: string,
         givenName: string,
         familyName: string,
+        gender: string,
         email: string,
         initials: string
     }
@@ -149,6 +168,7 @@ export namespace Schema {
         name: any,
         description: any,
         condition: any,
+        disableStatus: string,
         actionDate: string
     }
 
@@ -157,7 +177,7 @@ export namespace Schema {
         empQuestionnaireQuestionID: string,
         no: number,
         titleName: any,
-        inputType: string,
+        inputType: InputType,
         actionDate: string
     }
 
@@ -168,8 +188,8 @@ export namespace Schema {
         choiceOrder: string,
         name: any,
         description: any,
-        inputType: string,
-        specify: string,
+        inputType: InputType,
+        specify: InputType[],
         gotoSection: string,
         actionDate: string
     }

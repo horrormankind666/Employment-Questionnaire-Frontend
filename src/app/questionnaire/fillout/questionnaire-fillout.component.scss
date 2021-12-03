@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๑/๑๑/๒๕๖๔>
+Modify date : <๒๙/๑๑/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -28,11 +28,12 @@ Description : <>
                 padding-bottom: 1.25rem !important;
             }
             & .name {
+                line-height: 1.5;
                 font-size: 1.45rem;
                 font-weight: $fontStyleSemibold;
-                line-height: 1.7;
             }
             & .description {
+                line-height: 1.6;
                 font-size: 1.2rem;
                 font-weight: $fontStyleLight;
                 margin-top: 0.25rem;
@@ -54,7 +55,7 @@ Description : <>
     }
     & ::ng-deep .p-panel {
         & .p-panel-content {
-            line-height: 1.75;
+            line-height: 1.7;
             font-size: 1.05em;
             text-align: left;
             border-top: 1px solid #DADCE0 !important;
@@ -100,7 +101,7 @@ Description : <>
                 & .viewanswer {
                     font-weight: $fontStyleRegular;
                     opacity: 0.5;
-                    border-bottom: 1px dotted rgba(0, 0, 0, 0.4)
+                    border-bottom: 1px dotted rgba(0, 0, 0, 0.5)
                 }
                 & .namedescription {
                     & .description {
@@ -163,25 +164,71 @@ Description : <>
             padding-top: 1rem;
             padding-right: 1rem;
             padding-left: 1rem;
+            display: table;
+            table-layout: fixed;
             & .p-button {
-                width: 310px;
+                width: 100%;
                 padding-top: 0;
-                padding-right: 1.5rem;
                 padding-bottom: 0;
-                padding-left: 1.5rem;
             }
+            & .left,
+            & .center,
             & .right {
-                right: 1rem;
+                display: table-cell;
+            }
+            & .left,
+            & .right {
+                width: 77px;
+            }
+            & ::ng-deep .p-tooltip {
+                top: 46px !important;
+            }
+            & ::ng-deep .p-overlaypanel  {
+                background-color: $backgroundColor;
+                text-align: center;
+                border: 2px solid $textColor;
+                border-radius: 4px;
+                top: 29px !important;
+                left: 0 !important;
+                & .p-overlaypanel-content {
+                    padding: 0;
+                }
+                & ::ng-deep .p-orderlist {
+                    & .p-orderlist-controls {
+                        display: none;
+                    }
+                    & .p-orderlist-list {
+                        background-color: transparent;
+                        border: 0;
+                        border-bottom-right-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                }
+            }
+            & .left {
+                & .questionnairemenu-nav {
+                    &.active {
+                        & .p-button {
+                            border-bottom-right-radius: 0 !important;
+                            border-bottom-left-radius: 0 !important;
+                        }
+                    }
+                }
+                & ::ng-deep .questionnairemenu-template.p-overlaypanel  {
+                    width: 259px;
+                    height: 60px;
+                    border-top-left-radius: 0;
+                }
+            }
+            & .center {
                 & .questionnairesection-nav {
+                    margin: 0 auto;
                     display: table;
                     table-layout: fixed;
                     & .previous,
                     & .selected,
                     & .next {
                         display: table-cell !important;
-                        & .p-button {
-                            width: 100% !important;
-                        }
                     }
                     & .previous,
                     & .next {
@@ -198,13 +245,12 @@ Description : <>
                             border-bottom-right-radius: 0 !important;
                         }
                         & ::ng-deep .p-tooltip {
-                            top: 46px !important;
                             right: auto !important;
                             left: 0 !important;
                         }
                     }
                     & .selected {
-                        width: 145px !important ;
+                        width: 238px !important ;
                         & .p-button {
                             border-radius: 0 !important;
                             padding-right: 1rem;
@@ -218,7 +264,6 @@ Description : <>
                             border-bottom-left-radius: 0 !important;
                         }
                         & ::ng-deep .p-tooltip {
-                            top: 46px !important;
                             right: 0 !important;
                             left: auto !important
                         }
@@ -237,30 +282,14 @@ Description : <>
                     }
                 }
                 & ::ng-deep .questionnairesection-template.p-overlaypanel  {
-                    width: 217px;
-                    background-color: $backgroundColor;
-                    text-align: center;
-                    border: 2px solid $textColor;
-                    border-top: 0;
-                    border-radius: 0.75rem;
+                    width: 310px;
                     border-top-left-radius: 0;
                     border-top-right-radius: 0;
-                    top: 31px !important;
-                    left: 0 !important;
-                    & .p-overlaypanel-content {
-                        padding: 0;
-                    }
-                    & ::ng-deep .p-orderlist {
-                        & .p-orderlist-controls {
-                            display: none;
-                        }
-                        & .p-orderlist-list {
-                            background-color: transparent;
-                            border: 0;
-                            border-bottom-right-radius: 0;
-                            border-bottom-left-radius: 0;
-                        }
-                    }
+                }
+            }
+            & .right {
+                & .p-button {
+                    width: 77px;
                 }
             }
         }
@@ -276,6 +305,7 @@ Description : <>
             & .questionnairequestions {
                 margin-top: 1rem;
                 & ::ng-deep .p-panel {
+                    position: relative;
                     & .p-panel-content {
                         padding-right: 1.25rem !important;
                         padding-bottom: 1.25rem !important;
@@ -296,7 +326,9 @@ Description : <>
                         width: 196px;
                     }
                     &.country,
-                    &.province {
+                    &.province,
+                    &.district,
+                    &.subdistrict {
                         & .label {
                             vertical-align: top;
                             & label {
@@ -338,37 +370,29 @@ Description : <>
     #questionnaire-fillout-page.page-container {
         & .page-header {
             & .toolbar.fixed {
-                height: 122px;
                 & .left,
                 & .right {
-                    display: block !important;
-                    position: relative !important;
-                    right: 0
+                    width: 60px;
                 }
-                & .left {
-                    & .p-button {
-                        width: 100%;
-                    }
-                }
-                & .right {
+                & .center {
                     margin-top: 0.5rem;
                     & .questionnairesection-nav {
                         width: 100%;
                         & .selected {
                             width: 100% !important ;
                         }
-                        & .previous,
-                        & .next {
-                            width: 62px;
-                        }
                     }
                     & ::ng-deep .questionnairesection-template.p-overlaypanel  {
                         width: 100%;
                     }
                 }
-            }
-            & .title {
-                padding-top: 122px;
+                & .right {
+                    & .p-button {
+                        width: 50px;
+                        font-size: 0.875rem;
+                        padding: 0;
+                    }
+                }
             }
         }
         & ::ng-deep .p-panel {
@@ -394,24 +418,14 @@ Description : <>
                     }
                     & .address {
                         & .country,
-                        & .province {
+                        & .province,
+                        & .district,
+                        & .subdistrict {
                             & .label label {
                                 top: 0 !important;
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 388px) {
-    #questionnaire-fillout-page.page-container {
-        & .page-header {
-            & .toolbar {
-                & .p-button {
-                    width: 100%;
                 }
             }
         }

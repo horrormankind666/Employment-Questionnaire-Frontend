@@ -30,6 +30,11 @@
         },
         "noItemsFound": {
             "label": "ไม่พบรายการ"
+        },
+        "email": {
+            "invalid": {
+                "label": "กรุณาใล่อีเมล์ให้ถูกต้อง"
+            }
         }
     },
     "myAccount": {
@@ -69,6 +74,9 @@
         "selectItem": {
             "label": "เลือกรายการ"
         }
+    },
+    "save": {
+        "label": "บันทึก"
     },
     "questionnaire": {
         "explore": {

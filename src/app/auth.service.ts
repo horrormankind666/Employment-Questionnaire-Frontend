@@ -72,6 +72,7 @@ export class AuthService {
                                     PPID: PPID,
                                     givenName: payload.given_name,
                                     familyName: payload.family_name,
+                                    gender: 'M',
                                     email: payload.email,
                                     initials: ((payload.given_name ? payload.given_name[0].toUpperCase() : '') + (payload.family_name ? payload.family_name[0].toUpperCase() : ''))
                                 };

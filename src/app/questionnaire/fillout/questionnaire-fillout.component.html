@@ -6,16 +6,55 @@
                 {{ 'questionnaire.error.notFound.label' | translate | titlecase }}
             </div>
             <div class="toolbar block text-center h-auto pt-0 mt-3">
-                <ng-container *ngTemplateOutlet="questionnaireSetExploreTemplate"></ng-container>
+                <button pButton type="button" class="button button-outlined w-auto text-left"
+                    [disabled]="questionnaire.section.dataView.isLoading"
+                    (click)="router.navigate(['Questionnaire'])">
+                    <i class="fas fa-bars"></i>
+                    &nbsp;&nbsp;<span>{{ 'questionnaire.explore.label' | translate }}</span>
+                </button>
             </div>
         </div>
         <div *ngIf="questionnaire.set.datasource !== null">
-            <div class="toolbar block fixed z-2">
-                <div class="inline-block left">
-                    <ng-container *ngTemplateOutlet="questionnaireSetExploreTemplate"></ng-container>
+            <div class="toolbar fixed z-2">
+                <div class="left">
+                    <div class="questionnairemenu-nav relative"
+                        [ngClass]="{
+                            'active': questionnaire.menu.panel.toggle
+                        }">
+                        <button pButton type="button" class="button p-button-gray w-auto"
+                            [ngClass]="{
+                                'button-outlined': questionnaire.menu.panel.toggle,
+                                'active': questionnaire.menu.panel.toggle
+                            }"
+                            [disabled]="questionnaire.section.dataView.isLoading"
+                            (click)="questionnaireMenuPanel.toggle($event)">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <p-overlayPanel #questionnaireMenuPanel
+                            [dismissable]="true"
+                            [showCloseIcon]="false"
+                            [appendTo]="questionnaireMenuTemplate"
+                            [showTransitionOptions]="'0ms'"
+                            [hideTransitionOptions]="'0ms'"
+                            (onShow)="questionnaire.menu.panel.toggle = true"
+                            (onHide)="questionnaire.menu.panel.toggle = false"
+                            styleClass="questionnairemenu-template">
+                            <ng-template pTemplate >
+                                <p-orderList
+                                    [value]="questionnaire.menu.items">
+                                    <ng-template let-qtnmenu pTemplate="item">
+                                        <div (click)="router.navigate([qtnmenu.routerLink])">
+                                            {{ (qtnmenu.label + '') | translate | titlecase }}
+                                        </div>
+                                    </ng-template>
+                                </p-orderList>
+                            </ng-template>
+                        </p-overlayPanel>
+                        <div #questionnaireMenuTemplate></div>
+                    </div>
                 </div>
-                <div class="inline-block absolute right">
-                    <div class="questionnairesection-nav"
+                <div class="center">
+                    <div class="questionnairesection-nav relative"
                         [ngClass]="{
                             'active': questionnaire.section.panel.toggle
                         }">
@@ -82,6 +121,12 @@
                         <div #questionnaireSectionTemplate></div>
                     </div>
                 </div>
+                <div class="right text-right">
+                    <button pButton type="button" class="button p-button-success"
+                        [disabled]="questionnaire.section.dataView.isLoading">
+                        <span>{{ 'save.label' | translate | titlecase }}</span>
+                    </button>
+                </div>
             </div>
             <div class="title block heading">
                 <p-panel [showHeader]="false" class="questionnaireset">
@@ -128,8 +173,15 @@
                         </p-panel>
                     </div>
                     <div class="questionnairequestions" *ngFor="let qtnquestion of questionnaire.question[qtnsection.ID].datasource">
-                        <p-panel [showHeader]="false">
-                            <div class="questionnairequestion paragraph">
+                        <p-panel
+                            [showHeader]="false">
+                            <div class="p-component-overlay"
+                                *ngIf="qtnquestion.disableStatus === 'Y'">
+                            </div>
+                            <div class="questionnairequestion paragraph"
+                                [ngClass]="{
+                                    'p-disabled': qtnquestion.disableStatus === 'Y'
+                                }">
                                 <ul class="table">
                                     <li class="no">
                                         {{ qtnquestion.no + '.' }}
@@ -142,7 +194,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="questionnaireanswerset paragraph" *ngFor="let qtnanswerset of questionnaire.answerSet[qtnquestion.ID].datasource">
+                            <div class="questionnaireanswerset paragraph" *ngFor="let qtnanswerset of questionnaire.answerSet[qtnquestion.ID].datasource"
+                                [ngClass]="{
+                                    'p-disabled': qtnquestion.disableStatus === 'Y'
+                                }">
                                 <div class="titlename underline" *ngIf="qtnanswerset.titleName[appService.env.lang] !== null">
                                     {{ qtnanswerset.titleName[appService.env.lang] }}
                                 </div>
@@ -223,7 +278,8 @@
                                                 context: {
                                                     qtnanswerset: qtnanswerset,
                                                     qtnanswer: qtnanswer,
-                                                    formField: questionnaire.answer[qtnanswerset.ID].formField.address
+                                                    formField: questionnaire.answer[qtnanswerset.ID].formField.address,
+                                                    validators: questionnaire.answer[qtnanswerset.ID].validators
                                                 }">
                                             </ng-container>
                                         </div>
@@ -316,15 +372,11 @@
         </p-dataView>
     </div>
 </div>
-<ng-template #questionnaireSetExploreTemplate>
-    <button pButton type="button" class="button button-outlined text-left"
-        [disabled]="questionnaire.section.dataView.isLoading"
-        (click)="router.navigate(['Questionnaire'])">
-        <i class="fas fa-bars"></i>
-        &nbsp;&nbsp;<span>{{ 'questionnaire.explore.label' | translate }}</span>
-    </button>
-</ng-template>
-<ng-template #questionnaireAddressTemplate let-qtnanswerset="qtnanswerset" let-qtnanswer="qtnanswer" let-formField="formField">
+<ng-template #questionnaireAddressTemplate
+    let-qtnanswerset="qtnanswerset"
+    let-qtnanswer="qtnanswer"
+    let-formField="formField"
+    let-validators="validators">
     <ul class="table {{ addressField.name.toLowerCase() }}" *ngFor="let addressField of addressFields">
         <li class="label" *ngIf="addressField.inputType === '*' || addressField.inputType === qtnanswerset.inputType.inputType">
             <label [for]="addressField.name.toLowerCase() + qtnanswer.ID">
@@ -332,20 +384,78 @@
             </label>
         </li>
         <li class="editanswer p-fluid" *ngIf="addressField.inputType === '*' || addressField.inputType === qtnanswerset.inputType.inputType">
-            <input pInputText type="text"
+            <input pInputText trimOnBlur type="text"
                 [id]="addressField.name.toLowerCase() + qtnanswer.ID"
                 [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                [maxlength]="addressField.length !== undefined ? addressField.length : ''"
                 *ngIf="
                     addressField.name !== 'country' &&
-                    addressField.name !== 'province'
+                    addressField.name !== 'province' &&
+                    addressField.name !== 'district' &&
+                    addressField.name !== 'subdistrict' &&
+                    addressField.name !== 'email' &&
+                    addressField.type === 'text'
                 "
             />
+            <div
+                [ngClass]="{
+                    'formfield-error': validators.isEmail[qtnanswer.ID] === false
+                }"
+                *ngIf="
+                    addressField.name === 'email' &&
+                    addressField.type === 'text'
+                ">
+                <input pInputText trimOnBlur type="text"
+                    [id]="addressField.name.toLowerCase() + qtnanswer.ID"
+                    [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                    [maxlength]="addressField.length !== undefined ? addressField.length : ''"
+                    (ngModelChange)="validators.isEmail[qtnanswer.ID] = appService.isEmail(formField[addressField.name][qtnanswer.ID])"
+                    *ngIf="
+                        addressField.name === 'email' &&
+                        addressField.type === 'text'
+                    "
+                />
+                <p-message
+                    severity="error"
+                    text="{{ 'error.email.invalid.label' | translate }}"
+                    *ngIf="validators.isEmail[qtnanswer.ID] === false">
+                </p-message>
+            </div>
+            <p-inputNumber
+                [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                [mode]="addressField.mode !== undefined ? addressField.mode : ''"
+                [maxlength]="addressField.length !== undefined ? addressField.length : 0"
+                [minFractionDigits]="addressField.decimalPoint !== undefined ? addressField.decimalPoint : 0"
+                [maxFractionDigits]="addressField.decimalPoint !== undefined ? addressField.decimalPoint : 0"
+                [useGrouping]="addressField.useGrouping !== undefined ? addressField.useGrouping : true"
+                *ngIf="
+                    addressField.name !== 'country' &&
+                    addressField.name !== 'province' &&
+                    addressField.name !== 'district' &&
+                    addressField.name !== 'subdistrict' &&
+                    addressField.name !== 'email' &&
+                    addressField.type === 'number'
+                ">
+            </p-inputNumber>
+            <p-inputMask
+                [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                [mask]="addressField.mask !== undefined ? addressField.mask : ''"
+                *ngIf="
+                    addressField.name !== 'country' &&
+                    addressField.name !== 'province' &&
+                    addressField.name !== 'district' &&
+                    addressField.name !== 'subdistrict' &&
+                    addressField.name !== 'email' &&
+                    addressField.type === 'mask'
+                ">
+            </p-inputMask>
             <ng-select
                 [id]="addressField.name.toLowerCase() + qtnanswer.ID"
                 [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 [searchable]="false"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+                (change)="selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID)"
                 *ngIf="
                     addressField.name === 'country'
                 ">
@@ -359,6 +469,7 @@
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 [searchable]="false"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+                (change)="selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID)"
                 *ngIf="
                     addressField.name === 'province'
                 ">
@@ -366,16 +477,48 @@
                     {{ province.name[appService.env.lang] }}
                 </ng-option>
             </ng-select>
+            <ng-select
+                [id]="addressField.name.toLowerCase() + qtnanswer.ID"
+                [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
+                [searchable]="false"
+                notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+                (change)="selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID)"
+                *ngIf="
+                    addressField.name === 'district'
+                ">
+                <ng-option *ngFor="let district of district[qtnanswer.ID].datasource" [value]="district">
+                    {{ district.name[appService.env.lang] }}
+                </ng-option>
+            </ng-select>
+            <ng-select
+                [id]="addressField.name.toLowerCase() + qtnanswer.ID"
+                [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
+                placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
+                [searchable]="false"
+                notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+                *ngIf="
+                    addressField.name === 'subdistrict'
+                ">
+                <ng-option *ngFor="let subdistrict of subdistrict[qtnanswer.ID].datasource" [value]="subdistrict">
+                    {{ subdistrict.name[appService.env.lang] }}
+                </ng-option>
+            </ng-select>
         </li>
     </ul>
 </ng-template>
-<ng-template #questionnaireInputTypeTemplate let-qtnanswerset="qtnanswerset" let-qtnanswer="qtnanswer" let-formField="formField" let-qtnanswerspecify="qtnanswerspecify">
+<ng-template #questionnaireInputTypeTemplate
+    let-qtnanswerset="qtnanswerset"
+    let-qtnanswer="qtnanswer"
+    let-formField="formField"
+    let-qtnanswerspecify="qtnanswerspecify">
     <div *ngIf="qtnanswerset.inputType !== null && qtnanswerspecify === undefined">
         <p-radioButton
             [inputId]="qtnanswer.ID"
             [name]="formField.singleChoice"
-            [value]="qtnanswer.inputType.value"
+            [value]="qtnanswer"
             [(ngModel)]="formField.singleChoice"
+            (ngModelChange)="radiobuttonOnChange(formField.singleChoice)"
             *ngIf="
                 qtnanswerset.inputType.inputType === inputType.singleChoice &&
                 qtnanswerset.inputType.type === 'radio'
@@ -384,9 +527,10 @@
         <p-checkbox
             [inputId]="qtnanswer.ID"
             [name]="formField.multipleChoice"
-            [value]="qtnanswer.inputType.value"
+            [value]="qtnanswer"
             checkboxIcon="fas fa-check"
             [(ngModel)]="formField.multipleChoice"
+            (ngModelChange)="checkboxOnChange(qtnanswer, formField.multipleChoice)"
             *ngIf="
                 qtnanswerset.inputType.inputType === inputType.multipleChoice &&
                 qtnanswerset.inputType.type === 'checkbox'
@@ -394,7 +538,7 @@
         </p-checkbox>
     </div>
     <div *ngIf="qtnanswerset.inputType === null && qtnanswer.inputType !== null && qtnanswerspecify === undefined">
-        <input pInputText type="text"
+        <input pInputText trimOnBlur type="text"
             [(ngModel)]="formField.shortAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswer.inputType.length !== null ? qtnanswer.inputType.length : ''"
             *ngIf="
@@ -402,7 +546,7 @@
                 qtnanswer.inputType.type === 'text'
             "
         />
-        <textarea pInputTextarea
+        <textarea pInputTextarea trimOnBlur
             [(ngModel)]="formField.longAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswer.inputType.length !== null ? qtnanswer.inputType.length : ''"
             [autoResize]="true"
@@ -422,13 +566,19 @@
                 qtnanswer.inputType.type === 'select' &&
                 qtnanswer.inputType.mode === 'province'
             ">
-            <ng-option *ngFor="let province of province['master'].datasource" [value]="province">
+            <ng-option *ngFor="let province of province['th'].datasource" [value]="province">
                 {{ province.name[appService.env.lang] }}
             </ng-option>
         </ng-select>
     </div>
     <div *ngIf="qtnanswerspecify !== undefined">
-        <input pInputText type="text"
+        <input pInputText trimOnBlur type="text" class="p-disabled"
+            [ngClass]="{
+                'p-disabled': (
+                    !(formField.singleChoice !== null && formField.singleChoice.ID === qtnanswer.ID) &&
+                    !(formField.multipleChoice.length > 0 && appService.arrayFilter(formField.multipleChoice, ({ field: 'ID', value: qtnanswer.ID })).length > 0)
+                )
+            }"
             [(ngModel)]="formField.shortAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : ''"
             *ngIf="
@@ -442,12 +592,23 @@
             [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : 0"
             [minFractionDigits]="qtnanswerspecify.decimalPoint !== null ? qtnanswerspecify.decimalPoint : 0"
             [maxFractionDigits]="qtnanswerspecify.decimalPoint !== null ? qtnanswerspecify.decimalPoint : 0"
+            [useGrouping]="qtnanswerspecify.useGrouping !== null ? qtnanswerspecify.useGrouping : true"
+            [disabled]="
+                !(formField.singleChoice !== null && formField.singleChoice.ID === qtnanswer.ID) &&
+                !(formField.multipleChoice.length > 0 && appService.arrayFilter(formField.multipleChoice, ({ field: 'ID', value: qtnanswer.ID })).length > 0)
+            "
             *ngIf="
                 qtnanswerspecify.inputType === inputType.shortAnswerText &&
                 qtnanswerspecify.type === 'number'
             ">
         </p-inputNumber>
-        <textarea pInputTextarea
+        <textarea pInputTextarea trimOnBlur
+            [ngClass]="{
+                'p-disabled': (
+                    !(formField.singleChoice !== null && formField.singleChoice.ID === qtnanswer.ID) &&
+                    !(formField.multipleChoice.length > 0 && appService.arrayFilter(formField.multipleChoice, ({ field: 'ID', value: qtnanswer.ID })).length > 0)
+                )
+            }"
             [(ngModel)]="formField.longAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : ''"
             [autoResize]="true"
@@ -456,5 +617,21 @@
                 qtnanswerspecify.type === 'text'
             ">
         </textarea>
+        <!--
+        <ng-select
+            [(ngModel)]="formField.select[qtnanswer.ID]"
+            placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
+            [searchable]="false"
+            notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+            *ngIf="
+                qtnanswer.inputType.inputType === inputType.dropdown &&
+                qtnanswer.inputType.type === 'select' &&
+                qtnanswer.inputType.mode === 'province'
+            ">
+            <ng-option *ngFor="let province of province['th'].datasource" [value]="province">
+                {{ province.name[appService.env.lang] }}
+            </ng-option>
+        </ng-select>
+        -->
     </div>
 </ng-template>

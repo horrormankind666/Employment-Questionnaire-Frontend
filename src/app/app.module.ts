@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๙/๑๐/๒๕๖๔>
+Modify date : <๐๒/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -38,11 +38,14 @@ import { PanelModule } from 'primeng/panel';
 import { OrderListModule } from 'primeng/orderlist';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
-import { DynamicComponentDirective } from './app.directive';
+import { DynamicComponentDirective, TrimOnBlurDirective } from './app.directive';
 
 import { appRouting } from './app-routing.module';
 import { environment } from '../environments/environment';
@@ -61,6 +64,7 @@ export function httpLoaderFactory(http: HttpClient) {
 @NgModule({
     declarations: [
         DynamicComponentDirective,
+        TrimOnBlurDirective,
         AppComponent,
         ModalErrorComponent,
         PageNotFoundComponent,
@@ -121,9 +125,12 @@ export function httpLoaderFactory(http: HttpClient) {
         OrderListModule,
         RadioButtonModule,
         CheckboxModule,
+        InputMaskModule,
         InputTextModule,
         InputTextareaModule,
-        InputNumberModule
+        InputNumberModule,
+        MessagesModule,
+        MessageModule
     ],
     exports: [
         CommonModule,

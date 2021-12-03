@@ -30,6 +30,11 @@
         },
         "noItemsFound": {
             "label": "No items found"
+        },
+        "email": {
+            "invalid": {
+                "label": "Please enter a valid e-mail."
+            }
         }
     },
     "myAccount": {
@@ -69,6 +74,9 @@
         "selectItem": {
             "label": "Select item"
         }
+    },
+    "save": {
+        "label": "Save"
     },
     "questionnaire": {
         "explore": {

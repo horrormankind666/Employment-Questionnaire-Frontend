@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๒/๑๑/๒๕๖๔>
+Modify date : <๐๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -13,6 +13,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AppService } from '../../app.service';
+import { AuthService } from '../../auth.service';
 import { Schema, ModelService } from '../../model.service';
 
 class Country {
@@ -158,6 +159,9 @@ class QuestionnaireAnswer {
             email: {}
         }
     };
+    validators = {
+        isEmail: {}
+    };
 }
 
 @Component({
@@ -170,6 +174,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
         public router: Router,
         private route: ActivatedRoute,
         public appService: AppService,
+        public authService: AuthService,
         private modelService: ModelService
     ) {
     }
@@ -179,6 +184,17 @@ export class QuestionnaireFilloutComponent implements OnInit {
     district = this.modelService.any.setDefault();
     subdistrict = this.modelService.any.setDefault();
     questionnaire = {
+        menu: {
+            panel: {
+                toggle: false,
+            },
+            items: [
+                {
+                    label: 'questionnaire.explore.label',
+                    routerLink: 'Questionnaire',
+                }
+            ]
+        },
         doneAndSet: new QuestionnaireDoneAndSet(this.modelService),
         set: new QuestionnaireSet(this.modelService),
         section: new QuestionnaireSection(this.modelService),
@@ -197,24 +213,24 @@ export class QuestionnaireFilloutComponent implements OnInit {
         institute: 'institute',
         dropdown: 'dropdown'
     };
-    addressFields = [
-        { inputType: this.inputType.homeAddress, name: 'houseNo' },
-        { inputType: this.inputType.workplaceAddress, name: 'adddressNo' },
-        { inputType: '*', name: 'moo' },
-        { inputType: this.inputType.workplaceAddress, name: 'building' },
-        { inputType: this.inputType.homeAddress, name: 'village' },
-        { inputType: this.inputType.workplaceAddress, name: 'floors' },
-        { inputType: '*', name: 'soi' },
-        { inputType: '*', name: 'road' },
-        { inputType: this.inputType.workplaceAddress, name: 'country' },
-        { inputType: '*', name: 'province' },
-        { inputType: '*', name: 'district' },
-        { inputType: '*', name: 'subdistrict' },
-        { inputType: '*', name: 'zipcode' },
-        { inputType: '*', name: 'telephone' },
-        { inputType: '*', name: 'mobilePhone' },
-        { inputType: '*', name: 'fax' },
-        { inputType: '*', name: 'email' }
+    addressFields: Schema.InputType[] = [
+        { inputType: this.inputType.homeAddress, name: 'houseNo', type: 'text' },
+        { inputType: this.inputType.workplaceAddress, name: 'adddressNo', type: 'text' },
+        { inputType: '*', name: 'moo', type: 'text' },
+        { inputType: this.inputType.workplaceAddress, name: 'building', type: 'text' },
+        { inputType: this.inputType.homeAddress, name: 'village', type: 'text' },
+        { inputType: this.inputType.workplaceAddress, name: 'floors', type: 'text' },
+        { inputType: '*', name: 'soi', type: 'text' },
+        { inputType: '*', name: 'road', type: 'text' },
+        { inputType: this.inputType.workplaceAddress, name: 'country', type: this.inputType.dropdown },
+        { inputType: '*', name: 'province', type: this.inputType.dropdown },
+        { inputType: '*', name: 'district', type: this.inputType.dropdown },
+        { inputType: '*', name: 'subdistrict', type: this.inputType.dropdown },
+        { inputType: '*', name: 'zipcode', type: 'number', mode: 'decimal', useGrouping: false },
+        { inputType: '*', name: 'telephone', type: 'mask', mask: '9 9999 9999' },
+        { inputType: '*', name: 'mobilePhone', type: 'mask', mask: '99 9999 9999' },
+        { inputType: '*', name: 'fax', type: 'mask', mask: '9 9999 9999' },
+        { inputType: '*', name: 'email', type: 'text' }
     ]
 
     ngOnInit(): void {
@@ -225,6 +241,9 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
         this.province['master'] = new Province(this.modelService);
         this.province['master'].datasource = this.route.snapshot.data.questionnaireDataSource.province;
+
+        this.province['th'] = new Province(this.modelService);
+        this.province['th'].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
 
         this.district['master'] = new District(this.modelService);
         this.district['master'].datasource = this.route.snapshot.data.questionnaireDataSource.district;
@@ -241,23 +260,24 @@ export class QuestionnaireFilloutComponent implements OnInit {
             this.questionnaire.question[qtnsection.ID].datasource = this.questionnaire.doneAndSet.datasource.question.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
 
             this.questionnaire.question[qtnsection.ID].datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
+                let condition: string | null = this.genCoditionString(qtnquestion.condition);
+
+                qtnquestion.disableStatus = (condition !== null ? (this.appService.eval(condition) ? 'Y' : 'N') : 'N');
+
                 this.questionnaire.answerSet[qtnquestion.ID] = new QuestionnaireAnswerSet(this.modelService);
                 this.questionnaire.answerSet[qtnquestion.ID].datasource = this.questionnaire.doneAndSet.datasource.answerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
 
                 this.questionnaire.answerSet[qtnquestion.ID].datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
-                    let inputType: any = {
-                        inputType: null,
-                        type: null
-                    };
-
                     this.questionnaire.answer[qtnanswerset.ID] = new QuestionnaireAnswer(this.modelService);
                     this.questionnaire.answer[qtnanswerset.ID].datasource = this.questionnaire.doneAndSet.datasource.answer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
-                    inputType = qtnanswerset.inputType;
+                    let inputType: Schema.InputType = qtnanswerset.inputType;
 
                     if (qtnanswerset.inputType !== null && (inputType.inputType === this.inputType.homeAddress || inputType.inputType === this.inputType.workplaceAddress)) {
-                        let qtnanswerID = this.questionnaire.answer[qtnanswerset.ID].datasource[0].ID;
+                        let qtnanswerID: string = this.questionnaire.answer[qtnanswerset.ID].datasource[0].ID;
 
                         this.province[qtnanswerID] = new Province(this.modelService);
+                        this.district[qtnanswerID] = new District(this.modelService);
+                        this.subdistrict[qtnanswerID] = new Subdistrict(this.modelService);
 
                         if (inputType.inputType === this.inputType.homeAddress)
                             this.province[qtnanswerID].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
@@ -266,10 +286,84 @@ export class QuestionnaireFilloutComponent implements OnInit {
             });
         });
 
-        this.province['master'].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
-
         setTimeout(() => {
             this.questionnaire.section.dataView.isLoading = false;
         }, (this.questionnaire.set.datasource !== null ? 1000 : 0));
+    }
+
+    selectOnChange(formField: string, value: any, qtnanswersetID: string, qtnanswerID: string): void {
+        if (formField === 'country') {
+            let country: Schema.Country = value;
+
+            this.questionnaire.answer[qtnanswersetID].formField.address.province[qtnanswerID] = null;
+            this.province[qtnanswerID].datasource = (country !== null ? this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === country.ID) : this.modelService.province.setListDefault());
+
+            this.selectOnChange('province', null, qtnanswersetID, qtnanswerID);
+        }
+
+        if (formField === 'province') {
+            let province: Schema.Province = value;
+
+            this.questionnaire.answer[qtnanswersetID].formField.address.district[qtnanswerID] = null;
+            this.district[qtnanswerID].datasource = (province !== null ? this.district['master'].datasource.filter((dr: Schema.District) => dr.province.ID === province.ID) : this.modelService.district.setListDefault());
+
+            this.selectOnChange('district', null, qtnanswersetID, qtnanswerID);
+        }
+
+        if (formField === 'district') {
+            let district: Schema.District = value;
+
+            this.questionnaire.answer[qtnanswersetID].formField.address.subdistrict[qtnanswerID] = null;
+            this.questionnaire.answer[qtnanswersetID].formField.address.zipcode[qtnanswerID] = (district !== null ? district?.zipCode : null);
+            this.subdistrict[qtnanswerID].datasource = (district !== null ? this.subdistrict['master'].datasource.filter((dr: Schema.Subdistrict) => dr.district.ID === district.ID) : this.modelService.subdistrict.setListDefault());
+        }
+    }
+
+    radiobuttonOnChange(value: Schema.QuestionnaireAnswer): void {
+        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].datasource.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+            qtnanswer.specify.forEach((qtnanswerspecify: Schema.InputType) => {
+                if (['text', 'number'].filter((type: string) => type = qtnanswerspecify.type)) {
+                    if (qtnanswerspecify.inputType === this.inputType.shortAnswerText)
+                        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].formField.shortAnswerText[qtnanswer.ID] = null;
+
+                    if (qtnanswerspecify.inputType === this.inputType.longAnswerText)
+                        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].formField.longAnswerText[qtnanswer.ID] = null;
+                }
+            });
+        });
+    }
+
+    checkboxOnChange(qtnanswer: Schema.QuestionnaireAnswer, value: Schema.QuestionnaireAnswer[]): void {
+        if (this.appService.arrayFilter(value, { field: 'ID', value: qtnanswer.ID }).length === 0 && qtnanswer.specify !== null) {
+            qtnanswer.specify.forEach((qtnanswerspecify: Schema.InputType) => {
+                if (qtnanswerspecify.inputType === this.inputType.longAnswerText && qtnanswerspecify.type === 'text')
+                    this.questionnaire.answer[qtnanswer.empQuestionnaireAnswerSetID].formField.longAnswerText[qtnanswer.ID] = '';
+            });
+        }
+    }
+
+    genCoditionString(condition: any): string | null {
+        if (condition !== null) {
+            let or: Array<string> = [];
+
+            condition.forEach((qtnquestionconditions: Schema.Condition[]) => {
+                let and: Array<string> = [];
+
+                qtnquestionconditions.forEach((qtnquestioncondition: Schema.Condition) => {
+                    if (qtnquestioncondition.column === 'gender') {
+                        let gender: string = (this.authService.getUserInfo !== null ? this.authService.getUserInfo.gender : '');
+
+                        if (qtnquestioncondition.operator === '=')
+                            and.push('("' + gender + '"' + ' !== "' + qtnquestioncondition.value + '")');
+                    }
+                })
+
+                or.push(and.join(' && '));
+            });
+
+            return (or.join(' || '));
+        }
+
+        return null
     }
 }
