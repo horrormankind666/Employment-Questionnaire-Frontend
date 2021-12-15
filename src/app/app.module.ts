@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๐๒/๑๒/๒๕๖๔>
+Modify date : <๑๐/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -45,7 +45,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 
-import { DynamicComponentDirective, TrimOnBlurDirective } from './app.directive';
+import { DynamicComponentDirective, TrimOnBlurDirective, NullValueDirective } from './app.directive';
 
 import { appRouting } from './app-routing.module';
 import { environment } from '../environments/environment';
@@ -65,6 +65,7 @@ export function httpLoaderFactory(http: HttpClient) {
     declarations: [
         DynamicComponentDirective,
         TrimOnBlurDirective,
+        NullValueDirective,
         AppComponent,
         ModalErrorComponent,
         PageNotFoundComponent,

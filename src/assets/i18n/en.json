@@ -85,6 +85,9 @@
         "fillout": {
             "label": "Fill out a questionnaire"
         },
+        "submit": {
+            "label": "Submit"
+        },
         "error": {
             "notFound": {
                 "label": "Questionnaire not found."

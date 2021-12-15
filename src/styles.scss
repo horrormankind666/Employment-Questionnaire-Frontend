@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๐๓/๑๒/๒๕๖๔>
+Modify date : <๑๕/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -133,6 +133,7 @@ ul.table {
     color: $textColor;
     border-width: 2px !important;
     display: inline-block !important;
+    transition: none !important;
     &:enabled:focus {
         outline: 0 none !important;
         outline-offset: 0 !important;
@@ -150,7 +151,7 @@ ul.table {
         font-size: 1rem;
         font-weight: $fontStyleSemibold;
         color: $textColor !important;
-        border-radius: 4px !important;
+        border-radius: 4px;
         &:disabled {
             opacity: 1;
             & > * {
@@ -184,6 +185,14 @@ ul.table {
             &:hover:not(:disabled) {
                 background-color: $successColorHover !important;
                 border-color: $successColorHover !important;
+            }
+        }
+        &.p-button-warning {
+            background-color: $warningColor !important;
+            border-color: $warningColor;
+            &:hover:not(:disabled) {
+                background-color: $warningColorHover !important;
+                border-color: $warningColorHover !important;
             }
         }
         &.p-button-gray {
@@ -376,7 +385,7 @@ ul.table {
         z-index: 1;
     }
     & .p-disabled {
-        opacity: 0.3;
+        opacity: 0.5;
     }
 }
 
@@ -410,7 +419,7 @@ ul.table {
             border: 1px solid var(--surface-0) !important;
         }
         & .p-checkbox-icon {
-            font-size: 0.75rem !important;
+            font-size: 1rem !important;
         }
     }
     &:not(.p-disabled) {
@@ -422,14 +431,6 @@ ul.table {
         &:hover {
             border-color: $inputColorActive !important;
         }
-    }
-    &:disabled,
-    &.p-disabled,
-    &.p-disabled * {
-        background-color: var(--surface-300) !important;
-        opacity: 0.6 !important;
-        cursor: default !important;
-        pointer-events: none;
     }
 }
 
@@ -475,8 +476,6 @@ ul.table {
     display: table-cell;
     vertical-align: baseline;
 }
-
-
 
 .p-inputtextarea {
     min-height: 119px;
@@ -575,7 +574,21 @@ ul.table {
             z-index: 1 !important;
         }
     }
+}
 
+.p-inputtext,
+.p-radiobutton-box,
+.p-checkbox-box,
+.ng-select-disabled {
+    &:disabled,
+    &.p-disabled,
+    &.p-disabled *,
+    & > .ng-select-container  {
+        background-color: var(--surface-300) !important;
+        opacity: 0.6 !important;
+        cursor: default !important;
+        pointer-events: none;
+    }
 }
 
 .overflow-hidden {

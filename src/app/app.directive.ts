@@ -2,14 +2,15 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๓/๑๐/๒๕๖๔>
-Modify date : <๐๑/๑๒/๒๕๖๔>
+Modify date : <๑๐/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
 
 'use strict';
 
-import { Directive, HostListener, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit } from '@angular/core';
+import { Directive, HostListener, ElementRef, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Directive({
     selector: '[dynamicComponent]'
@@ -58,5 +59,21 @@ export class TrimOnBlurDirective {
             this.dispatchEvent(el, 'textarea')
             this.dispatchEvent(el, 'blur');
         }
+    }
+}
+
+@Directive({
+    selector: '[ngModel][empty2Null]'
+})
+export class NullValueDirective {
+    constructor(
+        private el: ElementRef,
+        private model: NgModel
+    ) {}
+
+    @HostListener('input', ['$event.target'])
+    onEvent(target: HTMLInputElement) {
+        if (target.value === '' || target.value.length === 0)
+            this.model.viewToModelUpdate(null);
     }
 }

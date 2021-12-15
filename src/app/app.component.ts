@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๕/๑๐/๒๕๖๔>
+Modify date : <๑๔/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -25,9 +25,9 @@ import { ModalService } from './modal/modal.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    @ViewChild('footer', { static: false }) footer!: ElementRef;
-    @ViewChild('copyright', { static: false }) copyright!: ElementRef;
-    @ViewChild('muitLogo', { static: false }) muitLogo!: ElementRef;
+    @ViewChild('footer', { static: false }) footer: ElementRef | undefined;
+    @ViewChild('copyright', { static: false }) copyright: ElementRef | undefined;
+    @ViewChild('muitLogo', { static: false }) muitLogo: ElementRef | undefined;
 
     constructor (
         private render: Renderer2,
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
 
     setFooterlayout(): void {
         setTimeout(() => {
-            this.render.setStyle(this.copyright.nativeElement, 'width', `${this.footer.nativeElement.offsetWidth - this.muitLogo.nativeElement.offsetWidth - 40}px`);
+            this.render.setStyle(this.copyright?.nativeElement, 'width', `${this.footer?.nativeElement.offsetWidth - this.muitLogo?.nativeElement.offsetWidth - 40}px`);
         }, 0);
     }
 

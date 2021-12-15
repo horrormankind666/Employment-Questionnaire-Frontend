@@ -2,19 +2,21 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๓/๑๒/๒๕๖๔>
+Modify date : <๑๔/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
 
 'use strict';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges,  OnInit, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AppService } from '../../app.service';
 import { AuthService } from '../../auth.service';
 import { Schema, ModelService } from '../../model.service';
+
+import * as _ from 'lodash';
 
 class Country {
     constructor(
@@ -133,35 +135,38 @@ class QuestionnaireAnswer {
     }
 
     datasource: Schema.QuestionnaireAnswer[] = this.modelService.questionnaire.answer.setListDefault();
-    formField = {
-        singleChoice: null,
-        multipleChoice: [],
-        shortAnswerText: {},
-        longAnswerText: {},
-        select: {},
-        address: {
-            houseNo: {},
-            adddressNo: {},
-            moo: {},
-            building: {},
-            village: {},
-            floors: {},
-            soi: {},
-            road: {},
-            country: {},
-            province: {},
-            district: {},
-            subdistrict: {},
-            zipcode: {},
-            telephone: {},
-            mobilePhone: {},
-            fax: {},
-            email: {}
-        }
-    };
+    formField = new FormField();
+    _formField = this.modelService.any.setDefault();
     validators = {
         isEmail: {}
     };
+}
+
+class FormField {
+    singleChoice = null;
+    multipleChoice = [];
+    shortAnswerText = {};
+    longAnswerText = {};
+    select = {};
+    address = {
+        houseNo: {},
+        adddressNo: {},
+        moo: {},
+        building: {},
+        village: {},
+        floors: {},
+        soi: {},
+        road: {},
+        country: {},
+        province: {},
+        district: {},
+        subdistrict: {},
+        zipcode: {},
+        telephone: {},
+        mobilePhone: {},
+        fax: {},
+        email: {}
+    }
 }
 
 @Component({
@@ -169,7 +174,7 @@ class QuestionnaireAnswer {
     templateUrl: './questionnaire-fillout.component.html',
     styleUrls: ['./questionnaire-fillout.component.scss'],
 })
-export class QuestionnaireFilloutComponent implements OnInit {
+export class QuestionnaireFilloutComponent implements OnChanges, OnInit {
     constructor(
         public router: Router,
         private route: ActivatedRoute,
@@ -200,7 +205,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
         section: new QuestionnaireSection(this.modelService),
         question: this.modelService.any.setDefault(),
         answerSet: this.modelService.any.setDefault(),
-        answer: this.modelService.any.setDefault()
+        answer: this.modelService.any.setDefault(),
+        answerOldValue: this.modelService.any.setDefault()
     };
     inputType = {
         singleChoice: 'single choice',
@@ -231,7 +237,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
         { inputType: '*', name: 'mobilePhone', type: 'mask', mask: '99 9999 9999' },
         { inputType: '*', name: 'fax', type: 'mask', mask: '9 9999 9999' },
         { inputType: '*', name: 'email', type: 'text' }
-    ]
+    ];
+    modelChange: Array<{ empQuestionnaireQuestionID: string, changeStatus: boolean }> = []
+
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
+    }
 
     ngOnInit(): void {
         this.questionnaire.section.dataView.isLoading = true;
@@ -255,47 +266,124 @@ export class QuestionnaireFilloutComponent implements OnInit {
         this.questionnaire.set.datasource = this.questionnaire.doneAndSet.datasource.set;
         this.questionnaire.section.datasource = this.questionnaire.doneAndSet.datasource.section;
 
+        let qtnquestionObj: any;
+        let qtnanswersetObj: any;
+        let qtnanswerObj: any;
+        let condition: string | null;
+
         this.questionnaire.section.datasource.forEach((qtnsection: Schema.QuestionnaireSection) => {
             this.questionnaire.question[qtnsection.ID] = new QuestionnaireQuestion(this.modelService);
-            this.questionnaire.question[qtnsection.ID].datasource = this.questionnaire.doneAndSet.datasource.question.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
+            qtnquestionObj = this.questionnaire.question[qtnsection.ID];
+            qtnquestionObj.datasource = this.questionnaire.doneAndSet.datasource.question.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
 
-            this.questionnaire.question[qtnsection.ID].datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
-                let condition: string | null = this.genCoditionString(qtnquestion.condition);
+            qtnquestionObj.datasource.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
+                this.modelChange.push({
+                    empQuestionnaireQuestionID: qtnquestion.ID,
+                    changeStatus: false
+                });
 
+                condition = this.genCoditionString(qtnquestion.condition);
                 qtnquestion.disableStatus = (condition !== null ? (this.appService.eval(condition) ? 'Y' : 'N') : 'N');
 
                 this.questionnaire.answerSet[qtnquestion.ID] = new QuestionnaireAnswerSet(this.modelService);
-                this.questionnaire.answerSet[qtnquestion.ID].datasource = this.questionnaire.doneAndSet.datasource.answerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
+                qtnanswersetObj = this.questionnaire.answerSet[qtnquestion.ID];
+                qtnanswersetObj.datasource = this.questionnaire.doneAndSet.datasource.answerSet.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
 
-                this.questionnaire.answerSet[qtnquestion.ID].datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
+                qtnanswersetObj.datasource.forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
                     this.questionnaire.answer[qtnanswerset.ID] = new QuestionnaireAnswer(this.modelService);
-                    this.questionnaire.answer[qtnanswerset.ID].datasource = this.questionnaire.doneAndSet.datasource.answer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
-                    let inputType: Schema.InputType = qtnanswerset.inputType;
+                    qtnanswerObj = this.questionnaire.answer[qtnanswerset.ID];
+                    qtnanswerObj.datasource = this.questionnaire.doneAndSet.datasource.answer.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
 
-                    if (qtnanswerset.inputType !== null && (inputType.inputType === this.inputType.homeAddress || inputType.inputType === this.inputType.workplaceAddress)) {
-                        let qtnanswerID: string = this.questionnaire.answer[qtnanswerset.ID].datasource[0].ID;
+                    if (qtnanswerset.inputType !== null) {
+                        if (qtnanswerset.inputType.inputType === this.inputType.homeAddress ||
+                            qtnanswerset.inputType.inputType === this.inputType.workplaceAddress) {
+                            let qtnanswerID: string = this.questionnaire.answer[qtnanswerset.ID].datasource[0].ID;
 
-                        this.province[qtnanswerID] = new Province(this.modelService);
-                        this.district[qtnanswerID] = new District(this.modelService);
-                        this.subdistrict[qtnanswerID] = new Subdistrict(this.modelService);
+                            this.province[qtnanswerID] = new Province(this.modelService);
+                            this.district[qtnanswerID] = new District(this.modelService);
+                            this.subdistrict[qtnanswerID] = new Subdistrict(this.modelService);
 
-                        if (inputType.inputType === this.inputType.homeAddress)
-                            this.province[qtnanswerID].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
+                            if (qtnanswerset.inputType.inputType === this.inputType.homeAddress)
+                                this.province[qtnanswerID].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
+
+                            this.addressFields.forEach((addressField: Schema.InputType) => {
+                                if (addressField.inputType === '*' || addressField.inputType === qtnanswerset.inputType.inputType)
+                                    qtnanswerObj.formField.address[addressField.name][qtnanswerID] = null;
+                            });
+                        }
+
+                        if (qtnanswerset.inputType.inputType === this.inputType.singleChoice && qtnanswerset.inputType.type === 'radio')
+                            qtnanswerObj.formField.singleChoice = null;
+
+                        if (qtnanswerset.inputType.inputType === this.inputType.multipleChoice && qtnanswerset.inputType.type === 'checkbox')
+                            qtnanswerObj.formField.multipleChoice = [];
                     }
+
+                    qtnanswerObj.datasource.filter((dr: Schema.QuestionnaireAnswer) => (dr.inputType !== null && dr.inputType.inputType !== undefined && dr.specify === null)).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                        if (qtnanswer.inputType.inputType === this.inputType.shortAnswerText)
+                            qtnanswerObj.formField.shortAnswerText[qtnanswer.ID] = null;
+
+                        if (qtnanswer.inputType.inputType === this.inputType.longAnswerText)
+                            qtnanswerObj.formField.longAnswerText[qtnanswer.ID] = null;
+
+                        if (qtnanswer.inputType.inputType === this.inputType.dropdown)
+                            qtnanswerObj.formField.select[qtnanswer.ID] = null;
+                    });
+
+                    qtnanswerObj.datasource.filter((dr: Schema.QuestionnaireAnswer) => (dr.specify !== null)).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                        qtnanswer.specify.forEach((qtnanswerspecify: Schema.InputType) => {
+                            if (qtnanswerspecify.inputType === this.inputType.shortAnswerText)
+                                qtnanswerObj.formField.shortAnswerText[qtnanswer.ID] = null;
+
+                            if (qtnanswerspecify.inputType === this.inputType.longAnswerText)
+                                qtnanswerObj.formField.longAnswerText[qtnanswer.ID] = null;
+
+                            if (qtnanswerspecify.inputType === this.inputType.dropdown)
+                                qtnanswerObj.formField.select[qtnanswer.ID] = null;
+
+                            if (qtnanswerspecify.items !== undefined) {
+                                qtnanswerObj._formField[qtnanswer.ID] = new FormField();
+
+                                if (qtnanswerspecify.inputType === this.inputType.singleChoice && qtnanswerspecify.type === 'radio')
+                                    qtnanswerObj._formField[qtnanswer.ID].singleChoice = null;
+
+                                if (qtnanswerspecify.inputType === this.inputType.multipleChoice && qtnanswerspecify.type === 'checkbox')
+                                    qtnanswerObj._formField[qtnanswer.ID].multipleChoice = [];
+
+                                qtnanswerspecify.items.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null).forEach((qtnanswerspecifyitem: Schema.QuestionnaireAnswer) => {
+                                    if (qtnanswerspecifyitem.specify[0].inputType === this.inputType.longAnswerText)
+                                        qtnanswerObj._formField[qtnanswer.ID].longAnswerText[qtnanswerspecifyitem.ID] = null;
+                                });
+                            }
+                        });
+                    });
                 });
             });
         });
+
+        this.questionnaire.answerOldValue = _.cloneDeep(this.questionnaire.answer);
 
         setTimeout(() => {
             this.questionnaire.section.dataView.isLoading = false;
         }, (this.questionnaire.set.datasource !== null ? 1000 : 0));
     }
 
+    watchChange(value: any, qtnanswerset: Schema.QuestionnaireAnswerSet): void {
+        let changeStatus: boolean = false;
+
+        if (!_.isEqual(this.questionnaire.answerOldValue[qtnanswerset.ID].formField, this.questionnaire.answer[qtnanswerset.ID].formField))
+            changeStatus = true;
+
+        this.modelChange[this.modelChange.findIndex((dr: any) => dr.empQuestionnaireQuestionID === qtnanswerset.empQuestionnaireQuestionID)].changeStatus = changeStatus;
+    }
+
     selectOnChange(formField: string, value: any, qtnanswersetID: string, qtnanswerID: string): void {
+        let qtnanswerObj: any = this.questionnaire.answer[qtnanswersetID];
+
         if (formField === 'country') {
             let country: Schema.Country = value;
 
-            this.questionnaire.answer[qtnanswersetID].formField.address.province[qtnanswerID] = null;
+            qtnanswerObj.formField.address.province[qtnanswerID] = null;
             this.province[qtnanswerID].datasource = (country !== null ? this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === country.ID) : this.modelService.province.setListDefault());
 
             this.selectOnChange('province', null, qtnanswersetID, qtnanswerID);
@@ -304,7 +392,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
         if (formField === 'province') {
             let province: Schema.Province = value;
 
-            this.questionnaire.answer[qtnanswersetID].formField.address.district[qtnanswerID] = null;
+            qtnanswerObj.formField.address.district[qtnanswerID] = null;
             this.district[qtnanswerID].datasource = (province !== null ? this.district['master'].datasource.filter((dr: Schema.District) => dr.province.ID === province.ID) : this.modelService.district.setListDefault());
 
             this.selectOnChange('district', null, qtnanswersetID, qtnanswerID);
@@ -313,33 +401,100 @@ export class QuestionnaireFilloutComponent implements OnInit {
         if (formField === 'district') {
             let district: Schema.District = value;
 
-            this.questionnaire.answer[qtnanswersetID].formField.address.subdistrict[qtnanswerID] = null;
-            this.questionnaire.answer[qtnanswersetID].formField.address.zipcode[qtnanswerID] = (district !== null ? district?.zipCode : null);
+            qtnanswerObj.formField.address.subdistrict[qtnanswerID] = null;
+            qtnanswerObj.formField.address.zipcode[qtnanswerID] = (district !== null ? district?.zipCode : null);
             this.subdistrict[qtnanswerID].datasource = (district !== null ? this.subdistrict['master'].datasource.filter((dr: Schema.Subdistrict) => dr.district.ID === district.ID) : this.modelService.subdistrict.setListDefault());
         }
     }
 
-    radiobuttonOnChange(value: Schema.QuestionnaireAnswer): void {
-        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].datasource.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
-            qtnanswer.specify.forEach((qtnanswerspecify: Schema.InputType) => {
-                if (['text', 'number'].filter((type: string) => type = qtnanswerspecify.type)) {
-                    if (qtnanswerspecify.inputType === this.inputType.shortAnswerText)
-                        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].formField.shortAnswerText[qtnanswer.ID] = null;
+    radiobuttonOnChange(qtnanswer: Schema.QuestionnaireAnswer, qtnanswerspecifyitem?: { selected: Schema.QuestionnaireAnswer, items: Schema.QuestionnaireAnswer[] }): void {
+        let obj: any;
 
-                    if (qtnanswerspecify.inputType === this.inputType.longAnswerText)
-                        this.questionnaire.answer[value.empQuestionnaireAnswerSetID].formField.longAnswerText[qtnanswer.ID] = null;
+        if (qtnanswerspecifyitem === undefined) {
+            if (qtnanswer.sectionOnOff !== null) {
+                if (qtnanswer.sectionOnOff.on !== undefined) {
+                    qtnanswer.sectionOnOff.on.forEach((qtnsectionID: string) => {
+                        this.questionnaire.section.datasource[this.questionnaire.section.datasource.findIndex((dr: Schema.QuestionnaireSection) => dr.ID === qtnsectionID)].disableStatus = 'N';
+                    });
                 }
-            });
+
+                if (qtnanswer.sectionOnOff.off !== undefined) {
+                    qtnanswer.sectionOnOff.off.forEach((qtnsectionID: string) => {
+                        this.questionnaire.section.datasource[this.questionnaire.section.datasource.findIndex((dr: Schema.QuestionnaireSection) => dr.ID === qtnsectionID)].disableStatus = 'Y';
+                    });
+                }
+            }
+
+            obj = Object.assign([], this.questionnaire.answer[qtnanswer.empQuestionnaireAnswerSetID].datasource);
+        }
+        else
+            obj = Object.assign([], qtnanswerspecifyitem.items);
+
+        obj.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null).forEach((_qtnanswer: Schema.QuestionnaireAnswer) => {
+            if (qtnanswerspecifyitem === undefined)
+                this.clearAnswerSpecify(_qtnanswer);
+            else
+                this.clearAnswerSpecify(qtnanswer, _qtnanswer);
         });
     }
 
-    checkboxOnChange(qtnanswer: Schema.QuestionnaireAnswer, value: Schema.QuestionnaireAnswer[]): void {
-        if (this.appService.arrayFilter(value, { field: 'ID', value: qtnanswer.ID }).length === 0 && qtnanswer.specify !== null) {
-            qtnanswer.specify.forEach((qtnanswerspecify: Schema.InputType) => {
-                if (qtnanswerspecify.inputType === this.inputType.longAnswerText && qtnanswerspecify.type === 'text')
-                    this.questionnaire.answer[qtnanswer.empQuestionnaireAnswerSetID].formField.longAnswerText[qtnanswer.ID] = '';
-            });
+    checkboxOnChange(
+        qtnanswer: { selected: Schema.QuestionnaireAnswer, value?: Schema.QuestionnaireAnswer[] },
+        qtnanswerspecifyitem?: { selected: Schema.QuestionnaireAnswer, value: Schema.QuestionnaireAnswer[] }
+    ): void {
+        let obj: any;
+
+        if (qtnanswer.value !== undefined && qtnanswerspecifyitem === undefined)
+            obj = Object.assign({}, qtnanswer);
+
+        if (qtnanswer.value === undefined && qtnanswerspecifyitem !== undefined)
+            obj = Object.assign({}, qtnanswerspecifyitem);
+
+        if (obj.value.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === obj.selected.ID).length === 0 && obj.selected.specify !== null)
+            this.clearAnswerSpecify(qtnanswer.selected, (qtnanswerspecifyitem === undefined ? undefined : qtnanswerspecifyitem.selected));
+    }
+
+    clearAnswerSpecify(qtnanswer: Schema.QuestionnaireAnswer, qtnanswerspecifyitem?: Schema.QuestionnaireAnswer): void {
+        let qtnanswerSelected: Schema.QuestionnaireAnswer;
+        let qtnanswerObj: any = this.questionnaire.answer[qtnanswer.empQuestionnaireAnswerSetID];
+        let formField: any;
+
+        if (qtnanswerspecifyitem === undefined) {
+            qtnanswerSelected = qtnanswer;
+            formField = qtnanswerObj.formField;
         }
+        else {
+            qtnanswerSelected = qtnanswerspecifyitem;
+            formField = qtnanswerObj._formField[qtnanswer.ID]
+         }
+
+         qtnanswerSelected.specify.forEach((qtnanswerspecify: Schema.InputType) => {
+            if (['text', 'number', 'select'].filter((type: string) => type = qtnanswerspecify.type)) {
+                if (qtnanswerspecify.inputType === this.inputType.shortAnswerText)
+                    formField.shortAnswerText[qtnanswerSelected.ID] = null;
+
+                if (qtnanswerspecify.inputType === this.inputType.longAnswerText)
+                    formField.longAnswerText[qtnanswerSelected.ID] = null;
+
+                if (qtnanswerspecify.inputType === this.inputType.dropdown)
+                    formField.select[qtnanswerSelected.ID] = null;
+            }
+
+            if (qtnanswerspecify.items !== undefined) {
+                if (['radio', 'checkbox'].filter((type: string) => type = qtnanswerspecify.type)) {
+                    if (qtnanswerspecify.inputType === this.inputType.singleChoice)
+                        qtnanswerObj._formField[qtnanswer.ID].singleChoice = null;
+
+                    if (qtnanswerspecify.inputType === this.inputType.multipleChoice)
+                        qtnanswerObj._formField[qtnanswer.ID].multipleChoice = [];
+                }
+
+                qtnanswerspecify.items.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null).forEach((_qtnanswerspecifyitem: Schema.QuestionnaireAnswer) => {
+                    if (_qtnanswerspecifyitem.specify[0].inputType === this.inputType.longAnswerText)
+                        qtnanswerObj._formField[qtnanswer.ID].longAnswerText[_qtnanswerspecifyitem.ID] = null;
+                });
+            }
+        });
     }
 
     genCoditionString(condition: any): string | null {

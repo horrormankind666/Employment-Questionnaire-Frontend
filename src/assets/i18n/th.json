@@ -85,6 +85,9 @@
         "fillout": {
             "label": "ทำแบบสอบถาม"
         },
+        "submit": {
+            "label": "ส่งคำตอบ"
+        },
         "error": {
             "notFound": {
                 "label": "ไม่พบแบบสอบถาม"

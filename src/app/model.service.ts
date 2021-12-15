@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๓/๑๒/๒๕๖๔>
+Modify date : <๑๔/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -32,6 +32,7 @@ export namespace Schema {
         decimalPoint?: number,
         useGrouping?: boolean,
         mask?: string,
+        items?: QuestionnaireAnswer[],
         value?: any
     }
 
@@ -158,6 +159,7 @@ export namespace Schema {
         no: number,
         titleName: any,
         name: any,
+        disableStatus: string,
         actionDate: string
     }
 
@@ -184,13 +186,14 @@ export namespace Schema {
     export interface QuestionnaireAnswer {
         ID: string,
         empQuestionnaireAnswerSetID: string,
+        empQuestionnaireAnswerID?: string,
         no: number,
         choiceOrder: string,
         name: any,
         description: any,
         inputType: InputType,
         specify: InputType[],
-        gotoSection: string,
+        sectionOnOff: any,
         actionDate: string
     }
 

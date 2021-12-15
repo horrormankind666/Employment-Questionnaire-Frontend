@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๐๙/๒๕๖๔>
-Modify date : <๑๖/๑๐/๒๕๖๔>
+Modify date : <๑๑/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -34,6 +34,10 @@ Description : <>
                     & .p-button {
                         height: 41px;
                         font-size: 0.87rem;
+                        &:hover:not(:disabled) {
+                            background-color: $warningColorHover !important;
+                            border-color: $warningColorHover !important;
+                        }
                     }
                 }
             }

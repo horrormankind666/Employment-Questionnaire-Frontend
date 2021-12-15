@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๙/๑๑/๒๕๖๔>
+Modify date : <๐๘/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -340,6 +340,13 @@ Description : <>
                 }
             }
         }
+        & .p-button {
+            &.submit {
+                width: 310px;
+                height: 55px;
+                font-size: 1.25rem;
+            }
+        }
     }
 }
 
@@ -392,6 +399,13 @@ Description : <>
                         font-size: 0.875rem;
                         padding: 0;
                     }
+                }
+            }
+        }
+        & .page-body {
+            & .p-button {
+                &.submit {
+                    width: 100%;
                 }
             }
         }
