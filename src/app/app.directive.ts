@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๓/๑๐/๒๕๖๔>
-Modify date : <๑๐/๑๒/๒๕๖๔>
+Modify date : <๒๑/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -43,7 +43,7 @@ export class DynamicComponentDirective implements OnInit {
     selector: 'input[trimOnBlur], textarea[trimOnBlur]'
 })
 export class TrimOnBlurDirective {
-    private dispatchEvent(el: any, eventType: any) {
+    private doDispatchEvent(el: any, eventType: any) {
         const event = document.createEvent('Event');
 
         event.initEvent(eventType, false, false);
@@ -55,9 +55,9 @@ export class TrimOnBlurDirective {
         if ('function' === typeof value.trim && value.trim() !== value) {
             el.value = value.trim();
 
-            this.dispatchEvent(el, 'input');
-            this.dispatchEvent(el, 'textarea')
-            this.dispatchEvent(el, 'blur');
+            this.doDispatchEvent(el, 'input');
+            this.doDispatchEvent(el, 'textarea')
+            this.doDispatchEvent(el, 'blur');
         }
     }
 }

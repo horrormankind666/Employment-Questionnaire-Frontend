@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๙/๐๙/๒๕๖๔>
+Modify date : <๒๑/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -32,7 +32,7 @@ export class ModalService {
 
     openDialogRef: DynamicDialogRef[] = [];
 
-    private getModal(checkHasOpenModal: boolean, component: any, styleClass: string, content?: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
+    private doGetModal(checkHasOpenModal: boolean, component: any, styleClass: string, content?: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
         let dialogRef: DynamicDialogRef | undefined;
 
         if (!checkHasOpenModal || this.openDialogRef.length === 0) {
@@ -56,15 +56,15 @@ export class ModalService {
     }
 
 
-    getModalError(checkHasOpenModal: boolean, content: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
+    doGetModalError(checkHasOpenModal: boolean, content: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
         let dialogRef: DynamicDialogRef | undefined;
 
-        dialogRef = this.getModal(checkHasOpenModal, ModalErrorComponent, 'modal-error', content, description, btnMsg);
+        dialogRef = this.doGetModal(checkHasOpenModal, ModalErrorComponent, 'modal-error', content, description, btnMsg);
 
         return dialogRef;
     }
 
-    closeAllModal() {
+    doCloseAllModal() {
         this.openDialogRef.forEach((dialogRef: DynamicDialogRef) => dialogRef.destroy());
         this.openDialogRef = [];
     }

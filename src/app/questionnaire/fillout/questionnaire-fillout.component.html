@@ -1,5 +1,12 @@
-
+<ngx-loading [show]="saveandsubmit.isSubmitting"></ngx-loading>
 <div id="questionnaire-fillout-page" class="page-container">
+    <p-toast
+        [showTransitionOptions]="'0ms'"
+        [hideTransitionOptions]="'0ms'">
+        <ng-template pTemplate>
+            {{ 'save.error.invalid.label' | translate }}
+        </ng-template>
+    </p-toast>
     <div class="page-header block h-auto">
         <div *ngIf="questionnaire.set.datasource === null">
             <div class="title block heading text-center text-2xl pt-3">
@@ -8,14 +15,14 @@
             <div class="toolbar block text-center h-auto pt-0 mt-3">
                 <button pButton type="button" class="button button-outlined w-auto text-left"
                     [disabled]="questionnaire.section.dataView.isLoading"
-                    (click)="router.navigate(['Questionnaire'])">
+                    (click)="router.navigate(['Home'])">
                     <i class="fas fa-bars"></i>
-                    &nbsp;&nbsp;<span>{{ 'questionnaire.explore.label' | translate }}</span>
+                    &nbsp;&nbsp;<span>{{ !questionnaire.section.dataView.isLoading ? ('questionnaire.explore.label' | translate) : '' }}</span>
                 </button>
             </div>
         </div>
         <div *ngIf="questionnaire.set.datasource !== null">
-            <div class="toolbar fixed z-2">
+            <div class="toolbar fixed z-2" *ngIf="!saveandsubmit.isSuccess">
                 <div class="left">
                     <div class="questionnairemenu-nav relative"
                         [ngClass]="{
@@ -64,7 +71,7 @@
                                 pTooltip="{{ 'previous.label' | translate | titlecase }}"
                                 [tooltipDisabled]="questionnaire.section.orderList.activeIndex === 0 || questionnaire.section.dataView.isLoading"
                                 [appendTo]="previousButton"
-                                (click)="questionnaire.section.navigate.previous()">
+                                (click)="questionnaire.section.navigate.doPrevious()">
                                 <i class="fas fa-long-arrow-alt-left"></i>
                             </button>
                         </div>
@@ -75,7 +82,7 @@
                                 }"
                                 [disabled]="questionnaire.section.dataView.isLoading"
                                 (click)="questionnaireSectionPanel.toggle($event)">
-                                <span>
+                                <span *ngIf="!questionnaire.section.dataView.isLoading">
                                     {{
                                         (questionnaire.section.datasource[questionnaire.section.orderList.activeIndex].titleName[appService.env.lang] | titlecase) +
                                         ' ' +
@@ -92,7 +99,7 @@
                                 pTooltip="{{ 'next.label' | translate | titlecase }}"
                                 [tooltipDisabled]="(questionnaire.section.orderList.activeIndex + 1) === questionnaire.section.datasource.length || questionnaire.section.dataView.isLoading"
                                 [appendTo]="nextButton"
-                                (click)="questionnaire.section.navigate.next()">
+                                (click)="questionnaire.section.navigate.doNext()">
                                 <i class="fas fa-long-arrow-alt-right"></i>
                             </button>
                         </div>
@@ -110,7 +117,7 @@
                                     [value]="questionnaire.section.datasource"
                                     (onSelectionChange)="
                                         questionnaireSectionPanel.hide();
-                                        questionnaire.section.orderList.selection($event.value)
+                                        questionnaire.section.orderList.doSelection($event.value)
                                     ">
                                     <ng-template let-qtnsection pTemplate="item">
                                         {{ (qtnsection.titleName[appService.env.lang] | titlecase) + ' ' + qtnsection.no }}
@@ -122,27 +129,60 @@
                     </div>
                 </div>
                 <div class="right text-right">
-                    <button pButton type="button" class="button p-button-warning"
-                        [disabled]="questionnaire.section.dataView.isLoading || appService.arrayFilter(this.modelChange, { field: 'changeStatus', value: true }).length === 0">
-                        <span>{{ 'save.label' | translate | titlecase }}</span>
+                    <button pButton type="button" class="button p-button-warning" *ngIf="!saveandsubmit.isSaving"
+                        [disabled]="
+                            questionnaire.section.dataView.isLoading ||
+                            questionnaire.section.datasource[questionnaire.section.orderList.activeIndex].disableStatus === 'Y'
+                        "
+                        (click)="saveandsubmit.doSave()">
+                        <span *ngIf="!questionnaire.section.dataView.isLoading">{{ 'save.label' | translate | titlecase }}</span>
                     </button>
+                    <i class="fas fa-spin fa-spinner" *ngIf="saveandsubmit.isSaving"></i>
                 </div>
             </div>
-            <div class="title block heading">
+            <div class="title block heading"
+                [ngClass]="{
+                    'p-3': saveandsubmit.isSuccess
+                }">
                 <p-panel [showHeader]="false" class="questionnaireset">
                     <div>
                         <div class="namedescription">
                             <div class="name" *ngIf="questionnaire.set.datasource.name !== null">
-                                {{ questionnaire.set.datasource.name[appService.env.lang] }}
+                                {{ !questionnaire.section.dataView.isLoading ? questionnaire.set.datasource.name[appService.env.lang] : '&nbsp;' }}
                             </div>
                             <div class="description paragraph" *ngIf="questionnaire.set.datasource.description !== null">
-                                {{ questionnaire.set.datasource.description[appService.env.lang] }}
+                                {{ !questionnaire.section.dataView.isLoading ? questionnaire.set.datasource.description[appService.env.lang] : '&nbsp;' }}
                             </div>
                         </div>
-                        <div *ngIf="questionnaire.set.datasource.cancelStatus === 'N' && questionnaire.section.orderList.activeIndex === 0">
+                        <div
+                            *ngIf="
+                                questionnaire.set.datasource.cancelStatus === 'N' &&
+                                questionnaire.section.orderList.activeIndex === 0 &&
+                                !saveandsubmit.isSuccess
+                            ">
                             <div class="notice paragraph" *ngIf="questionnaire.set.datasource.notice !== null">
-                                <span class="text-pink-500 font-semibold">{{ 'notice.label' | translate | titlecase }}&nbsp;</span>
-                                {{ questionnaire.set.datasource.notice[appService.env.lang] }}
+                                <span class="text-pink-500 font-semibold">
+                                    {{ !questionnaire.section.dataView.isLoading ? ('notice.label' | translate | titlecase) : '&nbsp;' }}&nbsp;
+                                </span>
+                                {{ !questionnaire.section.dataView.isLoading ? questionnaire.set.datasource.notice[appService.env.lang] : '&nbsp;' }}
+                            </div>
+                        </div>
+                        <div *ngIf="saveandsubmit.isSuccess">
+                            <div class="notice paragraph">
+                                <div class="font-semibold text-lg">
+                                    {{ 'questionnaire.submitted.date.label' | translate }}
+                                </div>
+                                <div class="font-light">
+                                    06 October 2021 ,3:10:36 pm
+                                </div>
+                                <div class="text-xl mt-5">
+                                    {{ 'questionnaire.submitted.thankyou.label' | translate }}
+                                </div>
+                                <button pButton type="button" class="button button-outlined w-auto text-left text-sm mt-4"
+                                    (click)="router.navigate(['Home'])">
+                                    <i class="fas fa-bars"></i>
+                                    &nbsp;&nbsp;<span>{{ 'questionnaire.explore.label' | translate }}</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -157,7 +197,10 @@
             [loading]="questionnaire.section.dataView.isLoading"
             loadingIcon="fas fa-spin fa-spinner"
             layout="grid"
-            *ngIf="questionnaire.set.datasource !== null">
+            *ngIf="
+                questionnaire.set.datasource !== null &&
+                !saveandsubmit.isSuccess
+            ">
             <ng-template let-qtnsection pTemplate="gridItem">
                 <div class="questionnairesection-tabpanel" *ngIf="!questionnaire.section.dataView.isLoading"
                     [ngClass]="{
@@ -174,7 +217,8 @@
                     </div>
                     <div class="questionnairequestions" *ngFor="let qtnquestion of questionnaire.question[qtnsection.ID].datasource">
                         <p-panel
-                            [showHeader]="false">
+                            [showHeader]="false"
+                            [styleClass]="((qtnsection.disableStatus === 'N' && qtnquestion.disableStatus === 'N' && qtnquestion.errorStatus === 'Y') ? 'question-error' : '')">
                             <div class="p-component-overlay"
                                 *ngIf="
                                     qtnsection.disableStatus === 'Y' ||
@@ -217,7 +261,7 @@
                                                     {{ 'institute.name.label' | translate | titlecase }}
                                                 </li>
                                                 <li class="viewanswer">
-                                                    มหาวิทยาลัยมหิดล
+                                                    {{ userInfo.instituteName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
                                             <ul class="table faculty">
@@ -225,7 +269,7 @@
                                                     {{ 'institute.faculty.label' | translate | titlecase }}
                                                 </li>
                                                 <li class="viewanswer">
-                                                    คณะสาธารณสุขศาสตร์
+                                                    {{ userInfo.facultyName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
                                             <ul class="table majorsubject">
@@ -233,7 +277,7 @@
                                                     {{ 'institute.majorSubject.label' | translate | titlecase }}
                                                 </li>
                                                 <li class="viewanswer">
-                                                    วิทยาศาสตรบัณฑิต สาขาวิชาสาธารณสุขศาสตร์
+                                                    {{ userInfo.programName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
                                         </div>
@@ -243,7 +287,7 @@
                                                     {{ 'personalDetail.fullName.label' | translate | titlecase }} (TH)
                                                 </li>
                                                 <li class="viewanswer">
-                                                    นายยุทธภูมิ ตวันนา
+                                                    {{ userInfo.titlePrefix.th + userInfo.firstName.th + (userInfo.middleName !== null ? (' ' + userInfo.middleName.th) : '') + ' ' + userInfo.lastName.th }}
                                                 </li>
                                             </ul>
                                             <ul class="table fullname">
@@ -251,7 +295,7 @@
                                                     {{ 'personalDetail.fullName.label' | translate | titlecase }} (EN)
                                                 </li>
                                                 <li class="viewanswer">
-                                                    Mr.Yutthaphoom Tawanan
+                                                    {{ (userInfo.titlePrefix.en | titlecase) + (userInfo.firstName.en | titlecase) + (userInfo.middleName !== null ? (' ' + (userInfo.middleName.en | titlecase)) : '') + ' ' + (userInfo.lastName.en | titlecase) }}
                                                 </li>
                                             </ul>
                                             <ul class="table idcard">
@@ -259,7 +303,7 @@
                                                     {{ 'personalDetail.IDCard.label' | translate | titlecase }}
                                                 </li>
                                                 <li class="viewanswer">
-                                                    3770600658218
+                                                    {{ userInfo.IDCard }}
                                                 </li>
                                             </ul>
                                             <ul class="table studentcode">
@@ -267,15 +311,11 @@
                                                     {{ 'personalDetail.studentCode.label' | translate | titlecase }}
                                                 </li>
                                                 <li class="viewanswer">
-                                                    6401001
+                                                    {{ userInfo.studentCode }}
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="address"
-                                            *ngIf="
-                                                qtnanswerset.inputType.inputType === inputType.homeAddress ||
-                                                qtnanswerset.inputType.inputType === inputType.workplaceAddress
-                                            ">
+                                        <div class="address" *ngIf="qtnanswerset.inputType.inputType === inputType.address">
                                             <ng-container *ngTemplateOutlet="
                                                 questionnaireAddressTemplate;
                                                 context: {
@@ -295,7 +335,7 @@
                                                 (qtnanswerset.inputType.inputType === inputType.multipleChoice && qtnanswerset.inputType.type === 'checkbox')
                                             )
                                         ">
-                                        <li class="inputtype" *ngIf="qtnanswer.inputType !== null">
+                                        <li class="inputtype" *ngIf="qtnanswer.inputType === null">
                                             <ng-container *ngTemplateOutlet="
                                                 questionnaireInputTypeTemplate;
                                                 context: {
@@ -305,17 +345,13 @@
                                                 }">
                                             </ng-container>
                                         </li>
-                                        <li class="inputtype" *ngIf="qtnanswer.inputType === null && qtnanswer.choiceOrder === null">
-                                            <i class="fas fa-angle-down"></i>
-                                        </li>
                                         <li class="choiceorder" *ngIf="qtnanswer.choiceOrder !== null">
-                                            <label [for]="qtnanswer.ID">{{ qtnanswer.choiceOrder }}</label>
+                                            <label [for]="qtnanswer.ID">
+                                                {{ qtnanswer.choiceOrder }}
+                                            </label>
                                         </li>
                                         <li class="namedescription" *ngIf="qtnanswer.name[appService.env.lang] !== null">
-                                            <label class="name" [for]="qtnanswer.ID"
-                                                [ngClass]="{
-                                                    'underline': (qtnanswer.inputType === null && qtnanswer.choiceOrder === null)
-                                                }">
+                                            <label class="name" [for]="qtnanswer.ID">
                                                 {{ qtnanswer.name[appService.env.lang] }}
                                             </label>
                                             <div class="description" *ngIf="qtnanswer.description[appService.env.lang] !== null">
@@ -372,20 +408,28 @@
                     </div>
                     <div class="text-center mt-3" *ngIf="(questionnaire.section.orderList.activeIndex + 1) === questionnaire.section.datasource.length">
                         <button pButton type="button" class="submit button p-button-rounded p-button-success"
-                            [disabled]="questionnaire.section.dataView.isLoading || appService.arrayFilter(this.modelChange, { field: 'changeStatus', value: true }).length === 0">
-                            <span>{{ 'questionnaire.submit.label' | translate | titlecase }}</span>
+                            (click)="saveandsubmit.doSubmit()">
+                            <span *ngIf="!saveandsubmit.isSubmitting">
+                                {{ 'questionnaire.submit.label' | translate | titlecase }}
+                            </span>
+                            <span *ngIf="saveandsubmit.isSubmitting">
+                                {{ 'questionnaire.submitting.label' | translate | titlecase }}
+                            </span>
                         </button>
-
                         <!--
-                        วันที่ตอบแบบสอบถาม
-                        06 October 2021 ,3:10:36 pm
-
-                        (ขอขอบคุณท่านที่ให้ความร่วมมือในการตอบแบบสอบถามฯ เป็นอย่างดี)
-
-                        Submitted on Date
-                        06 October 2021 ,3:10:36 pm
-
-                        Thank you for completing the questionnaire.
+                        <button pButton type="button" class="submit button p-button-rounded p-button-success"
+                            [disabled]="
+                                questionnaire.section.dataView.isLoading ||
+                                !saveandsubmit.isValid
+                            "
+                            (click)="saveandsubmit.doSubmit()">
+                            <span *ngIf="!saveandsubmit.isSubmitting">
+                                {{ 'questionnaire.submit.label' | translate | titlecase }}
+                            </span>
+                            <span *ngIf="saveandsubmit.isSubmitting">
+                                {{ 'questionnaire.submitting.label' | translate | titlecase }}
+                            </span>
+                        </button>
                         -->
                     </div>
                 </div>
@@ -399,23 +443,19 @@
     let-formField="formField"
     let-validators="validators">
     <ul class="table {{ addressField.name.toLowerCase() }}" *ngFor="let addressField of addressFields">
-        <li class="label" *ngIf="addressField.inputType === '*' || addressField.inputType === qtnanswerset.inputType.inputType">
+        <li class="label">
             <label [for]="addressField.name.toLowerCase() + qtnanswer.ID">
                 {{ 'address.' + addressField.name + '.label' | translate }}
             </label>
         </li>
-        <li class="editanswer p-fluid" *ngIf="addressField.inputType === '*' || addressField.inputType === qtnanswerset.inputType.inputType">
+        <li class="editanswer p-fluid">
             <input pInputText trimOnBlur empty2Null type="text"
                 [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
                 [id]="addressField.name.toLowerCase() + qtnanswer.ID"
                 [maxlength]="addressField.length !== undefined ? addressField.length : ''"
-                (ngModelChange)="watchChange($event, qtnanswerset)"
+                (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
                 *ngIf="
-                    addressField.name !== 'country' &&
-                    addressField.name !== 'province' &&
-                    addressField.name !== 'district' &&
-                    addressField.name !== 'subdistrict' &&
-                    addressField.name !== 'email' &&
+                    addressField.inputType === inputType.shortAnswerText &&
                     addressField.type === 'text'
                 "
             />
@@ -424,20 +464,16 @@
                     'formfield-error': validators.isEmail[qtnanswer.ID] === false
                 }"
                 *ngIf="
-                    addressField.name === 'email' &&
-                    addressField.type === 'text'
+                    addressField.inputType === inputType.shortAnswerText &&
+                    addressField.type === 'email'
                 ">
                 <input pInputText trimOnBlur empty2Null type="text"
                     [(ngModel)]="formField[addressField.name][qtnanswer.ID]"
                     [id]="addressField.name.toLowerCase() + qtnanswer.ID"
                     [maxlength]="addressField.length !== undefined ? addressField.length : ''"
                     (ngModelChange)="
-                        validators.isEmail[qtnanswer.ID] = appService.isEmail(formField[addressField.name][qtnanswer.ID]);
-                        watchChange($event, qtnanswerset)
-                    "
-                    *ngIf="
-                        addressField.name === 'email' &&
-                        addressField.type === 'text'
+                        validators.isEmail[qtnanswer.ID] = appService.doValidatorEmail(formField[addressField.name][qtnanswer.ID]);
+                        doWatchModelChange($event, qtnanswerset)
                     "
                 />
                 <p-message
@@ -455,14 +491,10 @@
                 [useGrouping]="addressField.useGrouping !== undefined ? addressField.useGrouping : true"
                 (onInput)="
                     formField[addressField.name][qtnanswer.ID] = $event.value;
-                    watchChange(formField[addressField.name][qtnanswer.ID], qtnanswerset)
+                    doWatchModelChange(formField[addressField.name][qtnanswer.ID], qtnanswerset)
                 "
                 *ngIf="
-                    addressField.name !== 'country' &&
-                    addressField.name !== 'province' &&
-                    addressField.name !== 'district' &&
-                    addressField.name !== 'subdistrict' &&
-                    addressField.name !== 'email' &&
+                    addressField.inputType === inputType.shortAnswerText &&
                     addressField.type === 'number'
                 ">
             </p-inputNumber>
@@ -471,14 +503,10 @@
                 [mask]="addressField.mask !== undefined ? addressField.mask : ''"
                 (onBlur)="
                     formField[addressField.name][qtnanswer.ID] = (($event.originalTarget.value === '' || $event.originalTarget.value.length === 0) ? null : $event.originalTarget.value);
-                    watchChange(formField[addressField.name][qtnanswer.ID], qtnanswerset)
+                    doWatchModelChange(formField[addressField.name][qtnanswer.ID], qtnanswerset)
                 "
                 *ngIf="
-                    addressField.name !== 'country' &&
-                    addressField.name !== 'province' &&
-                    addressField.name !== 'district' &&
-                    addressField.name !== 'subdistrict' &&
-                    addressField.name !== 'email' &&
+                    addressField.inputType === inputType.shortAnswerText &&
                     addressField.type === 'mask'
                 ">
             </p-inputMask>
@@ -489,11 +517,13 @@
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
                 (ngModelChange)="
-                    selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
-                    watchChange($event, qtnanswerset)
+                    doSelectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
+                    doWatchModelChange($event, qtnanswerset)
                 "
                 *ngIf="
-                    addressField.name === 'country'
+                    addressField.name === 'country' &&
+                    addressField.inputType === inputType.dropdown &&
+                    addressField.type === 'select'
                 ">
                 <ng-option *ngFor="let country of country['master'].datasource" [value]="country">
                     {{ country.name[appService.env.lang] }}
@@ -506,11 +536,13 @@
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
                 (ngModelChange)="
-                    selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
-                    watchChange($event, qtnanswerset)
+                    doSelectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
+                    doWatchModelChange($event, qtnanswerset)
                 "
                 *ngIf="
-                    addressField.name === 'province'
+                    addressField.name === 'province' &&
+                    addressField.inputType === inputType.dropdown &&
+                    addressField.type === 'select'
                 ">
                 <ng-option *ngFor="let province of province[qtnanswer.ID].datasource" [value]="province">
                     {{ province.name[appService.env.lang] }}
@@ -523,11 +555,13 @@
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
                 (ngModelChange)="
-                    selectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
-                    watchChange($event, qtnanswerset)
+                    doSelectOnChange(addressField.name, formField[addressField.name][qtnanswer.ID], qtnanswerset.ID, qtnanswer.ID);
+                    doWatchModelChange($event, qtnanswerset)
                 "
                 *ngIf="
-                    addressField.name === 'district'
+                    addressField.name === 'district' &&
+                    addressField.inputType === inputType.dropdown &&
+                    addressField.type === 'select'
                 ">
                 <ng-option *ngFor="let district of district[qtnanswer.ID].datasource" [value]="district">
                     {{ district.name[appService.env.lang] }}
@@ -539,9 +573,11 @@
                 [searchable]="false"
                 placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
                 notFoundText="{{ 'error.noItemsFound.label' | translate }}"
-                (ngModelChange)="watchChange($event, qtnanswerset)"
+                (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
                 *ngIf="
-                    addressField.name === 'subdistrict'
+                    addressField.name === 'subdistrict' &&
+                    addressField.inputType === inputType.dropdown &&
+                    addressField.type === 'select'
                 ">
                 <ng-option *ngFor="let subdistrict of subdistrict[qtnanswer.ID].datasource" [value]="subdistrict">
                     {{ subdistrict.name[appService.env.lang] }}
@@ -562,8 +598,8 @@
             [name]="formField.singleChoice"
             [value]="qtnanswer"
             (ngModelChange)="
-                radiobuttonOnChange(qtnanswer);
-                watchChange($event, qtnanswerset)
+                doRadiobuttonOnChange(qtnanswer);
+                doWatchModelChange($event, qtnanswerset)
             "
             *ngIf="
                 qtnanswerset.inputType.inputType === inputType.singleChoice &&
@@ -577,8 +613,8 @@
             [value]="qtnanswer"
             checkboxIcon="fas fa-times"
             (ngModelChange)="
-                checkboxOnChange({ selected: qtnanswer, value: formField.multipleChoice });
-                watchChange($event, qtnanswerset)
+                doCheckboxOnChange({ selected: qtnanswer, value: formField.multipleChoice });
+                doWatchModelChange($event, qtnanswerset)
             "
             *ngIf="
                 qtnanswerset.inputType.inputType === inputType.multipleChoice &&
@@ -590,7 +626,7 @@
         <input pInputText trimOnBlur empty2Null type="text"
             [(ngModel)]="formField.shortAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswer.inputType.length !== null ? qtnanswer.inputType.length : ''"
-            (ngModelChange)="watchChange($event, qtnanswerset)"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             *ngIf="
                 qtnanswer.inputType.inputType === inputType.shortAnswerText &&
                 qtnanswer.inputType.type === 'text'
@@ -600,7 +636,7 @@
             [(ngModel)]="formField.longAnswerText[qtnanswer.ID]"
             [maxlength]="qtnanswer.inputType.length !== null ? qtnanswer.inputType.length : ''"
             [autoResize]="true"
-            (ngModelChange)="watchChange($event, qtnanswerset)"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             *ngIf="
                 qtnanswer.inputType.inputType === inputType.longAnswerText &&
                 qtnanswer.inputType.type === 'text'
@@ -612,7 +648,7 @@
             [searchable]="false"
             placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
             notFoundText="{{ 'error.noItemsFound.label' | translate }}"
-            (ngModelChange)="watchChange($event, qtnanswerset)"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             *ngIf="
                 qtnanswer.inputType.inputType === inputType.dropdown &&
                 qtnanswer.inputType.type === 'select' &&
@@ -628,10 +664,11 @@
             [ngClass]="{
                 'p-disabled': (
                     !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                    !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                    !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
                 )
             }"
             [(ngModel)]="formField.formField.shortAnswerText[qtnanswer.ID]"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : ''"
             *ngIf="
                 qtnanswerspecify.inputType === inputType.shortAnswerText &&
@@ -647,9 +684,12 @@
             [useGrouping]="qtnanswerspecify.useGrouping !== null ? qtnanswerspecify.useGrouping : true"
             [disabled]="
                 !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
             "
-            (onInput)="formField.formField.typec.shortAnswerText[qtnanswer.ID] = $event.value"
+            (onInput)="
+                formField.formField.shortAnswerText[qtnanswer.ID] = $event.value;
+                doWatchModelChange(formField.formField.shortAnswerText[qtnanswer.ID], qtnanswerset)
+            "
             *ngIf="
                 qtnanswerspecify.inputType === inputType.shortAnswerText &&
                 qtnanswerspecify.type === 'number'
@@ -659,10 +699,11 @@
             [ngClass]="{
                 'p-disabled': (
                     !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                    !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                    !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
                 )
             }"
             [(ngModel)]="formField.formField.longAnswerText[qtnanswer.ID]"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : ''"
             [autoResize]="true"
             *ngIf="
@@ -675,9 +716,10 @@
             [searchable]="false"
             placeholder="{{ 'placeholder.selectItem.label' | translate | titlecase }}"
             notFoundText="{{ 'error.noItemsFound.label' | translate }}"
+            (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
             [readonly]="
                 !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
             "
             *ngIf="
                 qtnanswerspecify.inputType === inputType.dropdown &&
@@ -698,9 +740,12 @@
                         [value]="qtnanswerspecifyitem"
                         [disabled]="
                             !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                            !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                            !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
                         "
-                        (ngModelChange)="radiobuttonOnChange(qtnanswer, { selected: qtnanswerspecifyitem, items: qtnanswerspecify.items })"
+                        (ngModelChange)="
+                            doRadiobuttonOnChange(qtnanswer, { selected: qtnanswerspecifyitem, items: qtnanswerspecify.items });
+                            doWatchModelChange($event, qtnanswerset)
+                        "
                         *ngIf="
                             qtnanswerspecify.inputType === inputType.singleChoice &&
                             qtnanswerspecify.type === 'radio'
@@ -714,9 +759,12 @@
                         checkboxIcon="fas fa-times"
                         [disabled]="
                             !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
-                            !(formField.formField.multipleChoice.length > 0 && appService.arrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                            !(formField.formField.multipleChoice.length > 0 && appService.doArrayFilter(formField.formField.multipleChoice, { field: 'ID', value: qtnanswer.ID }).length > 0)
                         "
-                        (ngModelChange)="checkboxOnChange({ selected: qtnanswer }, { selected: qtnanswerspecifyitem, value: formField._formField[qtnanswer.ID].multipleChoice })"
+                        (ngModelChange)="
+                            doCheckboxOnChange({ selected: qtnanswer }, { selected: qtnanswerspecifyitem, value: formField._formField[qtnanswer.ID].multipleChoice });
+                            doWatchModelChange($event, qtnanswerset)
+                        "
                         *ngIf="
                             qtnanswerspecify.inputType === inputType.multipleChoice &&
                             qtnanswerspecify.type === 'checkbox'
@@ -727,12 +775,7 @@
                     <label [for]="qtnanswerspecifyitem.ID">{{ qtnanswerspecifyitem.choiceOrder }}</label>
                 </li>
                 <li class="namedescription" *ngIf="qtnanswerspecifyitem.name[appService.env.lang] !== null">
-                    <label class="name" [for]="qtnanswerspecifyitem.ID"
-                        [ngClass]="{
-                            'underline': (qtnanswerspecifyitem.inputType === null && qtnanswerspecifyitem.choiceOrder === null)
-                        }">
-                        {{ qtnanswerspecifyitem.name[appService.env.lang] }}
-                    </label>
+                    <label class="name" [for]="qtnanswerspecifyitem.ID">{{ qtnanswerspecifyitem.name[appService.env.lang] }}</label>
                     <div class="description" *ngIf="qtnanswerspecifyitem.description[appService.env.lang] !== null">
                         {{ qtnanswerspecifyitem.description[appService.env.lang] }}
                     </div>
@@ -742,10 +785,11 @@
                                 [ngClass]="{
                                     'p-disabled': (
                                         !(formField._formField[qtnanswer.ID].singleChoice !== null && formField._formField[qtnanswer.ID].singleChoice.ID === qtnanswerspecifyitem.ID) &&
-                                        !(formField._formField[qtnanswer.ID].multipleChoice.length > 0 && appService.arrayFilter(formField._formField[qtnanswer.ID].multipleChoice, { field: 'ID', value: qtnanswerspecifyitem.ID }).length > 0)
+                                        !(formField._formField[qtnanswer.ID].multipleChoice.length > 0 && appService.doArrayFilter(formField._formField[qtnanswer.ID].multipleChoice, { field: 'ID', value: qtnanswerspecifyitem.ID }).length > 0)
                                     )
                                 }"
                                 [(ngModel)]="formField._formField[qtnanswer.ID].longAnswerText[qtnanswerspecifyitem.ID]"
+                                (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
                                 [maxlength]="qtnanswerspecifyitem.specify[0].length !== null ? qtnanswerspecifyitem.specify[0].length : ''"
                                 [autoResize]="true"
                                 *ngIf="

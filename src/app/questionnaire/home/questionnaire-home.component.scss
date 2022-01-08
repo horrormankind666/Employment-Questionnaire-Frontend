@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๐๙/๒๕๖๔>
-Modify date : <๑๑/๑๒/๒๕๖๔>
+Modify date : <๐๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -17,26 +17,54 @@ Description : <>
     }
     & .page-body {
         & .questionnairesets {
-            & ::ng-deep .p-card {
-                & .p-card-header {
-                    height: 17px;
-                    font-size: 0.685rem;
-                    font-weight: $fontStyleMedium;
-                    color: var(--surface-500);
-                    margin-bottom: 0.25rem;
-                }
-                & .p-card-body {
-                    & .p-card-content {
-                        display: none;
+            & ::ng-deep {
+                & .p-card {
+                    & .p-card-header {
+                        height: 17px;
+                        font-size: 0.685rem;
+                        font-weight: $fontStyleMedium;
+                        color: var(--surface-500);
+                        margin-bottom: 0.25rem;
+                    }
+                    & .p-card-body {
+                        & .p-card-content {
+                            display: none;
+                        }
+                    }
+                    & .p-card-footer {
+                        & .p-button {
+                            height: 41px;
+                            font-size: 0.87rem;
+                        }
                     }
                 }
-                & .p-card-footer {
-                    & .p-button {
-                        height: 41px;
-                        font-size: 0.87rem;
-                        &:hover:not(:disabled) {
-                            background-color: $warningColorHover !important;
-                            border-color: $warningColorHover !important;
+                &.submitstatus-n {
+                    & .p-card {
+                        &:hover {
+                            background-color: $warningColorHover;
+                            border-color: $warningColorHover;
+                        }
+                    }
+                    & .p-card-footer {
+                        & .p-button {
+                            &:hover:not(:disabled) {
+                                background-color: $warningColor !important;
+                                border-color: $warningColorHover !important;
+                            }
+                        }
+                    }
+                }
+                &.submitstatus-y {
+                    & .p-card {
+                        background-color: $successColorHover;
+                        border-color: $successColorHover;
+                    }
+                    & .p-card-footer {
+                        & .p-button {
+                            &:hover:not(:disabled) {
+                                background-color: $successColor !important;
+                                border-color: $successColorHover !important;
+                            }
                         }
                     }
                 }

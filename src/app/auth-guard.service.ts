@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๗/๐๙/๒๕๖๔>
+Modify date : <๒๑/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -32,22 +32,19 @@ export class AuthGuardService implements CanActivate {
         this.appService.env.route.path = (route.routeConfig !== null ? (route.routeConfig.path !== undefined ? route.routeConfig.path : '') : '');
 
         try {
-            await this.authService.getAuthenInfo(route);
+            await this.authService.doGetAuthenInfo(route);
 
             if (!this.appService.env.authenInfo.isAuthenticated) {
                 localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
 
                 if (route.data.signin) {
-                    let messageError: any | null = this.appService.getMessagei18n(this.appService.env.authenInfo.message);
+                    let messageError: any | null = this.appService.doGetMessagei18n(this.appService.env.authenInfo.message);
 
                     if (messageError !== null)
-                        this.modalService.getModalError(false, messageError.content, messageError.description);
+                        this.modalService.doGetModalError(false, messageError.content, messageError.description);
                 }
 
-                if (state.url === '/SignOut')
-                    this.router.navigate(['/']);
-
-                if (this.appService.env.route.path === '**')
+                if (this.appService.env.route.path === '**' || state.url === '/')
                     return true;
 
                 return false;

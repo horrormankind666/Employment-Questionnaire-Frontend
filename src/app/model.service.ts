@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๔/๑๒/๒๕๖๔>
+Modify date : <๐๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -32,7 +32,7 @@ export namespace Schema {
         decimalPoint?: number,
         useGrouping?: boolean,
         mask?: string,
-        items?: QuestionnaireAnswer[],
+        items?: Array<QuestionnaireAnswer>,
         value?: any
     }
 
@@ -44,11 +44,41 @@ export namespace Schema {
 
     export interface User {
         PPID: string,
-        givenName: string,
-        familyName: string,
+        email?: string,
+        accountName?: string,
+        givenName?: string,
+        familyName?: string,
+        initials?: string
+        perPersonID: string | null,
+        studentCode: string | null,
+        IDCard: string | null,
+        titlePrefix: any,
+        firstName: any,
+        middleName: any,
+        lastName: any,
+        instituteName: any,
+        facultyID: string | null,
+        facultyCode: string | null,
+        facultyName: any,
+        programID: string | null,
+        programCode: string | null,
+        majorCode: string | null,
+        groupNum: string | null,
+        degreeLevelName: any,
+        programName: any,
+        degreeName: any,
+        branchID: string | null,
+        branchName: any,
+        classYear: number | null,
+        yearEntry: string | null,
         gender: string,
-        email: string,
-        initials: string
+        birthDate: string | null,
+        nationalityName: any,
+        nationality2Letter: string | null,
+        nationality3Letter: string | null,
+        raceName: any,
+        race2Letter: string | null,
+        race3Letter: string | null
     }
 
     export interface Country {
@@ -102,42 +132,13 @@ export namespace Schema {
     }
 
     export interface QuestionnaireDone {
-        ID: string,
-        empQuestionnaireSetID: string,
-        PPID: string,
-        perPersonID: string,
-        studentCode: string,
-        titlePrefix: any,
-        firstName: any,
-        middleName: any,
-        lastName: any,
-        instituteName: any,
-        facultyID: string,
-        facultyCode: string,
-        facultyName: any,
-        programID: string,
-        programCode: string,
-        majorCode: string,
-        groupNum: string,
-        degreeLevelName: any,
-        programName: any,
-        degreeName: any,
-        branchID: string,
-        branchName: any,
-        classYear: number,
-        yearEntry: string,
-        gender: string,
-        birthDate: string,
-        nationalityName: any,
-        nationality2Letter: string,
-        nationality3Letter: string,
-        raceName: any,
-        race2Letter: string,
-        race3Letter: string,
-        address: any,
-        empQuestionnaireAnswer: any,
-        cancelStatus: string,
-        actionDate: string
+        ID?: string | null,
+        empQuestionnaireSetID?: string | null,
+        userInfo: Schema.User,
+        empQuestionnaireAnswer?: any,
+        submitStatus?: string,
+        cancelStatus?: string,
+        actionDate?: string
     }
 
     export interface QuestionnaireSet {
@@ -148,7 +149,8 @@ export namespace Schema {
         notice: any,
         showStatus: string,
         cancelStatus: string,
-        doneStatus: string,
+        empQuestionnaireDoneID: string,
+        submitStatus: string,
         doneDate: string,
         actionDate: string
     }
@@ -171,6 +173,7 @@ export namespace Schema {
         description: any,
         condition: any,
         disableStatus: string,
+        errorStatus: string,
         actionDate: string
     }
 
@@ -192,24 +195,24 @@ export namespace Schema {
         name: any,
         description: any,
         inputType: InputType,
-        specify: InputType[],
-        sectionOnOff: any,
+        specify: Array<InputType>,
+        eventAction: any,
         actionDate: string
     }
 
     export interface QuestionnaireDoneAndSet {
         done: QuestionnaireDone | null,
         set: QuestionnaireSet | null,
-        section: QuestionnaireSection[],
-        question: QuestionnaireQuestion[],
-        answerSet: QuestionnaireAnswerSet[],
-        answer: QuestionnaireAnswer[]
+        section: Array<QuestionnaireSection>,
+        question: Array<QuestionnaireQuestion>,
+        answerSet: Array<QuestionnaireAnswerSet>,
+        answer: Array<QuestionnaireAnswer>
     }
 }
 
 namespace Instance {
     export class Any {
-        setDefault(): Schema.Any {
+        doSetDefault(): Schema.Any {
             return {};
         }
     }
@@ -222,17 +225,17 @@ namespace Instance {
 
         private routePrefix: string = 'Country';
 
-        setListDefault(): Schema.Country[] {
+        doSetListDefault(): Array<Schema.Country> {
             return [];
         }
 
-        setDefault(): Schema.Country | null {
+        doSetDefault(): Schema.Country | null {
             return null;
         }
 
-        async getList(): Promise<Schema.Country[]> {
+        async doGetList(): Promise<Array<Schema.Country>> {
             try {
-                let ds: Schema.Country[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Country> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -252,17 +255,17 @@ namespace Instance {
 
         private routePrefix: string = 'Province';
 
-        setListDefault(): Schema.Province[] {
+        doSetListDefault(): Array<Schema.Province> {
             return [];
         }
 
-        setDefault(): Schema.Province | null {
+        doSetDefault(): Schema.Province | null {
             return null;
         }
 
-        async getList(): Promise<Schema.Province[]> {
+        async doGetList(): Promise<Array<Schema.Province>> {
             try {
-                let ds: Schema.Province[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -282,17 +285,17 @@ namespace Instance {
 
         private routePrefix: string = 'District';
 
-        setListDefault(): Schema.District[] {
+        doSetListDefault(): Array<Schema.District> {
             return [];
         }
 
-        setDefault(): Schema.District | null {
+        doSetDefault(): Schema.District | null {
             return null;
         }
 
-        async getList(): Promise<Schema.District[]> {
+        async doGetList(): Promise<Array<Schema.District>> {
             try {
-                let ds: Schema.District[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -312,17 +315,17 @@ namespace Instance {
 
         private routePrefix: string = 'Subdistrict';
 
-        setListDefault(): Schema.Subdistrict[] {
+        doSetListDefault(): Array<Schema.Subdistrict> {
             return [];
         }
 
-        setDefault(): Schema.Subdistrict | null {
+        doSetDefault(): Schema.Subdistrict | null {
             return null;
         }
 
-        async getList(): Promise<Schema.Subdistrict[]> {
+        async doGetList(): Promise<Array<Schema.Subdistrict>> {
             try {
-                let ds: Schema.Subdistrict[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Subdistrict> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -340,15 +343,15 @@ namespace Instance {
         ) {
         }
 
-        private routePrefix: string = 'Questionnaire/DoneAndSet';
+        private routePrefix: string = 'DoneAndSet';
 
-        setListDefault(): Schema.QuestionnaireDoneAndSet[] {
+        doSetListDefault(): Array<Schema.QuestionnaireDoneAndSet> {
             return [];
         }
 
-        async getList(): Promise<Schema.QuestionnaireSet[]> {
+        async doGetList(): Promise<Array<Schema.QuestionnaireSet>> {
             try {
-                let ds: Schema.QuestionnaireSet[] = await this.appService.getDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.QuestionnaireSet> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
 
                 return ds;
             }
@@ -359,55 +362,61 @@ namespace Instance {
             }
         }
 
-        async get(CUID: string): Promise<Schema.QuestionnaireDoneAndSet> {
+        async doGet(CUID: string): Promise<Schema.QuestionnaireDoneAndSet> {
             let query = [
                 '',
                 CUID
             ].join('/');
 
             try {
-                let ds: Schema.QuestionnaireDoneAndSet[] = await this.appService.getDataSource(this.routePrefix, 'get', query, true);
+                let ds: Array<Schema.QuestionnaireDoneAndSet> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, true);
 
                 return ds[0];
             }
             catch(error) {
                 console.log(error);
 
-                return this.setListDefault()[0];
+                return this.doSetListDefault()[0];
             }
         }
     }
 
+    export class QuestionnaireDone {
+        doSetDefault(): Schema.QuestionnaireDone | null {
+            return null;
+        }
+    }
+
     export class QuestionnaireSet {
-        setListDefault(): Schema.QuestionnaireSet[] {
+        doSetListDefault(): Array<Schema.QuestionnaireSet> {
             return [];
         }
 
-        setDefault(): Schema.QuestionnaireSet | null {
+        doSetDefault(): Schema.QuestionnaireSet | null {
             return null;
         }
     }
 
     export class QuestionnaireSection {
-        setListDefault(): Schema.QuestionnaireSection[] {
+        doSetListDefault(): Array<Schema.QuestionnaireSection> {
             return [];
         }
     }
 
     export class QuestionnaireQuestion {
-        setListDefault(): Schema.QuestionnaireQuestion[] {
+        doSetListDefault(): Array<Schema.QuestionnaireQuestion> {
             return [];
         }
     }
 
     export class QuestionnaireAnswerSet {
-        setListDefault(): Schema.QuestionnaireAnswerSet[] {
+        doSetListDefault(): Array<Schema.QuestionnaireAnswerSet> {
             return [];
         }
     }
 
     export class QuestionnaireAnswer {
-        setListDefault(): Schema.QuestionnaireAnswer[] {
+        doSetListDefault(): Array<Schema.QuestionnaireAnswer> {
             return [];
         }
     }
@@ -430,6 +439,7 @@ export class ModelService {
     subdistrict = new Instance.Subdistrict(this.appService);
     questionnaire = {
         doneAndSet: new Instance.QuestionnaireDoneAndSet(this.appService),
+        done: new Instance.QuestionnaireDone(),
         set: new Instance.QuestionnaireSet(),
         section: new Instance.QuestionnaireSection(),
         question: new Instance.QuestionnaireQuestion(),

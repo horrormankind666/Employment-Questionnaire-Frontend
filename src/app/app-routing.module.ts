@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๗/๑๐/๒๕๖๔>
+Modify date : <๑๕/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -20,40 +20,35 @@ import { QuestionnaireFilloutComponent } from './questionnaire/fillout/questionn
 
 export const appRouting: Routes = [
     {
-        path: 'Questionnaire',
-        children: [
-            {
-                path: '',
-                component: QuestionnaireHomeComponent,
-                canActivate: [AuthGuardService],
-                runGuardsAndResolvers: 'always',
-                data: {
-                    signin: true,
-                    role: ['*'],
-                    hasHearderSubtitle: false
-                },
-                resolve: {
-                }
-            },
-            {
-                path: ':CUID',
-                component: QuestionnaireFilloutComponent,
-                canActivate: [AuthGuardService],
-                runGuardsAndResolvers: 'always',
-                data: {
-                    signin: true,
-                    role: ['*'],
-                    hasHearderSubtitle: false
-                },
-                resolve: {
-                    questionnaireDataSource: GetQuestionnaireDataSourceResolve
-                }
-            }
-        ]
+        path: '',
+        component: QuestionnaireHomeComponent,
+        canActivate: [AuthGuardService],
+        runGuardsAndResolvers: 'always',
+        data: {
+            signin: true,
+            role: ['*'],
+            hasHearderSubtitle: false
+        },
+        resolve: {
+        }
     },
     {
-        path: '',
-        redirectTo: 'Questionnaire',
+        path: 'FillOut/:CUID',
+        component: QuestionnaireFilloutComponent,
+        canActivate: [AuthGuardService],
+        runGuardsAndResolvers: 'always',
+        data: {
+            signin: true,
+            role: ['*'],
+            hasHearderSubtitle: false
+        },
+        resolve: {
+            questionnaireDataSource: GetQuestionnaireDataSourceResolve
+        }
+    },
+    {
+        path: 'Home',
+        redirectTo: '',
         pathMatch: 'full'
     },
     {

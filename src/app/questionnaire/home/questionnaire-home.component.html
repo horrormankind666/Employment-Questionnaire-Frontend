@@ -32,9 +32,14 @@
             layout="grid">
             <ng-template let-qtnset pTemplate="gridItem">
                 <div class="col-12 sm:col-6 md:col-4 lg:col-3">
-                    <p-card>
+                    <p-card class="submitstatus-{{ qtnset.submitStatus | lowercase }}">
                         <ng-template pTemplate="header">
-                            Last updated on {{ qtnset.doneDate }}
+                            <span *ngIf="qtnset.submitStatus === 'N'">
+                                Last updated on {{ qtnset.doneDate }}
+                            </span>
+                            <span *ngIf="qtnset.submitStatus === 'Y'">
+                                Submitted on {{ qtnset.doneDate }}
+                            </span>
                         </ng-template>
                         <ng-template pTemplate="title">
                             {{ qtnset.name[appService.env.lang] }}
@@ -43,8 +48,13 @@
                             <span class="paragraph">{{ qtnset.description[appService.env.lang] }}</span>
                         </ng-template>
                         <ng-template pTemplate="footer" *ngIf="qtnset.cancelStatus === 'N'">
-                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(qtnset.ID)">
-                                {{ 'questionnaire.fillout.label' | translate | lowercase }}
+                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(qtnset.empQuestionnaireDoneID, qtnset.ID)">
+                                <span *ngIf="qtnset.submitStatus === 'N'">
+                                    {{ 'questionnaire.fillout.label' | translate | lowercase }}
+                                </span>
+                                <span *ngIf="qtnset.submitStatus === 'Y'">
+                                    {{ 'questionnaire.view.label' | translate | lowercase }}
+                                </span>
                             </button>
                         </ng-template>
                     </p-card>

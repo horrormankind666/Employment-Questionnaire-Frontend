@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๒๗/๑๐/๒๕๖๔>
+Modify date : <๐๘/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -21,21 +21,21 @@ class QuestionnaireSet {
     ) {
     }
 
-    datasource = this.modelService.questionnaire.set.setListDefault();
+    datasource = this.modelService.questionnaire.set.doSetListDefault();
     dataView = {
         isLoading: false
     };
 
     getDataSource(): void {
         this.dataView.isLoading = true;
-        this.datasource = this.modelService.questionnaire.set.setListDefault();
+        this.datasource = this.modelService.questionnaire.set.doSetListDefault();
 
-        this.modelService.questionnaire.doneAndSet.getList()
-            .then((result: Schema.QuestionnaireSet[]) => {
+        this.modelService.questionnaire.doneAndSet.doGetList()
+            .then((result: Array<Schema.QuestionnaireSet>) => {
                 setTimeout(() => {
                     this.datasource = result;
                     this.dataView.isLoading = false;
-                }, 1000);
+                }, 200);
             });
     }
 }
@@ -61,8 +61,8 @@ export class QuestionnaireHomeComponent implements OnInit {
         this.questionnaire.set.getDataSource();
     }
 
-    getQuestionnaire(ID: string) {
-        this.router.navigate(['Questionnaire/' + this.appService.getCUID([ID])]);
+    getQuestionnaire(questionnaireDoneID: string, questionnaireSetID: string) {
+        this.router.navigate(['FillOut/' + this.appService.doGetCUID([questionnaireDoneID, questionnaireSetID])]);
     }
 }
 

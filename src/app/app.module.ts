@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๐/๑๒/๒๕๖๔>
+Modify date : <๐๔/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -44,6 +44,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ToastModule } from 'primeng/toast';
 
 import { DynamicComponentDirective, TrimOnBlurDirective, NullValueDirective } from './app.directive';
 
@@ -131,7 +132,8 @@ export function httpLoaderFactory(http: HttpClient) {
         InputTextareaModule,
         InputNumberModule,
         MessagesModule,
-        MessageModule
+        MessageModule,
+        ToastModule
     ],
     exports: [
         CommonModule,
@@ -143,8 +145,9 @@ export function httpLoaderFactory(http: HttpClient) {
     bootstrap: [
         AppComponent
     ],
-    schemas:
-        [CUSTOM_ELEMENTS_SCHEMA],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ],
     entryComponents: [
         ModalErrorComponent
     ]

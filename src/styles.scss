@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๑๕/๑๒/๒๕๖๔>
+Modify date : <๐๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -89,7 +89,8 @@ body {
 .p-inputtext,
 .p-inline-message,
 .ng-select,
-.ng-select .ng-select-container .ng-value-container .ng-input > input {
+.ng-select .ng-select-container .ng-value-container .ng-input > input,
+.p-toast-message-content {
     font-family: $fontFamilySarabun !important;
 }
 
@@ -155,7 +156,7 @@ ul.table {
         &:disabled {
             opacity: 1;
             & > * {
-                opacity: 0.6;
+                opacity: 0.3;
             }
         }
         &.button-outlined {
@@ -257,6 +258,7 @@ ul.table {
         &.child {
             height: 100%;
             padding: 1rem 1.5rem 1rem 1.5rem !important;
+            word-break: break-word;
             overflow-x: hidden;
             overflow-y: auto;
             -ms-overflow-style: none;
@@ -317,7 +319,7 @@ ul.table {
         background-color: transparent !important;
         justify-content: left !important;
         & .p-dataview-loading-icon {
-            color: var(--text-color-secondary);
+            font-size: 2.5rem;
             position: relative;
         }
     }
@@ -341,10 +343,6 @@ ul.table {
     border-radius: 1rem !important;
     box-shadow: none !important;
     padding: 1rem 1.5rem !important;
-    &:hover {
-        background-color: rgb(255, 212, 59);
-        border-color: rgba(255, 212, 59, 1);
-    }
     & .p-card-body {
         line-height: 1.5;
         padding: 0 !important;
@@ -369,14 +367,14 @@ ul.table {
 .p-panel {
     & .p-panel-header {
         border-color: #DADCE0 !important;
-        border-top-right-radius: 8px !important;
-        border-top-left-radius: 8px !important;
+        border-top-right-radius: 12px !important;
+        border-top-left-radius: 12px !important;
     }
     & .p-panel-content {
         color: $textColor !important;
         border-color: #DADCE0 !important;
-        border-bottom-right-radius: 8px !important;
-        border-bottom-left-radius: 8px !important;
+        border-bottom-right-radius: 12px !important;
+        border-bottom-left-radius: 12px !important;
         padding: 1rem 1.5rem 1rem 1.5rem !important;
     }
     & .p-component-overlay {
@@ -678,10 +676,6 @@ ul.table {
         border-top-right-radius: 0 !important;
         border-top-left-radius: 0 !important;
     }
-}
-
-#unsupported-page {
-    display: none;
 }
 
 #unsupported-page,

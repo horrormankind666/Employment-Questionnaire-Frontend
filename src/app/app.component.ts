@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๔/๑๒/๒๕๖๔>
+Modify date : <๒๓/๑๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -20,7 +20,7 @@ import { ModalService } from './modal/modal.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     host: {
-        '(window: resize)': 'onResize($event)'
+        '(window: resize)': 'doWindowOnResize($event)'
     },
     styleUrls: ['./app.component.scss']
 })
@@ -39,17 +39,17 @@ export class AppComponent implements OnInit {
         this.router.events.subscribe((event: Event) => {
             switch (true) {
                 case event instanceof NavigationStart:
-                    modalService.closeAllModal();
-                    appService.setLoading(true);
+                    modalService.doCloseAllModal();
+                    appService.doSetLoading(true);
                     break;
                 case event instanceof NavigationEnd:
                 case event instanceof NavigationCancel:
                 case event instanceof NavigationError:
                     setTimeout(() => {
-                        appService.setLoading(false);
+                        appService.doSetLoading(false);
                         appService.env.isFirstload = false;
-                        this.setFooterlayout();
-                    }, 1000);
+                        this.doSetFooterlayout();
+                    }, 200);
                     break;
                 default:
                     break;
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
         });
     }
 
-    avatarBackgroundColor: string = this.appService.getRandomColor();
+    avatarBackgroundColor: string = this.appService.doGetRandomColor();
     today: Date = new Date();
     profile = {
         panel: {
@@ -67,26 +67,30 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.appService.env.isFirstload = true;
-        this.appService.setDefaultLang();
+        this.appService.doSetDefaultLang();
     }
 
-    onResize(): void {
-        this.setFooterlayout();
+    doWindowOnResize(): void {
+        this.doSetFooterlayout();
     }
 
-    setFooterlayout(): void {
+    doSetFooterlayout(): void {
         setTimeout(() => {
-            this.render.setStyle(this.copyright?.nativeElement, 'width', `${this.footer?.nativeElement.offsetWidth - this.muitLogo?.nativeElement.offsetWidth - 40}px`);
+            try {
+                this.render.setStyle(this.copyright?.nativeElement, 'width', `${this.footer?.nativeElement.offsetWidth - this.muitLogo?.nativeElement.offsetWidth - 40}px`);
+            }
+            catch {
+            }
         }, 0);
     }
 
-    signIn(): void {
-        this.appService.setBearerToken();
-        this.router.navigate(['Questionnaire']);
+    doSignIn(): void {
+        this.appService.doSetBearerToken();
+        this.router.navigate(['Home']);
     }
 
-    signOut(): void {
+    doSignOut(): void {
         localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
-        this.router.navigate(['SignOut']);
+        this.router.navigate(['Home']);
     }
 }

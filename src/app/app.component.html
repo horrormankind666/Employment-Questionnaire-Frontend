@@ -11,16 +11,16 @@
                 <ul class="topbar-items vertical-middle">
                     <li>
                         <div class="flags-icon vertical-middle text-xl">
-                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'en'" (click)="appService.setDefaultLang('th')">
+                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'en'" (click)="appService.doSetDefaultLang('th')">
                                 <i class="flag-icon flag-icon-th" aria-hidden="true"></i>
                             </a>
-                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'th'" (click)="appService.setDefaultLang('en')">
+                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'th'" (click)="appService.doSetDefaultLang('en')">
                                 <i class="flag-icon flag-icon-gb" aria-hidden="true"></i>
                             </a>
                         </div>
                     </li>
                     <li>
-                        <button pButton type="button" label="" class="signin-btn vertical-middle" *ngIf="!appService.env.authenInfo.isAuthenticated" (click)="signIn()">
+                        <button pButton type="button" label="" class="signin-btn vertical-middle" *ngIf="!appService.env.authenInfo.isAuthenticated" (click)="doSignIn()">
                             {{ 'signin.label' | translate | titlecase }}
                         </button>
                         <div #userInfo class="user-info vertical-middle" *ngIf="appService.env.authenInfo.isAuthenticated">
@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
                                     <p-divider></p-divider>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="signOut()">
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignOut()">
                                         {{ 'signout.label' | translate | titlecase }}
                                     </button>
                                 </ng-template>

@@ -11,11 +11,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
     <link href="mu-favicon.png" rel="shortcut icon" type="image/x-icon" />
-    <link href="manifest.webmanifest" rel="manifest">
+    <link href="manifest.json" rel="manifest">
 </head>
 <body>
-    <app-root></app-root>
-    <div id="unsupported-page" class="page-container">
+    <app-root class="hidden"></app-root>
+    <div id="unsupported-page" class="page-container hidden">
         <div class="page-header h-auto text-center">
             <div class="title heading text-3xl">
                 Unsupported browser
@@ -26,7 +26,6 @@
             This web app works on the latest versions of <strong>Google Chrome</strong>, <strong>Mozilla Firefox</strong>, <strong>Apple Safari</strong>, or <strong>Microsoft Edge</strong>.
         </div>
     </div>
-    <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
 <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', function() {
@@ -62,8 +61,13 @@
         if (isOpera)
             document.getElementsByTagName('body')[0].classList.add('opera');
 
-        if (!body.hasAttribute('ng-version') || !isBrowserSupport)
-            document.getElementById('unsupported-page').style.display = 'block';
+        if (!isBrowserSupport) {
+            document.title = 'Unsupported Browser';
+
+            document.getElementById('unsupported-page').classList.remove('hidden');
+        }
+        else
+            body.classList.remove('hidden');
     }, false);
 </script>
 </html>

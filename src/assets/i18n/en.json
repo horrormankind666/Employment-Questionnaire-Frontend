@@ -16,10 +16,10 @@
         },
         "token": {
             "invalid": {
-                "label": "Token invalid."
+                "label": "Token is invalid."
             },
             "expired": {
-                "label": "Token expired."
+                "label": "Token has expired."
             }
         },
         "databaseConnectionFail": {
@@ -45,7 +45,7 @@
         "please": {
             "label": "Please sign in.",
             "again": {
-                "label": "Please sign in again."
+                "label": "Please try signing in again."
             }
         }
     },
@@ -76,7 +76,12 @@
         }
     },
     "save": {
-        "label": "Save"
+        "label": "Save",
+        "error": {
+            "invalid": {
+                "label": "Please fill in the information correctly and completely."
+            }
+        }
     },
     "questionnaire": {
         "explore": {
@@ -85,8 +90,27 @@
         "fillout": {
             "label": "Fill out a questionnaire"
         },
+        "view": {
+            "label": "View a questionnaire"
+        },
         "submit": {
             "label": "Submit"
+        },
+        "submitting": {
+            "label": "Submitting..."
+        },
+        "submitted": {
+            "date": {
+                "label": "Submitted on Date"
+            },
+            "thankyou": {
+                "label": "Thank you for completing the questionnaire."
+            }
+        },
+        "updated": {
+            "date": {
+                "label": "Last updated on Date"
+            }
         },
         "error": {
             "notFound": {
