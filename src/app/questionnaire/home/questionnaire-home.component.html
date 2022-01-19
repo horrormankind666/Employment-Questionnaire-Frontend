@@ -12,7 +12,7 @@
         </div>
         <div class="toolbar">
             <div #reloadButton class="toolbar-btn">
-                <button pButton type="button" class="button button-rounded button-text"
+                <button pButton type="button" class="button button-rounded p-button-secondary"
                     [disabled]="questionnaire.set.dataView.isLoading"
                     pTooltip="{{ 'reload.label' | translate | titlecase }}"
                     [tooltipDisabled]="questionnaire.set.dataView.isLoading"
@@ -31,31 +31,43 @@
             loadingIcon="fas fa-spin fa-spinner"
             layout="grid">
             <ng-template let-qtnset pTemplate="gridItem">
-                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                <div class="flex align-items-stretch col-12 sm:col-6 md:col-4 lg:col-3">
                     <p-card class="submitstatus-{{ qtnset.submitStatus | lowercase }}">
-                        <ng-template pTemplate="header">
-                            <span *ngIf="qtnset.submitStatus === 'N'">
-                                Last updated on {{ qtnset.doneDate }}
-                            </span>
-                            <span *ngIf="qtnset.submitStatus === 'Y'">
-                                Submitted on {{ qtnset.doneDate }}
-                            </span>
-                        </ng-template>
                         <ng-template pTemplate="title">
                             {{ qtnset.name[appService.env.lang] }}
                         </ng-template>
                         <ng-template pTemplate="subtitle">
                             <span class="paragraph">{{ qtnset.description[appService.env.lang] }}</span>
                         </ng-template>
-                        <ng-template pTemplate="footer" *ngIf="qtnset.cancelStatus === 'N'">
-                            <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(qtnset.empQuestionnaireDoneID, qtnset.ID)">
-                                <span *ngIf="qtnset.submitStatus === 'N'">
-                                    {{ 'questionnaire.fillout.label' | translate | lowercase }}
-                                </span>
-                                <span *ngIf="qtnset.submitStatus === 'Y'">
-                                    {{ 'questionnaire.view.label' | translate | lowercase }}
-                                </span>
-                            </button>
+                        <ng-template pTemplate="footer">
+                            <div class="text-xs font-normal" *ngIf="qtnset.empQuestionnaireDoneID !== null && qtnset.doneDate !== null">
+                                <div>
+                                    <span class="text-orange-700" *ngIf="qtnset.submitStatus === 'N'">
+                                        {{ 'questionnaire.submitted.not.label' | translate }}
+                                    </span>
+                                    <span class="text-green-700" *ngIf="qtnset.submitStatus === 'Y'">
+                                        {{ 'questionnaire.submitted.label' | translate }}
+                                    </span>
+                                </div>
+                                <div class="mt-1">
+                                    <span class="text-orange-700" *ngIf="qtnset.submitStatus === 'N'">
+                                        Last updated on {{ qtnset.doneDate }}
+                                    </span>
+                                    <span class="text-green-700" *ngIf="qtnset.submitStatus === 'Y'">
+                                        Submitted on {{ qtnset.doneDate }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-3" *ngIf="qtnset.cancelStatus === 'N'">
+                                <button pButton type="button" class="button button-outlined" (click)="getQuestionnaire(qtnset.empQuestionnaireDoneID, qtnset.ID)">
+                                    <span *ngIf="qtnset.submitStatus === 'N'">
+                                        {{ (qtnset.empQuestionnaireDoneID === null ? 'questionnaire.fillout.label' : 'questionnaire.fillout.continue.label') | translate | lowercase }}
+                                    </span>
+                                    <span *ngIf="qtnset.submitStatus === 'Y'">
+                                        {{ 'questionnaire.view.label' | translate | lowercase }}
+                                    </span>
+                                </button>
+                            </div>
                         </ng-template>
                     </p-card>
                 </div>

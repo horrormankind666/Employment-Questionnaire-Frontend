@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๐๗/๐๑/๒๕๖๕>
+Modify date : <๑๙/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -35,6 +35,7 @@ body {
     overflow-x: hidden;
     overflow-y: scroll;
     cursor: default;
+    /*
     &:not(.mobile) {
         &.p-overflow-hidden,
         &.overflow-hidden {
@@ -74,6 +75,7 @@ body {
             }
         }
     }
+    */
 }
 
 .fixed {
@@ -151,15 +153,16 @@ ul.table {
         height: 41px;
         font-size: 1rem;
         font-weight: $fontStyleSemibold;
-        color: $textColor !important;
+        color: #FFFFFF !important;
         border-radius: 4px;
         &:disabled {
             opacity: 1;
             & > * {
-                opacity: 0.3;
+                opacity: 0.5;
             }
         }
         &.button-outlined {
+            color: $textColor !important;
             background-color: transparent !important;
             border: 2px solid $textColor !important;
             &.p-button-success {
@@ -201,6 +204,14 @@ ul.table {
             border-color: var(--surface-300);
             &:hover:not(:disabled) {
                 border-color: var(--surface-400);
+            }
+        }
+        &.p-button-secondary {
+            background-color: $secondaryColor !important;
+            border-color: $secondaryColor;
+            &:hover:not(:disabled) {
+                background-color: $secondaryColorHover !important;
+                border-color: $secondaryColorHover !important;
             }
         }
     }
@@ -287,7 +298,9 @@ ul.table {
             }
         }
     }
-    &.modal-error {
+    &.modal-danger,
+    &.modal-info,
+    &.modal-success {
         & .p-dialog-header {
             display: none;
         }
@@ -301,13 +314,51 @@ ul.table {
         & .p-dialog-content,
         & .p-dialog-footer {
             color: var(--surface-0);
-            background-color: $errorBackgroundColor !important;
         }
         & .p-dialog-footer {
-            border-top: 1px solid $errorBorderColor #C02929;
+            border-top-width: 1px;
+            border-top-style: solid;
             & .p-button {
-                background-color: $errorButtonColor;
-                border-color: $errorBorderColor;
+                margin-right: 0;
+            }
+        }
+    }
+    &.modal-danger {
+        & .p-dialog-content,
+        & .p-dialog-footer {
+            background-color: $errorColor !important;
+        }
+        & .p-dialog-footer {
+            border-top-color: $errorColor;
+            & .p-button {
+                background-color: $errorColorHover !important;
+                border-color: $errorColorHover !important;
+            }
+        }
+    }
+    &.modal-info {
+        & .p-dialog-content,
+        & .p-dialog-footer {
+            background-color: $infoColor !important;
+        }
+        & .p-dialog-footer {
+            border-top-color: $infoColor;
+            & .p-button {
+                background-color: $infoColorHover !important;
+                border-color: $infoColorHover !important;
+            }
+        }
+    }
+    &.modal-success {
+        & .p-dialog-content,
+        & .p-dialog-footer {
+            background-color: $successColor !important;
+        }
+        & .p-dialog-footer {
+            border-top-color: $successColor;
+            & .p-button {
+                background-color: $successColorHover !important;
+                border-color: $successColorHover !important;
             }
         }
     }
@@ -337,30 +388,40 @@ ul.table {
     }
 }
 
-.p-card {
-    color: $textColor;
-    border: 2px solid rgba(158, 99, 99, 0.2);
-    border-radius: 1rem !important;
-    box-shadow: none !important;
-    padding: 1rem 1.5rem !important;
-    & .p-card-body {
-        line-height: 1.5;
-        padding: 0 !important;
-        & .p-card-title {
-            font-size: 1.35rem;
-            font-weight: $fontStyleSemibold;
-            color: $textColor;
+p-card {
+    display: flex;
+    flex: 1;
+    & .p-card {
+        color: $textColor;
+        border: 2px solid rgba(158, 99, 99, 0.2);
+        border-radius: 1rem !important;
+        box-shadow: none !important;
+        padding: 1rem 1.5rem !important;
+        display: flex;
+        flex: 1;
+        & .p-card-body {
+            line-height: 1.5;
+            padding: 0 !important;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            & .p-card-title {
+                font-size: 1.35rem;
+                font-weight: $fontStyleSemibold;
+                color: $textColor;
+            }
+            & .p-card-subtitle {
+                min-height: 28px;
+                line-height: 1.6;
+                color: $textColor;
+                font-weight: $fontStyleLight;
+                margin-bottom: 0;
+            }
         }
-        & .p-card-subtitle {
-            min-height: 28px;
-            line-height: 1.6;
-            color: $textColor;
-            font-weight: $fontStyleLight;
-            margin-bottom: 0;
+        & .p-card-footer {
+            padding-top: 1rem !important;
+            margin-top: auto;
         }
-    }
-    & .p-card-footer {
-        padding-top: 1.5rem !important;
     }
 }
 
@@ -395,10 +456,13 @@ ul.table {
 }
 
 .p-orderlist {
-    & .p-orderlist-item {
-        color: $textColor !important;
-        &:focus {
-            box-shadow: none !important;
+    & .p-orderlist-list {
+        min-height: 0;
+        & .p-orderlist-item {
+            color: $textColor !important;
+            &:focus {
+                box-shadow: none !important;
+            }
         }
     }
 }
@@ -485,7 +549,7 @@ ul.table {
     padding: 12px 14px !important;
     justify-content: left !important;
     &.p-inline-message-error {
-        background-color: $errorBackgroundColor !important;
+        background-color: $errorColor !important;
         color: var(--surface-0) !important;
     }
     & .p-inline-message-icon {
@@ -569,7 +633,7 @@ ul.table {
     &.ng-select-opened {
         & .ng-select-container,
         & .ng-dropdown-panel {
-            z-index: 1 !important;
+            z-index: 2 !important;
         }
     }
 }
@@ -586,6 +650,13 @@ ul.table {
         opacity: 0.6 !important;
         cursor: default !important;
         pointer-events: none;
+    }
+}
+.p-checkbox-box.p-highlight {
+    &:disabled,
+    &.p-disabled,
+    &.p-disabled * {
+        background-color: $inputColorActive !important;
     }
 }
 

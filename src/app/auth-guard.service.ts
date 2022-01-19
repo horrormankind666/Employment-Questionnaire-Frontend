@@ -34,14 +34,14 @@ export class AuthGuardService implements CanActivate {
         try {
             await this.authService.doGetAuthenInfo(route);
 
-            if (!this.appService.env.authenInfo.isAuthenticated) {
+            if (this.appService.env.authenInfo.isAuthenticated === false) {
                 localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
 
                 if (route.data.signin) {
                     let messageError: any | null = this.appService.doGetMessagei18n(this.appService.env.authenInfo.message);
 
                     if (messageError !== null)
-                        this.modalService.doGetModalError(false, messageError.content, messageError.description);
+                        this.modalService.doGetModal('danger', false, messageError.content, messageError.description);
                 }
 
                 if (this.appService.env.route.path === '**' || state.url === '/')

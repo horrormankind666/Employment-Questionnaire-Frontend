@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๑/๑๒/๒๕๖๔>
+Modify date : <๑๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -16,7 +16,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalService } from './modal.service';
 
 @Component({
-    selector: 'app-modal-error',
+    selector: 'app-modal',
     template: `
         <div class="p-dialog-content child paragraph">
             {{ content | translate }}
@@ -25,14 +25,15 @@ import { ModalService } from './modal.service';
             </div>
         </div>
         <div class="p-dialog-footer">
-            <button pButton type="button" label="" class="p-button-rounded p-button-danger p-mr-0" (click)="doClose()">
+            <button pButton type="button" label="" class="p-button-rounded p-button-{{ type }} p-mr-0" (click)="doClose()">
                 <span>{{ (btnMsg ? btnMsg.close : 'close.label') | translate | titlecase }}</span>
             </button>
         </div>
     `,
     styles: []
 })
-export class ModalErrorComponent implements OnInit {
+export class ModalComponent implements OnInit {
+    @Input() type: any;
     @Input() content: any;
     @Input() description: any;
     @Input() btnMsg: any;
@@ -45,6 +46,7 @@ export class ModalErrorComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.type = this.dialogConfig.data.type;
         this.content = this.dialogConfig.data.content;
         this.description = this.dialogConfig.data.description;
         this.btnMsg = this.dialogConfig.data.btnMsg;

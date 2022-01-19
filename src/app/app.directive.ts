@@ -2,14 +2,14 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๓/๑๐/๒๕๖๔>
-Modify date : <๒๑/๑๒/๒๕๖๔>
+Modify date : <๑๙/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
 
 'use strict';
 
-import { Directive, HostListener, ElementRef, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit } from '@angular/core';
+import { Directive, Pipe, PipeTransform, HostListener, ElementRef, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit } from '@angular/core';
 import { NgModel } from '@angular/forms';
 
 @Directive({
@@ -75,5 +75,19 @@ export class NullValueDirective {
     onEvent(target: HTMLInputElement) {
         if (target.value === '' || target.value.length === 0)
             this.model.viewToModelUpdate(null);
+    }
+}
+
+@Pipe({
+    name: 'nl2br'
+})
+export class Nl2BrPipe implements PipeTransform {
+    transform(value: string): string {
+        if (!value)
+            return value;
+
+        let breakTag = '<br />';
+
+        return (value + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
 }

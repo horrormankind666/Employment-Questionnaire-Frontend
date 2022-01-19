@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๗/๐๑/๒๕๖๕>
+Modify date : <๑๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -30,11 +30,11 @@ export class AuthService {
     private doParseToken(str: string): Schema.BearerToken | null {
         try {
             let strDecode: string = atob(str);
-            let strDecodeSplit: Array<string> = strDecode.split('.');
+            let strDecodes: Array<string> = strDecode.split('.');
 
             return ({
-                CUID: atob(strDecodeSplit[0]).split('').reverse().join(''),
-                token: atob(strDecodeSplit[1]).split('').reverse().join('')
+                CUID: atob(strDecodes[0]).split('').reverse().join(''),
+                token: atob(strDecodes[1]).split('').reverse().join('')
             });
         }
         catch {
@@ -56,18 +56,17 @@ export class AuthService {
 
             if (bearerTokenInfo !== null) {
                 try {
-                    if (!this.jwtHelperService.isTokenExpired(bearerTokenInfo.token)) {
-                        let CUIDInfo: Array<string> | null = this.appService.doParseCUID(bearerTokenInfo.CUID);
-                        let PPID: string | null = (CUIDInfo !== null ? CUIDInfo[0] : null);
+                    if (this.jwtHelperService.isTokenExpired(bearerTokenInfo.token) === false) {
+                        let CUIDInfos: Array<string> | null = this.appService.doParseCUID(bearerTokenInfo.CUID);
+                        let PPID: string | null = (CUIDInfos !== null ? CUIDInfos[0] : null);
                         let payload: any | null = this.jwtHelperService.decodeToken(bearerTokenInfo.token);
 
                         if (PPID !== null && payload !== null && PPID === payload.ppid) {
+                            if (this.appService.env.authenInfo.isAuthenticated === false)
+                                this.userInfo = null;
+
                             if (this.getUserInfo === null) {
-                                this.appService.env.authenInfo = {
-                                    isAuthenticated: true,
-                                    isRole: false,
-                                    message: 'OK'
-                                };
+                                this.appService.doSetAuthenInfo(true, false, 'OK');
                                 this.userInfo = {
                                     PPID: PPID,
                                     email: payload.email,
@@ -142,20 +141,12 @@ export class AuthService {
                             }
                         }
                         else {
-                            this.appService.env.authenInfo = {
-                                isAuthenticated: false,
-                                isRole: false,
-                                message: 'User Not Found'
-                            };
+                            this.appService.doSetAuthenInfo(false, false, 'User Not Found');
                             this.userInfo = null;
                         }
                     }
                     else {
-                        this.appService.env.authenInfo = {
-                            isAuthenticated: false,
-                            isRole: false,
-                            message: 'Token Expired'
-                        };
+                        this.appService.doSetAuthenInfo(false, false, 'Token Expired');
                         this.userInfo = null;
                     }
                 }
@@ -165,20 +156,12 @@ export class AuthService {
             }
 
             if (bearerTokenInfo === null) {
-                this.appService.env.authenInfo = {
-                    isAuthenticated: false,
-                    isRole: false,
-                    message: 'Token Invalid'
-                };
+                this.appService.doSetAuthenInfo(false, false, 'Token Invalid');
                 this.userInfo = null;
             }
         }
         else {
-            this.appService.env.authenInfo = {
-                isAuthenticated: false,
-                isRole: false,
-                message: 'Unauthorized'
-            };
+            this.appService.doSetAuthenInfo(false, false, 'Unauthorized');
             this.userInfo = null;
         }
     }

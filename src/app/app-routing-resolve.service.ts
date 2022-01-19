@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๔/๐๑/๒๕๖๕>
+Modify date : <๑๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -19,11 +19,11 @@ import { Schema, ModelService } from './model.service';
     providedIn: 'root'
 })
 export class GetQuestionnaireDataSourceResolve implements Resolve<{
-    country: Array<Schema.Country>,
-    province: Array<Schema.Province>,
-    district: Array<Schema.District>,
-    subdistrict: Array<Schema.Subdistrict>,
-    doneAndSet: Schema.QuestionnaireDoneAndSet
+    countries: Array<Schema.Country>,
+    provinces: Array<Schema.Province>,
+    districts: Array<Schema.District>,
+    subdistricts: Array<Schema.Subdistrict>,
+    doneandset: Schema.QuestionnaireDoneAndSet
 }> {
     constructor(
         private appService: AppService,
@@ -32,42 +32,42 @@ export class GetQuestionnaireDataSourceResolve implements Resolve<{
     }
 
     async resolve(route: ActivatedRouteSnapshot): Promise<{
-        country: Array<Schema.Country>,
-        province: Array<Schema.Province>,
-        district: Array<Schema.District>,
-        subdistrict: Array<Schema.Subdistrict>,
-        doneAndSet: Schema.QuestionnaireDoneAndSet
+        countries: Array<Schema.Country>,
+        provinces: Array<Schema.Province>,
+        districts: Array<Schema.District>,
+        subdistricts: Array<Schema.Subdistrict>,
+        doneandset: Schema.QuestionnaireDoneAndSet
     }> {
-        let country: Array<Schema.Country> = [];
-        let province: Array<Schema.Province> = [];
-        let district: Array<Schema.District> = [];
-        let subdistrict: Array<Schema.Subdistrict> = [];
-        let doneAndSet: Schema.QuestionnaireDoneAndSet = {
+        let countries: Array<Schema.Country> = [];
+        let provinces: Array<Schema.Province> = [];
+        let districts: Array<Schema.District> = [];
+        let subdistricts: Array<Schema.Subdistrict> = [];
+        let doneandset: Schema.QuestionnaireDoneAndSet = {
             done: null,
             set: null,
-            section: [],
-            question: [],
-            answerSet: [],
-            answer: []
+            sections: [],
+            questions: [],
+            answersets: [],
+            answers: []
         };
 
         if (this.appService.env.authenInfo.isAuthenticated) {
-            doneAndSet = await this.modelService.questionnaire.doneAndSet.doGet(route.params['CUID']);
+            doneandset = await this.modelService.questionnaire.doneandset.doGet(route.params['CUID']);
 
-            if (doneAndSet) {
-                country = await this.modelService.country.doGetList();
-                province = await this.modelService.province.doGetList();
-                district = await this.modelService.district.doGetList();
-                subdistrict = await this.modelService.subdistrict.doGetList();
+            if (doneandset !== undefined) {
+                countries = await this.modelService.country.doGetList();
+                provinces = await this.modelService.province.doGetList();
+                districts = await this.modelService.district.doGetList();
+                subdistricts = await this.modelService.subdistrict.doGetList();
             }
         }
 
         return {
-            country,
-            province,
-            district,
-            subdistrict,
-            doneAndSet
+            countries,
+            provinces,
+            districts,
+            subdistricts,
+            doneandset
         };
     }
 }

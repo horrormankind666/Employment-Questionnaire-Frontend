@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๑/๑๒/๒๕๖๔>
+Modify date : <๑๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -13,7 +13,7 @@ import { Injectable } from '@angular/core';
 
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
-import { ModalErrorComponent } from './modal.component';
+import { ModalComponent } from './modal.component';
 
 export interface BtnMsg {
     ok?: string,
@@ -32,34 +32,26 @@ export class ModalService {
 
     openDialogRef: DynamicDialogRef[] = [];
 
-    private doGetModal(checkHasOpenModal: boolean, component: any, styleClass: string, content?: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
+    doGetModal(type: string, checkHasOpenModal: boolean, content?: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
         let dialogRef: DynamicDialogRef | undefined;
 
         if (!checkHasOpenModal || this.openDialogRef.length === 0) {
             setTimeout(() => {
-                dialogRef = this.dialogService.open(component, {
+                dialogRef = this.dialogService.open(ModalComponent, {
                     data: {
+                        type: type,
                         content: content,
                         description: description,
                         btnMsg: btnMsg
                     },
                     closeOnEscape: false,
-                    styleClass: styleClass,
+                    styleClass: ('modal-' + type),
                     transitionOptions: '0ms'
                 });
 
                 this.openDialogRef.push(dialogRef);
-            }, 1000);
+            }, 0);
         }
-
-        return dialogRef;
-    }
-
-
-    doGetModalError(checkHasOpenModal: boolean, content: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
-        let dialogRef: DynamicDialogRef | undefined;
-
-        dialogRef = this.doGetModal(checkHasOpenModal, ModalErrorComponent, 'modal-error', content, description, btnMsg);
 
         return dialogRef;
     }

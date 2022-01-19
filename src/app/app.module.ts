@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๐๔/๐๑/๒๕๖๕>
+Modify date : <๑๙/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -46,13 +46,13 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 
-import { DynamicComponentDirective, TrimOnBlurDirective, NullValueDirective } from './app.directive';
+import { DynamicComponentDirective, TrimOnBlurDirective, NullValueDirective, Nl2BrPipe } from './app.directive';
 
 import { appRouting } from './app-routing.module';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { ModalErrorComponent } from './modal/modal.component';
+import { ModalComponent } from './modal/modal.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { PageEmptyComponent } from './page-empty.component';
 import { QuestionnaireHomeComponent } from './questionnaire/home/questionnaire-home.component';
@@ -67,8 +67,9 @@ export function httpLoaderFactory(http: HttpClient) {
         DynamicComponentDirective,
         TrimOnBlurDirective,
         NullValueDirective,
+        Nl2BrPipe,
         AppComponent,
-        ModalErrorComponent,
+        ModalComponent,
         PageNotFoundComponent,
         PageEmptyComponent,
         QuestionnaireHomeComponent,
@@ -149,7 +150,7 @@ export function httpLoaderFactory(http: HttpClient) {
         CUSTOM_ELEMENTS_SCHEMA
     ],
     entryComponents: [
-        ModalErrorComponent
+        ModalComponent
     ]
 })
 export class AppModule {

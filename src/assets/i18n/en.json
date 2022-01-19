@@ -75,6 +75,9 @@
             "label": "Select item"
         }
     },
+    "reset": {
+        "label": "Reset"
+    },
     "save": {
         "label": "Save",
         "error": {
@@ -88,23 +91,33 @@
             "label": "Explore the Questionnaire Sets"
         },
         "fillout": {
-            "label": "Fill out a questionnaire"
+            "label": "Fill out a questionnaire",
+            "continue": {
+                "label": "Continue filling out a questionnaire"
+            }
         },
         "view": {
             "label": "View a questionnaire"
         },
         "submit": {
-            "label": "Submit"
+            "label": "Submit",
+            "info": {
+                "label": "The questionnaire is completed when \"Submit\""
+            }
         },
         "submitting": {
             "label": "Submitting..."
         },
         "submitted": {
+            "label": "Submitted",
             "date": {
                 "label": "Submitted on Date"
             },
             "thankyou": {
                 "label": "Thank you for completing the questionnaire."
+            },
+            "not": {
+                "label": "Not submitted"
             }
         },
         "updated": {
@@ -115,6 +128,9 @@
         "error": {
             "notFound": {
                 "label": "Questionnaire not found."
+            },
+            "notComplete": {
+                "label": "Questionnaire set is incomplete."
             }
         }
     },

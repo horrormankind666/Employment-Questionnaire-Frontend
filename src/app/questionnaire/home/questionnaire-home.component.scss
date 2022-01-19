@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๐๙/๒๕๖๔>
-Modify date : <๐๗/๐๑/๒๕๖๕>
+Modify date : <๑๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -16,9 +16,13 @@ Description : <>
         }
     }
     & .page-body {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+        margin-top: 0.5rem;
         & .questionnairesets {
             & ::ng-deep {
                 & .p-card {
+                    margin: 0.5rem;
                     & .p-card-header {
                         height: 17px;
                         font-size: 0.685rem;
@@ -33,38 +37,49 @@ Description : <>
                     }
                     & .p-card-footer {
                         & .p-button {
-                            height: 41px;
+                            height: auto;
+                            min-height: 41px;
                             font-size: 0.87rem;
-                        }
-                    }
-                }
-                &.submitstatus-n {
-                    & .p-card {
-                        &:hover {
-                            background-color: $warningColorHover;
-                            border-color: $warningColorHover;
-                        }
-                    }
-                    & .p-card-footer {
-                        & .p-button {
+                            color: $textColor !important;
                             &:hover:not(:disabled) {
-                                background-color: $warningColor !important;
+                                background-color: $warningColorHover !important;
+                                border-color: $warningColorHover !important;
+                            }
+                        }
+                    }
+                    &:hover {
+                        background-color: $warningColor;
+                        border-color: $warningColor;
+                        & .p-card-body {
+                            & .p-card-title,
+                            & .p-card-subtitle {
+                                color: #FFFFFF;
+                            }
+                        }
+                        & .p-card-footer {
+                            & .p-button {
+                                color: #FFFFFF !important;
                                 border-color: $warningColorHover !important;
                             }
                         }
                     }
                 }
-                &.submitstatus-y {
-                    & .p-card {
-                        background-color: $successColorHover;
-                        border-color: $successColorHover;
-                    }
-                    & .p-card-footer {
-                        & .p-button {
-                            &:hover:not(:disabled) {
-                                background-color: $successColor !important;
-                                border-color: $successColorHover !important;
-                            }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    #questionnaire-home-page.page-container {
+        & .page-body {
+            & .questionnairesets {
+                & ::ng-deep {
+                    & .p-dataview .grid {
+                        & .col-12,
+                        & p-card::ng-deep,
+                        & .p-card,
+                        & .p-card-body {
+                            display: block !important;
                         }
                     }
                 }

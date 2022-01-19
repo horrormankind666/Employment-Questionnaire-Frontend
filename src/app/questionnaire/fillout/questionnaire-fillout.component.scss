@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๕/๐๑/๒๕๖๕>
+Modify date : <๑๗/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -19,11 +19,8 @@ Description : <>
             padding: 0 !important;
             & .namedescription,
             & .notice {
-                padding-top: 1rem !important;
-                padding-right: 1.5rem !important;
-                padding-left:  1.5rem !important;
+                padding: 1rem 1.5rem !important;
             }
-            & .namedescription,
             & .notice {
                 padding-bottom: 1.25rem !important;
             }
@@ -101,7 +98,7 @@ Description : <>
                     }
                     & .viewanswer {
                         font-weight: $fontStyleRegular;
-                        opacity: 0.5;
+                        color: var(--surface-500);
                         border-bottom: 1px dotted rgba(0, 0, 0, 0.5)
                     }
                     & .namedescription {
@@ -226,7 +223,11 @@ Description : <>
             }
             & .left,
             & .right {
-                width: 77px;
+                width: 94px;
+                & .p-button {
+                    padding-right: 1.5rem;
+                    padding-left: 1.5rem;
+                }
             }
             & ::ng-deep .p-tooltip {
                 top: 46px !important;
@@ -279,6 +280,7 @@ Description : <>
                         display: table-cell !important;
                     }
                     & .previous,
+                    & .selected,
                     & .next {
                         width: 36px;
                         & .p-button {
@@ -301,8 +303,6 @@ Description : <>
                         width: 238px !important ;
                         & .p-button {
                             border-radius: 0 !important;
-                            padding-right: 1rem;
-                            padding-left: 1rem;
                         }
                     }
                     & .next {
@@ -336,9 +336,6 @@ Description : <>
                 }
             }
             & .right {
-                & .p-button {
-                    width: 77px;
-                }
                 & i.fa-spin {
                     font-size: 2.5rem;
                     position: relative;
@@ -361,8 +358,8 @@ Description : <>
                     position: relative;
                     &.question-error {
                         & .p-panel-content {
-                            background-color:rgba(211, 47, 47, 0.8);
-                            border-color: $errorBorderColor !important;
+                            background-color:rgba(239, 68, 68, 0.8);
+                            border-color: $errorColor !important;
                         }
                     }
                     & .p-panel-content {
@@ -376,23 +373,29 @@ Description : <>
                 & .personaldetail .table,
                 & .address .table {
                     margin-top: 0.75rem;
+                }
+                &.submitstatus-y,
+                & .institute .table,
+                & .personaldetail .table {
                     & .label {
                         width: 210px;
                     }
                 }
-                & .address .table {
-                    & .label {
-                        width: 196px;
-                    }
-                    &.country,
-                    &.province,
-                    &.district,
-                    &.subdistrict {
+                &.submitstatus-n {
+                    & .address .table {
                         & .label {
-                            vertical-align: top;
-                            & label {
-                                position: relative;
-                                top: 8px;
+                            width: 196px;
+                        }
+                        &.country,
+                        &.province,
+                        &.district,
+                        &.subdistrict {
+                            & .label {
+                                vertical-align: top;
+                                & label {
+                                    position: relative;
+                                    top: 8px;
+                                }
                             }
                         }
                     }
@@ -436,13 +439,18 @@ Description : <>
     }
 }
 
-@media screen and (max-width: 590px) {
+@media screen and (max-width: 564px) {
     #questionnaire-fillout-page.page-container {
         & .page-header {
             & .toolbar.fixed {
                 & .left,
                 & .right {
                     width: 60px;
+                    & .p-button {
+                        width: 50px;
+                        font-size: 0.875rem;
+                        padding: 0;
+                    }
                 }
                 & .center {
                     margin-top: 0.5rem;
@@ -454,13 +462,6 @@ Description : <>
                     }
                     & ::ng-deep .questionnairesection-template.p-overlaypanel  {
                         width: 100%;
-                    }
-                }
-                & .right {
-                    & .p-button {
-                        width: 50px;
-                        font-size: 0.875rem;
-                        padding: 0;
                     }
                 }
             }

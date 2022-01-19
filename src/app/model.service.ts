@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๗/๐๑/๒๕๖๕>
+Modify date : <๑๓/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -10,6 +10,7 @@ Description : <>
 'use strict';
 
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 import { AppService } from './app.service';
 
@@ -138,7 +139,8 @@ export namespace Schema {
         empQuestionnaireAnswer?: any,
         submitStatus?: string,
         cancelStatus?: string,
-        actionDate?: string
+        actionDate?: string,
+        doneDate?: string
     }
 
     export interface QuestionnaireSet {
@@ -203,10 +205,10 @@ export namespace Schema {
     export interface QuestionnaireDoneAndSet {
         done: QuestionnaireDone | null,
         set: QuestionnaireSet | null,
-        section: Array<QuestionnaireSection>,
-        question: Array<QuestionnaireQuestion>,
-        answerSet: Array<QuestionnaireAnswerSet>,
-        answer: Array<QuestionnaireAnswer>
+        sections: Array<QuestionnaireSection>,
+        questions: Array<QuestionnaireQuestion>,
+        answersets: Array<QuestionnaireAnswerSet>,
+        answers: Array<QuestionnaireAnswer>
     }
 }
 
@@ -371,7 +373,7 @@ namespace Instance {
             try {
                 let ds: Array<Schema.QuestionnaireDoneAndSet> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, true);
 
-                return ds[0];
+                return (ds.length > 0 ? ds[0] : this.doSetListDefault()[0]);
             }
             catch(error) {
                 console.log(error);
@@ -382,8 +384,31 @@ namespace Instance {
     }
 
     export class QuestionnaireDone {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Done';
+
         doSetDefault(): Schema.QuestionnaireDone | null {
             return null;
+        }
+
+        async doSet(
+            method: string,
+            data: HttpParams
+        ): Promise<any> {
+            try {
+                let ds: Array<any> = await this.appService.doSetDataSource(this.routePrefix, method, data, true);
+
+                return (ds.length > 0 ? ds[0] : {});
+            }
+            catch(error) {
+                console.log(error);
+
+                return {};
+            }
         }
     }
 
@@ -438,12 +463,12 @@ export class ModelService {
     district = new Instance.District(this.appService);
     subdistrict = new Instance.Subdistrict(this.appService);
     questionnaire = {
-        doneAndSet: new Instance.QuestionnaireDoneAndSet(this.appService),
-        done: new Instance.QuestionnaireDone(),
+        doneandset: new Instance.QuestionnaireDoneAndSet(this.appService),
+        done: new Instance.QuestionnaireDone(this.appService),
         set: new Instance.QuestionnaireSet(),
         section: new Instance.QuestionnaireSection(),
         question: new Instance.QuestionnaireQuestion(),
-        answerSet: new Instance.QuestionnaireAnswerSet(),
+        answerset: new Instance.QuestionnaireAnswerSet(),
         answer: new Instance.QuestionnaireAnswer()
     }
 }

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๐๘/๐๑/๒๕๖๕>
+Modify date : <๑๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -30,7 +30,7 @@ class QuestionnaireSet {
         this.dataView.isLoading = true;
         this.datasource = this.modelService.questionnaire.set.doSetListDefault();
 
-        this.modelService.questionnaire.doneAndSet.doGetList()
+        this.modelService.questionnaire.doneandset.doGetList()
             .then((result: Array<Schema.QuestionnaireSet>) => {
                 setTimeout(() => {
                     this.datasource = result;
