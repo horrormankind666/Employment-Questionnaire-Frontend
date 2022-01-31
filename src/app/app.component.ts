@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๓/๑๒/๒๕๖๔>
+Modify date : <๓๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -14,6 +14,7 @@ import { Router, Event, NavigationStart, NavigationEnd, NavigationCancel, Naviga
 
 import { AppService } from './app.service';
 import { AuthService } from './auth.service';
+import { Schema } from './model.service';
 import { ModalService } from './modal/modal.service';
 
 @Component({
@@ -68,6 +69,11 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.appService.env.isFirstload = true;
         this.appService.doSetDefaultLang();
+
+        this.appService.doSetBearerToken().then((result: boolean) => {
+            if (result === true)
+                this.router.navigate(['Home']);
+        });
     }
 
     doWindowOnResize(): void {
@@ -85,12 +91,27 @@ export class AppComponent implements OnInit {
     }
 
     doSignIn(): void {
-        this.appService.doSetBearerToken();
-        this.router.navigate(['Home']);
+        let query = [
+            ('client_id=' + this.appService.env.oauthConfig.clientID),
+            ('resource=' + this.appService.env.oauthConfig.resourceID),
+            ('redirect_uri=' + this.appService.env.oauthConfig.redirectURL),
+            ('response_type=' + this.appService.env.oauthConfig.responseType),
+            ('scope=' + this.appService.env.oauthConfig.scope)
+        ].join('&');
+
+        window.location.href = (this.appService.env.oauthConfig.authorizationURL + '?' + query);
     }
 
     doSignOut(): void {
-        localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
-        this.router.navigate(['Home']);
+        let bearerToken: string | null = localStorage.getItem(this.appService.env.localStorageKey.bearerToken);
+
+        if (bearerToken !== null) {
+            let bearerTokenInfo: Schema.BearerToken | null = this.authService.doParseToken(bearerToken);
+
+            if (bearerTokenInfo !== null) {
+                localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
+                window.location.href = this.appService.env.oauthConfig.logoutURL + '?post_logout_redirect_uri=' + this.appService.env.oauthConfig.redirectURL + '&id_token_hint=' + bearerTokenInfo.token;
+            }
+        }
     }
 }

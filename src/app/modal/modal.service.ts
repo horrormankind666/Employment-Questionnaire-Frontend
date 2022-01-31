@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๗/๐๑/๒๕๖๕>
+Modify date : <๓๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -50,7 +50,7 @@ export class ModalService {
                 });
 
                 this.openDialogRef.push(dialogRef);
-            }, 0);
+            }, 300);
         }
 
         return dialogRef;

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๓/๐๑/๒๕๖๕>
+Modify date : <๓๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -50,36 +50,36 @@ export namespace Schema {
         givenName?: string,
         familyName?: string,
         initials?: string
-        perPersonID: string | null,
-        studentCode: string | null,
-        IDCard: string | null,
-        titlePrefix: any,
-        firstName: any,
-        middleName: any,
-        lastName: any,
-        instituteName: any,
-        facultyID: string | null,
-        facultyCode: string | null,
-        facultyName: any,
-        programID: string | null,
-        programCode: string | null,
-        majorCode: string | null,
-        groupNum: string | null,
-        degreeLevelName: any,
-        programName: any,
-        degreeName: any,
-        branchID: string | null,
-        branchName: any,
-        classYear: number | null,
-        yearEntry: string | null,
-        gender: string,
-        birthDate: string | null,
-        nationalityName: any,
-        nationality2Letter: string | null,
-        nationality3Letter: string | null,
-        raceName: any,
-        race2Letter: string | null,
-        race3Letter: string | null
+        perPersonID?: string | null,
+        studentCode?: string | null,
+        IDCard?: string | null,
+        titlePrefix?: any,
+        firstName?: any,
+        middleName?: any,
+        lastName?: any,
+        instituteName?: any,
+        facultyID?: string | null,
+        facultyCode?: string | null,
+        facultyName?: any,
+        programID?: string | null,
+        programCode?: string | null,
+        majorCode?: string | null,
+        groupNum?: string | null,
+        degreeLevelName?: any,
+        programName?: any,
+        degreeName?: any,
+        branchID?: string | null,
+        branchName?: any,
+        classYear?: number | null,
+        yearEntry?: string | null,
+        gender?: string | null,
+        birthDate?: string | null,
+        nationalityName?: any,
+        nationality2Letter?: string | null,
+        nationality3Letter?: string | null,
+        raceName?: any,
+        race2Letter?: string | null,
+        race3Letter?: string | null
     }
 
     export interface Country {
@@ -219,6 +219,32 @@ namespace Instance {
         }
     }
 
+    export class Student {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Student';
+
+        doSetDefault(): Schema.User | null {
+            return null;
+        }
+
+        async doGet(showError?: boolean): Promise<Schema.User | null> {
+            try {
+                let ds: Array<Schema.User> = await this.appService.doGetDataSource(this.routePrefix, 'get', '', (showError === undefined ? true : showError));
+
+                return (ds.length > 0 ? ds[0] : this.doSetDefault());
+            }
+            catch(error) {
+                console.log(error);
+
+                return this.doSetDefault();
+            }
+        }
+    }
+
     export class Country {
         constructor(
             private appService: AppService
@@ -235,9 +261,9 @@ namespace Instance {
             return null;
         }
 
-        async doGetList(): Promise<Array<Schema.Country>> {
+        async doGetList(showError?: boolean): Promise<Array<Schema.Country>> {
             try {
-                let ds: Array<Schema.Country> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Country> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -265,9 +291,9 @@ namespace Instance {
             return null;
         }
 
-        async doGetList(): Promise<Array<Schema.Province>> {
+        async doGetList(showError?: boolean): Promise<Array<Schema.Province>> {
             try {
-                let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -295,9 +321,9 @@ namespace Instance {
             return null;
         }
 
-        async doGetList(): Promise<Array<Schema.District>> {
+        async doGetList(showError?: boolean): Promise<Array<Schema.District>> {
             try {
-                let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -325,9 +351,9 @@ namespace Instance {
             return null;
         }
 
-        async doGetList(): Promise<Array<Schema.Subdistrict>> {
+        async doGetList(showError?: boolean): Promise<Array<Schema.Subdistrict>> {
             try {
-                let ds: Array<Schema.Subdistrict> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.Subdistrict> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -351,9 +377,9 @@ namespace Instance {
             return [];
         }
 
-        async doGetList(): Promise<Array<Schema.QuestionnaireSet>> {
+        async doGetList(showError?: boolean): Promise<Array<Schema.QuestionnaireSet>> {
             try {
-                let ds: Array<Schema.QuestionnaireSet> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', true);
+                let ds: Array<Schema.QuestionnaireSet> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -364,14 +390,17 @@ namespace Instance {
             }
         }
 
-        async doGet(CUID: string): Promise<Schema.QuestionnaireDoneAndSet> {
+        async doGet(
+            CUID: string,
+            showError?: boolean
+        ): Promise<Schema.QuestionnaireDoneAndSet> {
             let query = [
                 '',
                 CUID
             ].join('/');
 
             try {
-                let ds: Array<Schema.QuestionnaireDoneAndSet> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, true);
+                let ds: Array<Schema.QuestionnaireDoneAndSet> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, (showError === undefined ? true : showError));
 
                 return (ds.length > 0 ? ds[0] : this.doSetListDefault()[0]);
             }
@@ -397,10 +426,11 @@ namespace Instance {
 
         async doSet(
             method: string,
-            data: HttpParams
+            data: HttpParams,
+            showError?: boolean
         ): Promise<any> {
             try {
-                let ds: Array<any> = await this.appService.doSetDataSource(this.routePrefix, method, data, true);
+                let ds: Array<any> = await this.appService.doSetDataSource(this.routePrefix, method, data, (showError === undefined ? true : showError));
 
                 return (ds.length > 0 ? ds[0] : {});
             }
@@ -458,6 +488,7 @@ export class ModelService {
     }
 
     any = new Instance.Any();
+    student = new Instance.Student(this.appService);
     country = new Instance.Country(this.appService);
     province = new Instance.Province(this.appService);
     district = new Instance.District(this.appService);

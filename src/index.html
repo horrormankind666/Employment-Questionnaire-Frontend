@@ -6,7 +6,7 @@
     <base href="/">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="MURSC Management System" />
+    <meta name="description" content="Survey set on employment status of graduates" />
     <meta name="theme-color" content="#253988" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,13 +17,10 @@
     <app-root class="hidden"></app-root>
     <div id="unsupported-page" class="page-container hidden">
         <div class="page-header h-auto text-center">
-            <div class="title heading text-3xl">
-                Unsupported browser
+            <div class="title heading text-3xl" id="header-title">
             </div>
         </div>
-        <div class="page-body paragraph text-center text-lg">
-            You are using a browser that is not supported.<br/>
-            This web app works on the latest versions of <strong>Google Chrome</strong>, <strong>Mozilla Firefox</strong>, <strong>Apple Safari</strong>, or <strong>Microsoft Edge</strong>.
+        <div class="page-body paragraph text-center text-lg" id="body-content">
         </div>
     </div>
 </body>
@@ -64,6 +61,8 @@
         if (!isBrowserSupport) {
             document.title = 'Unsupported Browser';
 
+            document.getElementById('header-title').innerHTML = "Unsupported browser";
+            document.getElementById('body-content').innerHTML = "You are using a browser that is not supported.<br/>This web app works on the latest versions of <strong>Google Chrome</strong>, <strong>Mozilla Firefox</strong>, <strong>Apple Safari</strong>, or <strong>Microsoft Edge</strong>.";
             document.getElementById('unsupported-page').classList.remove('hidden');
         }
         else

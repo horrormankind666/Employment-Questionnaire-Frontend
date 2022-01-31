@@ -19,7 +19,13 @@ Description : <>
         padding-right: 0.5rem;
         padding-left: 0.5rem;
         margin-top: 0.5rem;
-        & .questionnairesets {
+        & ::ng-deep.questionnairesets {
+            & .p-dataview  {
+                & .p-dataview-loading-overlay {
+                    padding-right: 0.5rem !important;
+                    padding-left: 0.5rem !important;
+                }
+            }
             & ::ng-deep {
                 & .p-card {
                     margin: 0.5rem;

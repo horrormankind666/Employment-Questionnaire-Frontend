@@ -42,6 +42,9 @@
     },
     "signin": {
         "label": "Sign in",
+        "again": {
+            "label": "Sign in again"
+        },
         "please": {
             "label": "Please sign in.",
             "again": {

@@ -49,13 +49,27 @@
                                             shape="circle"
                                             [style]="{ 'background-color': avatarBackgroundColor }">
                                         </p-avatar>
-                                        <div class="block mt-2">
-                                            <div class="text-truncate font-normal text-white text-lg">{{ authService.getUserInfo !== null ? ((authService.getUserInfo.givenName | titlecase) + ' ' + (authService.getUserInfo.familyName | titlecase)) : '' }}</div>
-                                            <div class="text-truncate font-light mt-1 text-white text-base">{{ authService.getUserInfo !== null ? (authService.getUserInfo.email | lowercase) : '' }}</div>
+                                        <div class="block mt-2" *ngIf="authService.getUserInfo !== null">
+                                            <div class="text-truncate font-normal text-white text-lg">
+                                                {{
+                                                    (authService.getUserInfo.givenName !== undefined ? (authService.getUserInfo.givenName | titlecase) : '') +
+                                                    ' ' +
+                                                    (authService.getUserInfo.familyName !== undefined ? (authService.getUserInfo.familyName | titlecase) : '')
+                                                }}
+                                            </div>
+                                            <div class="text-truncate font-light mt-1 text-white text-base">{{ authService.getUserInfo.email | lowercase }}</div>
                                         </div>
                                     </div>
                                     <p-divider></p-divider>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignOut()">
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignIn()"
+                                        *ngIf="
+                                            appService.env.authenInfo.isAuthenticated &&
+                                            appService.env.authenInfo.isReAuthenticated &&
+                                            appService.env.authenInfo.message === appService.TOKEN_EXPIRED
+                                        ">
+                                        {{ 'signin.again.label' | translate | titlecase }}
+                                    </button>
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignOut()" *ngIf="appService.env.authenInfo.isAuthenticated">
                                         {{ 'signout.label' | translate | titlecase }}
                                     </button>
                                 </ng-template>
@@ -67,7 +81,7 @@
             </div>
         </div>
     </header>
-    <main *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
+    <main *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.authenInfo.isReAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
         <router-outlet></router-outlet>
     </main>
     <footer>

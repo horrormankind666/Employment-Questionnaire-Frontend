@@ -118,7 +118,7 @@ header .topbar {
             & ::ng-deep .p-avatar {
                 width: 40px;
                 height: 40px;
-                font-size: 1.25rem;
+                font-size: 1rem;
                 font-weight: $fontStyleSemibold;
                 color: var(--surface-0);
                 border: 2px solid var(--surface-0);
@@ -171,6 +171,9 @@ header .topbar {
                         &:enabled:hover {
                             background-color: var(--surface-800);
                         }
+                    }
+                    & .signout-btn:not(:last-child) {
+                        border-radius: 0 !important;
                     }
                 }
             }

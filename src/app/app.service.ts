@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๙/๐๑/๒๕๖๕>
+Modify date : <๓๐/๐๑/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 
 import { environment } from '../environments/environment';
@@ -27,19 +28,62 @@ export class AppService {
     constructor(
         private title: Title,
         private http: HttpClient,
+        private jwtHelperService: JwtHelperService,
         private translateService: TranslateService,
         private modalService: ModalService
     ) {
     }
 
+    OK: string = 'OK';
+    DATABASE_CONNECTION_FAIL: string = 'Database Connection Fail';
+    UNAUTHORIZED: string = 'Unauthorized';
+    TOKEN_INVALID: string = 'Token Invalid';
+    TOKEN_EXPIRED: string = 'Token Expired';
+    USER_NOT_FOUND: string = 'User Not Found';
+
     env = environment;
 
-    doSetBearerToken() {
-        let CUID: string = this.doGetCUID(['6unbq648oglyxf90ds']);
-        let token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSIsImtpZCI6IlU3TWZHMk5lTXRqZjlmOC1iWldTVXl1LUVjRSJ9.eyJhdWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJpc3MiOiJodHRwczovL2lkcC5tYWhpZG9sLmFjLnRoL2FkZnMiLCJpYXQiOjE2NDI2MTE0MDgsIm5iZiI6MTY0MjYxMTQwOCwiZXhwIjoxNjQyNjE1MDA4LCJhdXRoX3RpbWUiOjE2NDI1OTY3NTEsIm5vbmNlIjoiNjM3NzgyMDgyMDgyNjgyMTI1Lk1EWmpOV00wWldZdE9HSXlaQzAwTVRrNUxXSXlOV1V0TmpRMk1qY3hObUpqTjJFNU1tSTFabVU1TkRJdFltVTBaQzAwWmpka0xUaG1abUV0WXpWak1EZzVNekpqWlRGayIsInN1YiI6ImhRdVBXeTFnZSt0ZWtMRlQ4WmxHNEQzaXNVL2FHQTR2WkhnditLUGN3NVk9Iiwic2lkIjoiUy0xLTUtMjEtMjM2ODEzMDQxMi0zMjQ2OTQ5NDYwLTI1MzEzNzM3NDMtMzY0NTkiLCJ1cG4iOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsInVuaXF1ZV9uYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZW1haWwiOiJ5dXR0aGFwaG9vbS50YXdAbWFoaWRvbC5hYy50aCIsIndpbmFjY291bnRuYW1lIjoieXV0dGhhcGhvb20udGF3IiwiZ2l2ZW5fbmFtZSI6Illvb3RhcG9vbSIsImZhbWlseV9uYW1lIjoiVGF2YW5uYSIsInBwaWQiOiI2dW5icTY0OG9nbHl4ZjkwZHMiLCJhcHB0eXBlIjoiQ29uZmlkZW50aWFsIiwiYXBwaWQiOiJlYTRmNWJhNy1iNTliLTQ2NzMtODRlNS00Mjk2NzBiMDkwODEiLCJhdXRobWV0aG9kIjoidXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFjOmNsYXNzZXM6UGFzc3dvcmRQcm90ZWN0ZWRUcmFuc3BvcnQiLCJ2ZXIiOiIxLjAiLCJzY3AiOiJhbGxhdGNsYWltcyBvcGVuaWQiLCJjX2hhc2giOiJBanZPZGQwZjQ0VzVEczlpUFhrTkRBIn0.Cu7QzC3tYz28_RdZZRWqt59LTzldGKibyD8d1XXioPbxgvYqd-G7e3MUph-_6kP1o_-WfFaO7sal5VDMggndN_YJJ_FpPRIq7-d8NZIizzuKu1Cl-gB2Uax-D91oozHmLhRZcm47q_ATFltWiTPh5fhASAA-NejHn06addDaGW8usseu5aj4qpx9S39Plly5ihNKmY6HZOBN5qniMgoawqvxdFg8b2oyJa_jK5ECvbobdCfwMUTe-KbjKXPjIjsZIMiCenZYsqGypvmMwtc4HMdSJzJ27qx_zIaZdZZ_Ni0vsxSbogO1kSFHCqF0Bj7q6718eRu0jL_xwzzNdz20gw';
-        let bearerToken: string = btoa(btoa(CUID.split('').reverse().join('')) + '.' + btoa(token.split('').reverse().join('')));
+    async doSetBearerToken(): Promise<any> {
+        let bearerToken: string | null = localStorage.getItem(this.env.localStorageKey.bearerToken);
+        let posError: number = window.location.href.indexOf('error');
+        let posCode: number = window.location.href.indexOf('code');
 
-        localStorage.setItem(this.env.localStorageKey.bearerToken, bearerToken);
+        if (bearerToken === null) {
+            if (posError !== -1)
+                this.modalService.doGetModal('danger', false, window.location.href);
+            else {
+                if (posCode !== -1) {
+                    let params: HttpParams = new HttpParams()
+                        .set('CUID', this.doGetCUID([btoa(this.env.oauthConfig.redirectURL), btoa(window.location.href.substring(posCode + 5))]));
+                    let headers: HttpHeaders = new HttpHeaders()
+                        .set('Content-Type', 'application/x-www-form-urlencoded');
+                    let url: string = (this.env.apiURL + '/Token/Get');
+                    let exit: boolean = false;
+
+                    this.env.isStartAuthen = true;
+
+                    let result: any = await this.doHttpMethod('POST', url, params, { headers: headers });
+
+                    if (result !== null) {
+                        let token: any = JSON.parse(result.split('').reverse().join(''));
+
+                        if (token.id_token !== undefined) {
+                            let payload: any | null = this.jwtHelperService.decodeToken(token.id_token);
+                            let CUID: string = this.doGetCUID([payload.ppid]);
+
+                            localStorage.setItem(this.env.localStorageKey.bearerToken, btoa(btoa(CUID.split('').reverse().join('')) + '.' + btoa(token.id_token.split('').reverse().join(''))));
+                            exit = true;
+                        }
+                    }
+
+                    this.env.isStartAuthen = false;
+
+                    return exit;
+                }
+            }
+        }
+
+        return false;
     }
 
     doSetDefaultLang(lang?: string): void {
@@ -63,13 +107,32 @@ export class AppService {
             document.body.classList.remove('overflow-hidden');
     }
 
-    doSetAuthenInfo(
-        isAuthenticated: boolean,
-        isRole: boolean,
-        message: string
-    ): void {
+    doSetAuthenInfo(message: string): void {
+        let isAuthenticated: boolean = this.env.authenInfo.isAuthenticated;
+        let isReAuthenticated: boolean = this.env.authenInfo.isReAuthenticated;
+        let isRole: boolean = this.env.authenInfo.isRole;
+
+        if (message === this.OK) {
+            isAuthenticated = true;
+            isReAuthenticated = false;
+            isRole = false;
+        }
+
+        if ([this.UNAUTHORIZED, this.TOKEN_INVALID].filter((dr: string) => dr === message).length > 0) {
+            isAuthenticated = false;
+            isReAuthenticated = false;
+            isRole = false;
+        }
+
+        if ([this.TOKEN_EXPIRED, this.USER_NOT_FOUND].filter((dr: string) => dr === message).length > 0) {
+            isAuthenticated = true;
+            isReAuthenticated = true;
+            isRole = false;
+        }
+
         this.env.authenInfo = {
             isAuthenticated: isAuthenticated,
+            isReAuthenticated: isReAuthenticated,
             isRole: isRole,
             message: (message !== undefined ? message : '')
         };
@@ -123,31 +186,31 @@ export class AppService {
     }
 
     doGetMessagei18n(msg: string): any | null {
-        if (msg === 'Database Connection Fail')
+        if (msg === this.DATABASE_CONNECTION_FAIL)
             return {
                 content: 'error.databaseConnectionFail.label',
                 description: ''
             };
 
-        if (msg === 'Unauthorized')
+        if (msg === this.UNAUTHORIZED)
             return {
                 content: 'error.unauthorized.label',
                 description: 'signin.please.again.label'
             };
 
-        if (msg === 'Token Invalid')
+        if (msg === this.TOKEN_INVALID)
             return {
                 content: 'error.token.invalid.label',
                 description: 'signin.please.again.label'
             };
 
-        if (msg === 'Token Expired')
+        if (msg === this.TOKEN_EXPIRED)
             return {
                 content: 'error.token.expired.label',
                 description: 'signin.please.again.label'
             };
 
-        if (msg === 'User Not Found')
+        if (msg === this.USER_NOT_FOUND)
             return {
                 content: 'error.userNotFound.label',
                 description: 'signin.please.again.label'
@@ -181,8 +244,6 @@ export class AppService {
         }
         catch(error: any) {
             console.log(error);
-
-            this.modalService.doGetModal('danger', false, error.message);
 
             return null;
         }
@@ -226,14 +287,14 @@ export class AppService {
 
                 url += (route + query + '?ver=' + datetime.date + datetime.time);
 
-                let result = await this.doHttpMethod('GET', url, null, option)
+                let result: any = await this.doHttpMethod('GET', url, null, option);
 
                 if (result !== null) {
                     if (result.statusCode === 200 && result.message === 'OK')
                         return result['data'];
                     else {
                         if (result.statusCode === 401 || result.statusCode === 404)
-                            this.doSetAuthenInfo(false, false, result.message);
+                            this.doSetAuthenInfo(result.message);
 
                         if (showError) {
                             let messageError: any | null = this.doGetMessagei18n(result.message);
@@ -249,7 +310,7 @@ export class AppService {
                 return result;
             }
             else {
-                this.doSetAuthenInfo(false, false, 'Unauthorized');
+                this.doSetAuthenInfo(this.UNAUTHORIZED);
 
                 let messageError: any | null = this.doGetMessagei18n(this.env.authenInfo.message);
 
@@ -289,7 +350,7 @@ export class AppService {
 
                 url += ('?ver=' + datetime.date + datetime.time);
 
-                let result = await this.doHttpMethod(method.toUpperCase(), url, data, option)
+                let result: any = await this.doHttpMethod(method.toUpperCase(), url, data, option);
 
                 if (result !== null) {
                     if (result.statusCode === 200 && result.message === 'OK') {
@@ -297,7 +358,7 @@ export class AppService {
                     }
                     else {
                         if (result.statusCode === 401 || result.statusCode === 404)
-                            this.doSetAuthenInfo(false, false, result.message);
+                            this.doSetAuthenInfo(result.message);
 
                         if (showError) {
                             let messageError: any | null = this.doGetMessagei18n(result.message);
@@ -313,7 +374,7 @@ export class AppService {
                 return result;
             }
             else {
-                this.doSetAuthenInfo(false, false, 'Unauthorized');
+                this.doSetAuthenInfo(this.UNAUTHORIZED);
 
                 let messageError: any | null = this.doGetMessagei18n(this.env.authenInfo.message);
 
