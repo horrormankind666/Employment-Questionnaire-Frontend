@@ -105,8 +105,16 @@ export class AppComponent implements OnInit {
     doSignOut(): void {
         let bearerToken: string | null = localStorage.getItem(this.appService.env.localStorageKey.bearerToken);
 
-        if (bearerToken !== null) {
-            let bearerTokenInfo: Schema.BearerToken | null = this.authService.doParseToken(bearerToken);
+        if (bearerToken !== null || this.appService.token !== null) {
+            let bearerTokenInfo: Schema.BearerToken | null = null
+
+            if (bearerToken !== null && this.appService.token === null)
+                bearerTokenInfo = this.authService.doParseToken(bearerToken);
+
+            if (bearerToken === null && this.appService.token !== null)
+                bearerTokenInfo = this.authService.doParseToken(this.appService.token);
+
+            this.appService.token = null;
 
             if (bearerTokenInfo !== null) {
                 localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);

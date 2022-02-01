@@ -34,6 +34,7 @@ export class AppService {
     ) {
     }
 
+    token: string | null = null;
     OK: string = 'OK';
     DATABASE_CONNECTION_FAIL: string = 'Database Connection Fail';
     UNAUTHORIZED: string = 'Unauthorized';

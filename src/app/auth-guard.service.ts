@@ -53,8 +53,10 @@ export class AuthGuardService implements CanActivate {
             }
             else {
                 if (this.appService.env.authenInfo.isReAuthenticated === true) {
-                    if (this.appService.env.authenInfo.message === this.appService.TOKEN_EXPIRED)
+                    if (this.appService.env.authenInfo.message === this.appService.TOKEN_EXPIRED) {
+                        this.appService.token = localStorage.getItem(this.appService.env.localStorageKey.bearerToken);
                         localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
+                    }
 
                     let messageError: any | null = this.appService.doGetMessagei18n(this.appService.env.authenInfo.message);
 
