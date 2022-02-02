@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๓๐/๐๑/๒๕๖๕>
+Modify date : <๐๒/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -72,6 +72,7 @@ export namespace Schema {
         branchName?: any,
         classYear?: number | null,
         yearEntry?: string | null,
+        graduateYear?: string | null,
         gender?: string | null,
         birthDate?: string | null,
         nationalityName?: any,

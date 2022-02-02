@@ -1352,6 +1352,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 branchNameEN: userInfo.branchName.en.toUpperCase(),
                 class: userInfo.classYear,
                 yearEntry: userInfo.yearEntry,
+                graduateYear: userInfo.graduateYear,
                 gender: userInfo.gender,
                 birthDate: userInfo.birthDate,
                 nationalityNameTH: userInfo.nationalityName.th,
