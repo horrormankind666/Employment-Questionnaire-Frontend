@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๕/๐๑/๒๕๖๕>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -38,6 +38,7 @@ export class AuthGuardService implements CanActivate {
 
             if (this.appService.env.authenInfo.isAuthenticated === false) {
                 localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
+                localStorage.removeItem(this.appService.env.localStorageKey.CUID);
 
                 if (route.data.signin) {
                     let messageError: any | null = this.appService.doGetMessagei18n(this.appService.env.authenInfo.message);
@@ -56,6 +57,7 @@ export class AuthGuardService implements CanActivate {
                     if (this.appService.env.authenInfo.message === this.appService.TOKEN_EXPIRED) {
                         this.appService.token = localStorage.getItem(this.appService.env.localStorageKey.bearerToken);
                         localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
+                        localStorage.removeItem(this.appService.env.localStorageKey.CUID);
                     }
 
                     let messageError: any | null = this.appService.doGetMessagei18n(this.appService.env.authenInfo.message);

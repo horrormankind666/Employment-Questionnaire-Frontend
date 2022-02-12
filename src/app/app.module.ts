@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๙/๐๑/๒๕๖๕>
+Modify date : <๐๓/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -42,6 +42,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
@@ -132,6 +133,7 @@ export function httpLoaderFactory(http: HttpClient) {
         InputTextModule,
         InputTextareaModule,
         InputNumberModule,
+        AutoCompleteModule,
         MessagesModule,
         MessageModule,
         ToastModule

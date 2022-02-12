@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๒/๐๒/๒๕๖๕>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
 import { AppService } from './app.service';
+import { forEach } from 'lodash';
 
 export namespace Schema {
     export interface Any {
@@ -81,6 +82,14 @@ export namespace Schema {
         raceName?: any,
         race2Letter?: string | null,
         race3Letter?: string | null
+    }
+
+    export interface Career {
+        name: string
+    }
+
+    export interface Program {
+        name: string
     }
 
     export interface Country {
@@ -220,6 +229,24 @@ namespace Instance {
         }
     }
 
+    export class AutoComplete {
+        doFilter(
+            event: any,
+            datasource: Array<any>
+        ): Array<any> {
+            let results: Array<any> = [];
+            let query: any = event.query;
+
+            datasource.forEach((data: any) => {
+                if (data.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+                    results.push(data.name);
+                }
+            });
+
+            return results;
+        }
+    }
+
     export class Student {
         constructor(
             private appService: AppService
@@ -246,6 +273,58 @@ namespace Instance {
         }
     }
 
+    export class Career {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Career';
+
+        doSetListDefault(): Array<Schema.Career> {
+            return [];
+        }
+
+        async doGetList(showError?: boolean): Promise<Array<Schema.Career>> {
+            try {
+                let ds: Array<Schema.Career> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+
+                return ds;
+            }
+            catch(error) {
+                console.log(error);
+
+                return [];
+            }
+        }
+    }
+
+    export class Program {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'Program';
+
+        doSetListDefault(): Array<Schema.Program> {
+            return [];
+        }
+
+        async doGetList(showError?: boolean): Promise<Array<Schema.Program>> {
+            try {
+                let ds: Array<Schema.Program> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+
+                return ds;
+            }
+            catch(error) {
+                console.log(error);
+
+                return [];
+            }
+        }
+    }
+
     export class Country {
         constructor(
             private appService: AppService
@@ -256,10 +335,6 @@ namespace Instance {
 
         doSetListDefault(): Array<Schema.Country> {
             return [];
-        }
-
-        doSetDefault(): Schema.Country | null {
-            return null;
         }
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Country>> {
@@ -288,10 +363,6 @@ namespace Instance {
             return [];
         }
 
-        doSetDefault(): Schema.Province | null {
-            return null;
-        }
-
         async doGetList(showError?: boolean): Promise<Array<Schema.Province>> {
             try {
                 let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
@@ -318,10 +389,6 @@ namespace Instance {
             return [];
         }
 
-        doSetDefault(): Schema.District | null {
-            return null;
-        }
-
         async doGetList(showError?: boolean): Promise<Array<Schema.District>> {
             try {
                 let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
@@ -346,10 +413,6 @@ namespace Instance {
 
         doSetListDefault(): Array<Schema.Subdistrict> {
             return [];
-        }
-
-        doSetDefault(): Schema.Subdistrict | null {
-            return null;
         }
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Subdistrict>> {
@@ -489,7 +552,10 @@ export class ModelService {
     }
 
     any = new Instance.Any();
+    autocomplete = new Instance.AutoComplete();
     student = new Instance.Student(this.appService);
+    career = new Instance.Career(this.appService);
+    program = new Instance.Program(this.appService);
     country = new Instance.Country(this.appService);
     province = new Instance.Province(this.appService);
     district = new Instance.District(this.appService);

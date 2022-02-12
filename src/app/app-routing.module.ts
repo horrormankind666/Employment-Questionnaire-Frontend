@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๕/๑๒/๒๕๖๔>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -33,7 +33,7 @@ export const appRouting: Routes = [
         }
     },
     {
-        path: 'FillOut/:CUID',
+        path: 'FillOut',
         component: QuestionnaireFilloutComponent,
         canActivate: [AuthGuardService],
         runGuardsAndResolvers: 'always',

@@ -118,6 +118,7 @@ export class AppComponent implements OnInit {
 
             if (bearerTokenInfo !== null) {
                 localStorage.removeItem(this.appService.env.localStorageKey.bearerToken);
+                localStorage.removeItem(this.appService.env.localStorageKey.CUID);
                 window.location.href = this.appService.env.oauthConfig.logoutURL + '?post_logout_redirect_uri=' + this.appService.env.oauthConfig.redirectURL + '&id_token_hint=' + bearerTokenInfo.token;
             }
         }

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๕/๐๑/๒๕๖๕>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -25,7 +25,8 @@ export const environment = {
         message: ''
     },
     localStorageKey: {
-        bearerToken: 'EmploymentQuestionnaireBearerToken'
+        bearerToken: 'EmploymentQuestionnaireBearerToken',
+        CUID: 'EmploymentQuestionnaireDoneAndSetCUID'
     },
     route: {
         path: ''

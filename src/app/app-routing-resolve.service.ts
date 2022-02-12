@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๐/๐๑/๒๕๖๕>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -19,6 +19,8 @@ import { Schema, ModelService } from './model.service';
     providedIn: 'root'
 })
 export class GetQuestionnaireDataSourceResolve implements Resolve<{
+    careers: Array<Schema.Career>,
+    programs: Array<Schema.Program>,
     countries: Array<Schema.Country>,
     provinces: Array<Schema.Province>,
     districts: Array<Schema.District>,
@@ -32,29 +34,37 @@ export class GetQuestionnaireDataSourceResolve implements Resolve<{
     }
 
     async resolve(route: ActivatedRouteSnapshot): Promise<{
+        careers: Array<Schema.Career>,
+        programs: Array<Schema.Program>,
         countries: Array<Schema.Country>,
         provinces: Array<Schema.Province>,
         districts: Array<Schema.District>,
         subdistricts: Array<Schema.Subdistrict>,
         doneandset: Schema.QuestionnaireDoneAndSet
     }> {
-        let countries: Array<Schema.Country> = [];
-        let provinces: Array<Schema.Province> = [];
-        let districts: Array<Schema.District> = [];
-        let subdistricts: Array<Schema.Subdistrict> = [];
+        let careers: Array<Schema.Career> = this.modelService.career.doSetListDefault();
+        let programs: Array<Schema.Program> = this.modelService.program.doSetListDefault();
+        let countries: Array<Schema.Country> = this.modelService.country.doSetListDefault();
+        let provinces: Array<Schema.Province> = this.modelService.province.doSetListDefault();
+        let districts: Array<Schema.District> = this.modelService.district.doSetListDefault();
+        let subdistricts: Array<Schema.Subdistrict> = this.modelService.subdistrict.doSetListDefault();
         let doneandset: Schema.QuestionnaireDoneAndSet = {
-            done: null,
-            set: null,
-            sections: [],
-            questions: [],
-            answersets: [],
-            answers: []
+            done: this.modelService.questionnaire.done.doSetDefault(),
+            set: this.modelService.questionnaire.set.doSetDefault(),
+            sections: this.modelService.questionnaire.section.doSetListDefault(),
+            questions: this.modelService.questionnaire.question.doSetListDefault(),
+            answersets: this.modelService.questionnaire.answerset.doSetListDefault(),
+            answers: this.modelService.questionnaire.answer.doSetListDefault()
         };
 
         if (this.appService.env.authenInfo.isAuthenticated) {
-            doneandset = await this.modelService.questionnaire.doneandset.doGet(route.params['CUID']);
+            let doneandsetCUID: string | null = localStorage.getItem(this.appService.env.localStorageKey.CUID);
+
+            doneandset = await this.modelService.questionnaire.doneandset.doGet(doneandsetCUID !== null ? doneandsetCUID : '');
 
             if (doneandset !== undefined) {
+                careers = await this.modelService.career.doGetList();
+                programs = await this.modelService.program.doGetList();
                 countries = await this.modelService.country.doGetList();
                 provinces = await this.modelService.province.doGetList();
                 districts = await this.modelService.district.doGetList();
@@ -63,6 +73,8 @@ export class GetQuestionnaireDataSourceResolve implements Resolve<{
         }
 
         return {
+            careers,
+            programs,
             countries,
             provinces,
             districts,

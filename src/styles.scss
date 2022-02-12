@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๑๙/๐๑/๒๕๖๕>
+Modify date : <๑๓/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -92,6 +92,7 @@ body {
 .p-inline-message,
 .ng-select,
 .ng-select .ng-select-container .ng-value-container .ng-input > input,
+.p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item,
 .p-toast-message-content {
     font-family: $fontFamilySarabun !important;
 }
@@ -564,7 +565,7 @@ p-card {
     font-weight: $fontStyleRegular;
     & .ng-select-container {
         border: 2px solid $inputColor !important;
-        border-radius: 4px;
+        border-radius: 4px !important;
         &:hover {
             border-color: $inputColorActive !important;
         }
@@ -580,9 +581,9 @@ p-card {
             text-overflow: ellipsis;
         }
         & .ng-input {
-            background-color: transparent !important;
             height: 100%;
             min-height: 0;
+            background-color: transparent !important;
             top: 0 !important;
             & > input {
                 font-size: inherit;
@@ -595,26 +596,33 @@ p-card {
         padding-left: 0.5rem;
     }
     & .ng-dropdown-panel {
+        background-color: var(--surface-200);
+        border-color: #FFFFFF !important;
         border-width: 2px;
+        border-radius: 4px !important;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
         &.ng-select-top {
-            border-bottom: 0;
             margin-bottom: 0;
         }
         &.ng-select-bottom {
-            border-top: 0;
             margin-top: 0;
         }
         & .ng-dropdown-panel-items {
-            max-height: 240px;
+            max-height: 236px;
             & .ng-option {
                 font-size: 1rem;
                 font-weight: $fontStyleRegular;
                 color: $textColor;
+                background-color: transparent;
                 padding: 10px 12px;
                 white-space: normal;
                 word-break: break-all;
                 word-wrap: break-word;
+                &.ng-option-marked {
+                    background-color: #F5FAFF;
+                }
                 &.ng-option-selected {
+                    background-color: #EBF5FF;
                     & .ng-option-label {
                         font-weight: $fontStyleMedium;
                     }
@@ -624,8 +632,7 @@ p-card {
     }
     &.ng-select-opened .ng-select-container,
     &.ng-select-focused:not(.ng-select-opened),
-    &.ng-select-focused:not(.ng-select-opened) > .ng-select-container,
-    & .ng-dropdown-panel {
+    &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
         border-color: $inputColorActive !important;
         outline: 0;
         box-shadow: 0 0 0 0;
@@ -633,7 +640,33 @@ p-card {
     &.ng-select-opened {
         & .ng-select-container,
         & .ng-dropdown-panel {
-            z-index: 2 !important;
+            z-index: 1 !important;
+        }
+    }
+}
+
+.p-autocomplete {
+    & .p-autocomplete-panel {
+        max-height: 238px !important;
+        background-color: var(--surface-200);
+        border: 2px solid #FFFFFF;
+        border-radius: 4px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1 !important;
+        & .p-autocomplete-items {
+            padding: 0 !important;
+            & .p-autocomplete-item {
+                font-size: 1rem;
+                font-weight: $fontStyleRegular;
+                color: $textColor !important;
+                padding: 10px 12px;
+                white-space: normal;
+                word-break: break-all;
+                word-wrap: break-word;
+                &:hover {
+                    background-color: #F5FAFF;
+                }
+            }
         }
     }
 }
@@ -658,6 +691,9 @@ p-card {
     &.p-disabled * {
         background-color: $inputColorActive !important;
     }
+}
+.p-radiobutton-disabled {
+    cursor: default !important;
 }
 
 .overflow-hidden {

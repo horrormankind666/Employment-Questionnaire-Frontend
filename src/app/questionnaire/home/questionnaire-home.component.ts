@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๑๐/๐๑/๒๕๖๕>
+Modify date : <๑๑/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -62,7 +62,8 @@ export class QuestionnaireHomeComponent implements OnInit {
     }
 
     getQuestionnaire(questionnaireDoneID: string, questionnaireSetID: string) {
-        this.router.navigate(['FillOut/' + this.appService.doGetCUID([questionnaireDoneID, questionnaireSetID])]);
+        localStorage.setItem(this.appService.env.localStorageKey.CUID, this.appService.doGetCUID([questionnaireDoneID, questionnaireSetID]));
+        this.router.navigate(['FillOut']);
     }
 }
 

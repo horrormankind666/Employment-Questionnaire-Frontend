@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๗/๐๑/๒๕๖๕>
+Modify date : <๑๐/๐๒/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -209,8 +209,8 @@ Description : <>
             padding-top: 1rem;
             padding-right: 1rem;
             padding-left: 1rem;
-            display: table;
-            table-layout: fixed;
+            display: flex;
+            justify-content: space-between;
             & .p-button {
                 width: 100%;
                 padding-top: 0;
@@ -219,15 +219,31 @@ Description : <>
             & .left,
             & .center,
             & .right {
-                display: table-cell;
+                display: flex;
+                justify-content: center;
             }
             & .left,
-            & .right {
-                width: 94px;
+            & .right,
+            & .bottom {
                 & .p-button {
                     padding-right: 1.5rem;
                     padding-left: 1.5rem;
+                    display: flex !important;
+                    justify-content: center;
+                    &:not(:first-child) {
+                        margin-left: 0.25rem;
+                    }
                 }
+                & i.fa-spin {
+                    font-size: 2rem;
+                    color: $textColor;
+                    position: relative;
+                }
+            }
+            & .left,
+            & .right {
+                width: 192px;
+                flex: none;
             }
             & ::ng-deep .p-tooltip {
                 top: 46px !important;
@@ -255,6 +271,9 @@ Description : <>
                 }
             }
             & .left {
+                & .button {
+                    width: 94px;
+                }
                 & .questionnairemenu-nav {
                     &.active {
                         & .p-button {
@@ -270,14 +289,20 @@ Description : <>
                 }
             }
             & .center {
+                padding-right: 0.25rem;
+                padding-left: 0.25rem;
                 & .questionnairesection-nav {
                     margin: 0 auto;
-                    display: table;
-                    table-layout: fixed;
+                    display: flex;
                     & .previous,
                     & .selected,
                     & .next {
-                        display: table-cell !important;
+                        display: flex;
+                        justify-content: center;
+                    }
+                    & .previous,
+                    & .next {
+                        flex: none;
                     }
                     & .previous,
                     & .selected,
@@ -335,11 +360,23 @@ Description : <>
                     border-top-right-radius: 0;
                 }
             }
-            & .right {
-                & i.fa-spin {
-                    font-size: 2.5rem;
-                    position: relative;
-                    top: -2px;
+            & .bottom {
+                display: none;
+            }
+            &.submitstatus-y {
+                & .center {
+                    width: 100% !important;
+                    padding-right: 0;
+                    padding-left: 0;
+                    & .questionnairesection-nav {
+                        width: 100% !important;
+                        & .selected {
+                            width: 100% !important;
+                        }
+                    }
+                }
+                & ::ng-deep .questionnairesection-template.p-overlaypanel {
+                    width: 100% !important;
                 }
             }
         }
@@ -427,43 +464,72 @@ Description : <>
     }
 }
 
-@media screen and (max-width: 678px) {
-    #questionnaire-fillout-page.page-container {
-        & ::ng-deep .p-panel {
-            & .p-panel-content {
-                & .questionnaireset {
-                    text-align: left;
-                }
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 564px) {
+@media screen and (max-width: 750px) {
     #questionnaire-fillout-page.page-container {
         & .page-header {
             & .toolbar.fixed {
-                & .left,
-                & .right {
-                    width: 60px;
-                    & .p-button {
-                        width: 50px;
-                        font-size: 0.875rem;
-                        padding: 0;
-                    }
-                }
                 & .center {
-                    margin-top: 0.5rem;
+                    width: 100%;
                     & .questionnairesection-nav {
                         width: 100%;
                         & .selected {
-                            width: 100% !important ;
+                            width: 100% !important;
                         }
                     }
                     & ::ng-deep .questionnairesection-template.p-overlaypanel  {
                         width: 100%;
                     }
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 664px) {
+    #questionnaire-fillout-page.page-container {
+        & .page-header {
+            & .toolbar.fixed {
+                & .left,
+                & .right {
+                    width: 124px;
+                    & .p-button {
+                        font-size: 0.875rem;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 527px) {
+    #questionnaire-fillout-page.page-container {
+        & .page-header {
+            & .toolbar.fixed {
+                flex-direction: column;
+                justify-content: flex-start;
+                & .left,
+                & .right {
+                    display: none;
+                }
+                & .center {
+                    padding-right: 0;
+                    padding-left: 0;
+                }
+                & .bottom {
+                    margin-top: 0.5rem;
+                    display: flex;
+                    & .p-button {
+                        font-size: 0.875rem;
+                        padding: 0;
+                    }
+                }
+            }
+            & .toolbar.fixed.submitstatus-n {
+                height: 122px;
+            }
+            & .title.submitstatus-n {
+                padding-top: 122px;
             }
         }
         & .page-body {
