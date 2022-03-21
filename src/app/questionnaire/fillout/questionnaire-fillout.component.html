@@ -33,7 +33,7 @@
                 questionnaire.set.datasource !== null &&
                 questionnaire.doneandset.datasource.answers.length > 0
             ">
-            <div class="toolbar submitstatus-{{ submitStatus.toLowerCase() }} fixed z-2" *ngIf="!saveandsubmit.isSuccess">
+            <div class="toolbar submitstatus-{{ submitStatus.toLowerCase() }} fixed z-3" *ngIf="!saveandsubmit.isSuccess">
                 <div class="left" *ngIf="submitStatus === 'N'">
                     <ng-container *ngTemplateOutlet="
                         questionnaireToolbarButtonTemplate;
