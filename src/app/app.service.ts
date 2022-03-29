@@ -294,8 +294,15 @@ export class AppService {
                     if (result.statusCode === 200 && result.message === 'OK')
                         return result['data'];
                     else {
-                        if (result.statusCode === 401 || result.statusCode === 404)
+                        if (result.statusCode === 401 || result.statusCode === 404) {
                             this.doSetAuthenInfo(result.message);
+
+                            if (result.message === this.TOKEN_EXPIRED) {
+                                this.token = localStorage.getItem(this.env.localStorageKey.bearerToken);
+                                localStorage.removeItem(this.env.localStorageKey.bearerToken);
+                                localStorage.removeItem(this.env.localStorageKey.CUID);
+                            }
+                        }
 
                         if (showError) {
                             let messageError: any | null = this.doGetMessagei18n(result.message);
@@ -358,8 +365,15 @@ export class AppService {
                         return result['data'];
                     }
                     else {
-                        if (result.statusCode === 401 || result.statusCode === 404)
+                        if (result.statusCode === 401 || result.statusCode === 404) {
                             this.doSetAuthenInfo(result.message);
+
+                            if (result.message === this.TOKEN_EXPIRED) {
+                                this.token = localStorage.getItem(this.env.localStorageKey.bearerToken);
+                                localStorage.removeItem(this.env.localStorageKey.bearerToken);
+                                localStorage.removeItem(this.env.localStorageKey.CUID);
+                            }
+                        }
 
                         if (showError) {
                             let messageError: any | null = this.doGetMessagei18n(result.message);
