@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๐๒/๐๒/๒๕๖๕>
+Modify date : <๓๐/๐๓/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -35,7 +35,8 @@ export class AuthService {
 
             return ({
                 CUID: atob(strDecodes[0]).split('').reverse().join(''),
-                token: atob(strDecodes[1]).split('').reverse().join('')
+                token: atob(strDecodes[1]).split('').reverse().join(''),
+                tokenExpiration: parseFloat(atob(strDecodes[2]).split('').reverse().join(''))
             });
         }
         catch {
@@ -62,7 +63,10 @@ export class AuthService {
                     let PPID: string | null = (CUIDInfos !== null ? CUIDInfos[0] : null);
                     let payload: any | null = this.jwtHelperService.decodeToken(bearerTokenInfo.token);
 
+                    if (this.appService.doIsTokenExpired(bearerTokenInfo.tokenExpiration) === false) {
+                    /*
                     if (this.jwtHelperService.isTokenExpired(bearerTokenInfo.token) === false) {
+                    */
                         if (PPID !== null && payload !== null && PPID === payload.ppid) {
                             if (this.appService.env.authenInfo.isAuthenticated === false)
                                 this.userInfo = null;

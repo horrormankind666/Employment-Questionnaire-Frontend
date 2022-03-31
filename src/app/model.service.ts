@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๑/๐๒/๒๕๖๕>
+Modify date : <๓๐/๐๓/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -13,7 +13,6 @@ import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
 import { AppService } from './app.service';
-import { forEach } from 'lodash';
 
 export namespace Schema {
     export interface Any {
@@ -22,7 +21,8 @@ export namespace Schema {
 
     export interface BearerToken {
         CUID: string,
-        token: string
+        token: string,
+        tokenExpiration: number
     }
 
     export interface InputType {

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๐๙/๐๒/๒๕๖๕>
+Modify date : <๓๐/๐๓/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -71,8 +71,12 @@ export class AppService {
                         if (token.id_token !== undefined) {
                             let payload: any | null = this.jwtHelperService.decodeToken(token.id_token);
                             let CUID: string = this.doGetCUID([payload.ppid]);
+                            let tokenExpiration: number = ((Date.now() / 1000) + token.refresh_token_expires_in);
 
-                            localStorage.setItem(this.env.localStorageKey.bearerToken, btoa(btoa(CUID.split('').reverse().join('')) + '.' + btoa(token.id_token.split('').reverse().join(''))));
+                            localStorage.setItem(
+                                this.env.localStorageKey.bearerToken,
+                                btoa(btoa(CUID.split('').reverse().join('')) + '.' + btoa(token.id_token.split('').reverse().join('')) + '.' + btoa(tokenExpiration.toString().split('').reverse().join('')))
+                            );
                             exit = true;
                         }
                     }
@@ -424,5 +428,16 @@ export class AppService {
 
     doEval(condition: string): boolean {
         return eval(condition);
+    }
+
+    doIsTokenExpired(tokenExpiration: number | null): boolean {
+        if (tokenExpiration !== null) {
+            if (tokenExpiration < (Date.now() / 1000))
+                return true;
+
+            return false;
+        }
+
+        return true;
     }
 }
