@@ -873,7 +873,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                         }
 
                                         if (get)
-                                            value = qtnanswerObj.formField.autocomplete[qtnanswer.ID];
+                                            value = ((qtnanswerObj.formField.autocomplete[qtnanswer.ID] !== null && qtnanswerObj.formField.autocomplete[qtnanswer.ID].length > 0) ? qtnanswerObj.formField.autocomplete[qtnanswer.ID] : null);
                                     }
 
                                     if (qtnanswerspecify.items === undefined) {
@@ -1058,7 +1058,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             }
 
                             if (get)
-                                value = qtnanswerObj.formField.autocomplete[qtnanswer.ID];
+                                value = ((qtnanswerObj.formField.autocomplete[qtnanswer.ID] !== null && qtnanswerObj.formField.autocomplete[qtnanswer.ID].length > 0) ? qtnanswerObj.formField.autocomplete[qtnanswer.ID] : null);
                         }
 
                         if (get) {
@@ -1104,7 +1104,6 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 this.questionnaire.doneandset.datasource = result;
                 this.model.doInit();
             });
-
     }
 
     doWatchModelChange(
@@ -1245,6 +1244,9 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
                 if (qtnanswerspecify.inputType === this.inputType.dropdown)
                     formField.select[qtnanswerselectedObj.ID] = null;
+
+                if (qtnanswerspecify.inputType === this.inputType.autocomplete)
+                    formField.autocomplete[qtnanswerselectedObj.ID] = null;
             }
 
             if (qtnanswerspecify.items !== undefined) {

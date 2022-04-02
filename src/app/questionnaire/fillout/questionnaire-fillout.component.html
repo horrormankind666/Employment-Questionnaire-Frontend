@@ -974,6 +974,7 @@
                 [completeOnFocus]="false"
                 [showTransitionOptions]="'0ms'"
                 [hideTransitionOptions]="'0ms'"
+                (onKeyUp)="doWatchModelChange($event, qtnanswerset)"
                 [disabled]="
                     !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
                     !(formField.formField.multipleChoices.length > 0 && appService.doArrayFilter(formField.formField.multipleChoices, { field: 'ID', value: qtnanswer.ID }).length > 0)
