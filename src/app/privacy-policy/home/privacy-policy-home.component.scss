@@ -1,0 +1,74 @@
+/*
+=============================================
+Author      : <ยุทธภูมิ ตวันนา>
+Create date : <๒๑/๐๔/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
+Description : <>
+=============================================
+*/
+
+@import '../../../variables.scss';
+
+#privacy-policy-home-page.page-container {
+    & ::ng-deep .p-dataview::ng-deep .p-panel {
+        & .p-panel-content {
+            & .name {
+                line-height: 1.5;
+                font-size: 1.45rem;
+                font-weight: $fontStyleSemibold;
+            }
+            & .topic {
+                line-height: 1.6;
+                font-size: 1.125rem;
+                font-weight: $fontStyleRegular;
+                margin-top: 1rem;
+            }
+            & .choice {
+                line-height: 2;
+                font-size: 1rem;
+                font-weight: $fontStyleLight;
+                text-align: justify;
+                text-justify: distribute;
+                white-space: normal;
+                word-break: break-word;
+                word-spacing: 0;
+                margin-top: 0.5rem;
+            }
+            & .result {
+                width: 90px;
+                height: 30px;
+                line-height: 1;
+                font-size: 0.875rem;
+                font-weight: $fontStyleRegular;
+                padding: 0;
+            }
+        }
+    }
+    & ::ng-deep {
+        & .p-panel {
+            & .p-panel-content {
+                line-height: 1.7;
+                font-size: 1.05em;
+                text-align: left;
+                border-top: 1px solid #DADCE0 !important;
+                border-radius: 12px;
+            }
+        }
+    }
+    & .page-body {
+        width: $screenMaxWidth !important;
+        margin-right: auto;
+        margin-left: auto;
+        & .consent-tabpanel {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 1216px) {
+    #privacy-policy-home-page.page-container {
+        & .page-body {
+            width: 100% !important;
+        }
+    }
+}

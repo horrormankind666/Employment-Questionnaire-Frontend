@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๑๑/๐๒/๒๕๖๕>
+Modify date : <๒๑/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -21,22 +21,21 @@ class QuestionnaireSet {
     ) {
     }
 
-    datasource = this.modelService.questionnaire.set.doSetListDefault();
+    datasource: Array<Schema.QuestionnaireSet> = this.modelService.questionnaire.set.doSetListDefault();
     dataView = {
         isLoading: false
     };
 
-    getDataSource(): void {
-        this.dataView.isLoading = true;
+    async getDataSource(): Promise<void> {
         this.datasource = this.modelService.questionnaire.set.doSetListDefault();
+        this.dataView.isLoading = true;
 
-        this.modelService.questionnaire.doneandset.doGetList()
-            .then((result: Array<Schema.QuestionnaireSet>) => {
-                setTimeout(() => {
-                    this.datasource = result;
-                    this.dataView.isLoading = false;
-                }, 200);
-            });
+        let result: Array<Schema.QuestionnaireSet> = await this.modelService.questionnaire.doneandset.doGetList()
+
+        setTimeout(() => {
+            this.datasource = result;
+            this.dataView.isLoading = false;
+        }, 200);
     }
 }
 
@@ -49,7 +48,7 @@ export class QuestionnaireHomeComponent implements OnInit {
     constructor(
         private router: Router,
         public appService: AppService,
-        private modelService: ModelService,
+        private modelService: ModelService
     ) {
     }
 
@@ -57,8 +56,9 @@ export class QuestionnaireHomeComponent implements OnInit {
         set: new QuestionnaireSet(this.modelService)
     };
 
-    ngOnInit(): void {
-        this.questionnaire.set.getDataSource();
+    async ngOnInit(): Promise<any> {
+        localStorage.removeItem(this.appService.env.localStorageKey.CUID);
+        await this.questionnaire.set.getDataSource();
     }
 
     getQuestionnaire(questionnaireDoneID: string, questionnaireSetID: string) {
@@ -66,4 +66,3 @@ export class QuestionnaireHomeComponent implements OnInit {
         this.router.navigate(['FillOut']);
     }
 }
-

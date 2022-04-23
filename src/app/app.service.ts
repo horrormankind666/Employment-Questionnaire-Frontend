@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๓๐/๐๓/๒๕๖๕>
+Modify date : <๑๖/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -48,7 +48,7 @@ export class AppService {
         let bearerToken: string | null = localStorage.getItem(this.env.localStorageKey.bearerToken);
         let posError: number = window.location.href.indexOf('error');
         let posCode: number = window.location.href.indexOf('code');
-
+        
         if (bearerToken === null) {
             if (posError !== -1)
                 this.modalService.doGetModal('danger', false, window.location.href);
@@ -439,5 +439,14 @@ export class AppService {
         }
 
         return true;
+    }
+
+    doIsEmpty(value: any): boolean {
+        return (
+            (value === undefined) ||
+            (value === null) ||
+            (value.hasOwnProperty('length') && value.length === 0) ||
+            (value.constructor === Object && Object.keys(value).length === 0)
+        );
     }
 }

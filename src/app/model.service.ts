@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๓๐/๐๓/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -17,6 +17,13 @@ import { AppService } from './app.service';
 export namespace Schema {
     export interface Any {
         [key: string]: any;
+    }
+
+    export interface Consent {
+        isError: boolean,
+        isConsent: boolean,
+        consentChoiceIds: Array<any> | null,
+        page: string | null
     }
 
     export interface BearerToken {
@@ -244,6 +251,28 @@ namespace Instance {
             });
 
             return results;
+        }
+    }
+
+    export class MSent {
+        constructor(
+            private appService: AppService
+        ) {
+        }
+
+        private routePrefix: string = 'M-Sent';
+
+        async doSet(data: HttpParams): Promise<any> {
+            try {
+                let ds: Array<any> = await this.appService.doSetDataSource(this.routePrefix, 'Post', data);
+
+                return (ds.length > 0 ? ds[0] : {});
+            }
+            catch(error) {
+                console.log(error);
+
+                return {};
+            }
         }
     }
 
@@ -553,6 +582,7 @@ export class ModelService {
 
     any = new Instance.Any();
     autocomplete = new Instance.AutoComplete();
+    msent = new Instance.MSent(this.appService);
     student = new Instance.Student(this.appService);
     career = new Instance.Career(this.appService);
     program = new Instance.Program(this.appService);

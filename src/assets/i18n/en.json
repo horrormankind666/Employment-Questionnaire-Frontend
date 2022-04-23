@@ -7,6 +7,21 @@
             }
         }
     },
+    "privacyPolicy": {
+        "label": "Privacy policy",
+        "consent": {
+            "label": "Consent",
+            "update": {
+                "label": "Update consent"
+            },
+            "agree": {
+                "label": "Agree"
+            },
+            "disagree": {
+                "label": "Disagree"
+            }
+        }
+    },
     "error": {
         "pageNotFound": {
             "label": "Page not found."

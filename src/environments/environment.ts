@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๑/๐๒/๒๕๖๕>
+Modify date : <๑๘/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -42,5 +42,12 @@ export const environment = {
         authorizationURL: 'https://idp.mahidol.ac.th/adfs/oauth2/authorize',
         tokenURL: 'https://idp.mahidol.ac.th/adfs/oauth2/token',
         logoutURL: 'https://idp.mahidol.ac.th/adfs/oauth2/logout',
+    },
+    msentConfig: {
+        lang: 'TH',
+        clientID: 'SIT_KEY_EMPLOYMENT',
+        clientSecret: '82657b3d-b020-4f52-b447-a367c60a0357',
+        consentURL: 'https://privacy-qas.mahidol.ac.th/Msent/Pages/consents.html',
+        redirectURL: 'http://localhost:4279/'
     }
 };

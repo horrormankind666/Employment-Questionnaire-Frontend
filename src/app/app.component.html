@@ -10,12 +10,19 @@
                 <div class="systemname-logo" [class]="appService.env.lang"></div>
                 <ul class="topbar-items vertical-middle">
                     <li>
-                        <div class="flags-icon vertical-middle text-xl">
+                        <div class="font-icon vertical-middle">
+                            <a href="javascript:void(0)" routerLink="/Home">
+                                <i class="fas fa-home text-xl text-0"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="font-icon vertical-middle">
                             <a href="javascript:void(0)" *ngIf="appService.env.lang === 'en'" (click)="appService.doSetDefaultLang('th')">
-                                <i class="flag-icon flag-icon-th" aria-hidden="true"></i>
+                                <i class="flag-icon flag-icon-th text-xl" aria-hidden="true"></i>
                             </a>
                             <a href="javascript:void(0)" *ngIf="appService.env.lang === 'th'" (click)="appService.doSetDefaultLang('en')">
-                                <i class="flag-icon flag-icon-gb" aria-hidden="true"></i>
+                                <i class="flag-icon flag-icon-gb text-xl" aria-hidden="true"></i>
                             </a>
                         </div>
                     </li>
@@ -61,7 +68,16 @@
                                         </div>
                                     </div>
                                     <p-divider></p-divider>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignIn()"
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="router.navigate(['PrivacyPolicy'])"
+                                        *ngIf="
+                                            appService.env.authenInfo.isAuthenticated &&
+                                            !appService.env.authenInfo.isReAuthenticated &&
+                                            appService.env.authenInfo.message === appService.OK
+                                        ">
+                                        {{ 'privacyPolicy.label' | translate | titlecase }}
+                                    </button>
+                                    <p-divider></p-divider>
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="doSignIn()"
                                         *ngIf="
                                             appService.env.authenInfo.isAuthenticated &&
                                             appService.env.authenInfo.isReAuthenticated &&
@@ -69,7 +85,7 @@
                                         ">
                                         {{ 'signin.again.label' | translate | titlecase }}
                                     </button>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-lg" (click)="doSignOut()" *ngIf="appService.env.authenInfo.isAuthenticated">
+                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="doSignOut()" *ngIf="appService.env.authenInfo.isAuthenticated">
                                         {{ 'signout.label' | translate | titlecase }}
                                     </button>
                                 </ng-template>

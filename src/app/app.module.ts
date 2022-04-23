@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๐๓/๐๒/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -46,6 +46,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { TagModule } from 'primeng/tag';
 
 import { DynamicComponentDirective, TrimOnBlurDirective, NullValueDirective, Nl2BrPipe } from './app.directive';
 
@@ -58,6 +59,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
 import { PageEmptyComponent } from './page-empty.component';
 import { QuestionnaireHomeComponent } from './questionnaire/home/questionnaire-home.component';
 import { QuestionnaireFilloutComponent } from './questionnaire/fillout/questionnaire-fillout.component';
+import { PrivacyPolicyHomeComponent } from './privacy-policy/home/privacy-policy-home.component';
 
 export function httpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -74,7 +76,8 @@ export function httpLoaderFactory(http: HttpClient) {
         PageNotFoundComponent,
         PageEmptyComponent,
         QuestionnaireHomeComponent,
-        QuestionnaireFilloutComponent
+        QuestionnaireFilloutComponent,
+        PrivacyPolicyHomeComponent
     ],
     imports: [
         BrowserModule,
@@ -136,7 +139,8 @@ export function httpLoaderFactory(http: HttpClient) {
         AutoCompleteModule,
         MessagesModule,
         MessageModule,
-        ToastModule
+        ToastModule,
+        TagModule
     ],
     exports: [
         CommonModule,

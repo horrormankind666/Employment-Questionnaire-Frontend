@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๔/๐๙/๒๕๖๔>
-Modify date : <๑๕/๑๐/๒๕๖๔>
+Modify date : <๒๐/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -98,9 +98,11 @@ header .topbar {
             position: relative;
             margin-left: 8px;
         }
-        & .flags-icon {
+        & .font-icon {
             & i {
                 border-radius: 0.2rem;
+                position: relative;
+                top: -1px;
             }
         }
         & .signin-btn {
@@ -163,8 +165,8 @@ header .topbar {
                     }
                     & .signout-btn {
                         width: 100%;
-                        height: 50px;
-                        min-height: 50px;
+                        height: 47px;
+                        min-height: 47px;
                         border-radius: 0.75rem !important;
                         border-top-right-radius: 0 !important;
                         border-top-left-radius: 0 !important;
@@ -239,7 +241,7 @@ header .topbar {
     }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 580px) {
     .systemname-logo {
         width: 95px;
         &.th {

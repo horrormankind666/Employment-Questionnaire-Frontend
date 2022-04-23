@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๕/๐๓/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -713,6 +713,10 @@ p-card {
     white-space: nowrap;
 }
 
+.text-danger {
+    color: $errorColorHover;
+}
+
 .page-container {
     width: 100%;
     padding-top: 1rem;
@@ -729,7 +733,7 @@ p-card {
             width: 100%;
             height: 100%;
             line-height: 1.5;
-            font-size: 1.65rem;
+            font-size: 1.55rem;
             font-weight: $fontStyleSemibold;
             padding-right: 1rem;
             display: table-cell;
@@ -737,7 +741,7 @@ p-card {
             & .table {
                 & i {
                     width: 25px;
-                    font-size: 1.05rem;
+                    font-size: 1rem;
                     position: relative;
                     top: -1px;
                 }

@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๑๑/๐๒/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -14,7 +14,9 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 
 import { AppService } from './app.service';
 import { AuthService } from './auth.service';
+import { Schema } from './model.service';
 import { ModalService } from './modal/modal.service';
+import { MSentService } from './m-sent.service';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +25,8 @@ export class AuthGuardService implements CanActivate {
     constructor(
         private appService: AppService,
         private authService: AuthService,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private msentService: MSentService
     ) {
     }
 
@@ -67,6 +70,28 @@ export class AuthGuardService implements CanActivate {
 
                     return false;
                 }
+                else {
+                    if (this.appService.env.authenInfo.message === this.appService.OK) {
+                        if (['', 'FillOut', 'PrivacyPolicy'].filter((dr: string) => dr === this.appService.env.route.path).length > 0) {
+                            let consent: Schema.Consent | null = await this.msentService.doGetIsConsent();
+
+                            if (consent.isError === false) {
+                                if (consent.isConsent === false) {
+                                    if (consent.page !== null) {
+                                        if (['', 'FillOut'].filter((dr: string) => dr === this.appService.env.route.path).length > 0) {
+                                            location.href = consent.page;
+
+                                            return false;
+                                        }
+                                    }
+                                }
+                                else
+                                    await this.msentService.doSetConsent(consent);
+                            }
+                        }
+                    }
+                }
+
             }
 
             return true;

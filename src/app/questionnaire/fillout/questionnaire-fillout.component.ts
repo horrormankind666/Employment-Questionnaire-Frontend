@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๓/๐๒/๒๕๖๕>
+Modify date : <๒๑/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -44,6 +44,10 @@ class Career {
 
     datasource: Array<Schema.Career> = this.modelService.career.doSetListDefault();
     filtered: Array<Schema.Career> = this.modelService.career.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.Career>> {
+        return await this.modelService.career.doGetList();
+    }
 }
 
 class Program {
@@ -54,6 +58,10 @@ class Program {
 
     datasource: Array<Schema.Program> = this.modelService.program.doSetListDefault();
     filtered: Array<Schema.Program> = this.modelService.program.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.Program>> {
+        return await this.modelService.program.doGetList();
+    }
 }
 
 class Country {
@@ -63,6 +71,10 @@ class Country {
     }
 
     datasource: Array<Schema.Country> = this.modelService.country.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.Country>> {
+        return await this.modelService.country.doGetList();
+    }
 }
 
 class Province {
@@ -72,6 +84,10 @@ class Province {
     }
 
     datasource: Array<Schema.Province> = this.modelService.province.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.Province>> {
+        return await this.modelService.province.doGetList();
+    }
 }
 
 class District {
@@ -81,6 +97,10 @@ class District {
     }
 
     datasource: Array<Schema.District> = this.modelService.district.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.District>> {
+        return await this.modelService.district.doGetList();
+    }
 }
 
 class Subdistrict {
@@ -90,6 +110,10 @@ class Subdistrict {
     }
 
     datasource: Array<Schema.Subdistrict> = this.modelService.subdistrict.doSetListDefault();
+
+    async getDataSource(): Promise<Array<Schema.Subdistrict>> {
+        return await this.modelService.subdistrict.doGetList();
+    }
 }
 
 class QuestionnaireDoneAndSet {
@@ -98,7 +122,14 @@ class QuestionnaireDoneAndSet {
     ) {
     }
 
-    datasource: Schema.QuestionnaireDoneAndSet = this.modelService.questionnaire.doneandset.doSetListDefault()[0];
+    datasource: Schema.QuestionnaireDoneAndSet = {
+        done: this.modelService.questionnaire.done.doSetDefault(),
+        set: this.modelService.questionnaire.set.doSetDefault(),
+        sections: this.modelService.questionnaire.section.doSetListDefault(),
+        questions: this.modelService.questionnaire.question.doSetListDefault(),
+        answersets: this.modelService.questionnaire.answerset.doSetListDefault(),
+        answers: this.modelService.questionnaire.answer.doSetListDefault()
+    };
 }
 
 class QuestionnaireDone {
@@ -304,31 +335,37 @@ export class QuestionnaireFilloutComponent implements OnInit {
     userInfo: Schema.User = Object.assign({}, this.authService.getUserInfo);
     submitStatus: string = 'N';
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         this.questionnaire.section.dataView.isLoading = true;
 
-        this.career['master'] = new Career(this.modelService);
-        this.career['master'].datasource = this.route.snapshot.data.questionnaireDataSource.careers;
+        this.questionnaire.doneandset.datasource = this.route.snapshot.data.questionnaire.doneandset;
+        this.questionnaire.done.datasource = this.questionnaire.doneandset.datasource.done;
+        this.questionnaire.set.datasource = this.questionnaire.doneandset.datasource.set;
+        this.questionnaire.section.datasource = this.questionnaire.doneandset.datasource.sections;
 
-        this.program['master'] = new Program(this.modelService);
-        this.program['master'].datasource = this.route.snapshot.data.questionnaireDataSource.programs;
+        if (this.questionnaire.set.datasource !== null && this.questionnaire.doneandset.datasource.answers.length > 0) {
+            this.career['master'] = new Career(this.modelService);
+            this.career['master'].datasource = await this.career['master'].getDataSource();
 
-        this.country['master'] = new Country(this.modelService);
-        this.country['master'].datasource = this.route.snapshot.data.questionnaireDataSource.countries;
+            this.program['master'] = new Program(this.modelService);
+            this.program['master'].datasource = await this.program['master'].getDataSource();
 
-        this.province['master'] = new Province(this.modelService);
-        this.province['master'].datasource = this.route.snapshot.data.questionnaireDataSource.provinces;
+            this.country['master'] = new Country(this.modelService);
+            this.country['master'].datasource = await this.country['master'].getDataSource();
 
-        this.province['th'] = new Province(this.modelService);
-        this.province['th'].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
+            this.province['master'] = new Province(this.modelService);
+            this.province['master'].datasource = await this.province['master'].getDataSource();
 
-        this.district['master'] = new District(this.modelService);
-        this.district['master'].datasource = this.route.snapshot.data.questionnaireDataSource.districts;
+            this.province['th'] = new Province(this.modelService);
+            this.province['th'].datasource = this.province['master'].datasource.filter((dr: Schema.Province) => dr.country.ID === '217');
 
-        this.subdistrict['master'] = new Subdistrict(this.modelService);
-        this.subdistrict['master'].datasource = this.route.snapshot.data.questionnaireDataSource.subdistricts;
+            this.district['master'] = new District(this.modelService);
+            this.district['master'].datasource = await this.district['master'].getDataSource();
 
-        this.questionnaire.doneandset.datasource = this.route.snapshot.data.questionnaireDataSource.doneandset;
+            this.subdistrict['master'] = new Subdistrict(this.modelService);
+            this.subdistrict['master'].datasource = await this.subdistrict['master'].getDataSource();
+        }
+
         this.model.doInit();
     }
 
@@ -337,10 +374,6 @@ export class QuestionnaireFilloutComponent implements OnInit {
         doInit(): void {
             if (this.that.questionnaire.doneandset.datasource !== undefined) {
                 setTimeout(() => {
-                    this.that.questionnaire.done.datasource = this.that.questionnaire.doneandset.datasource.done;
-                    this.that.questionnaire.set.datasource = this.that.questionnaire.doneandset.datasource.set;
-                    this.that.questionnaire.section.datasource = this.that.questionnaire.doneandset.datasource.sections;
-
                     let qtnsections: Array<Schema.QuestionnaireSection> = Object.assign([], this.that.questionnaire.section.datasource);
                     let qtnquestionObj: any;
                     let qtnquestions: Array<Schema.QuestionnaireQuestion> = [];

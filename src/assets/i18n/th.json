@@ -7,6 +7,21 @@
             }
         }
     },
+    "privacyPolicy": {
+        "label": "นโยบายคุ้มครองข้อมูลส่วนบุคคล",
+        "consent": {
+            "label": "ความยินยอม",
+            "update": {
+                "label": "แก้ไขความยินยอม"
+            },
+            "agree": {
+                "label": "ยินยอม"
+            },
+            "disagree": {
+                "label": "ไม่ยินยอม"
+            }
+        }
+    },
     "error": {
         "pageNotFound": {
             "label": "ไม่พบหน้านี้"

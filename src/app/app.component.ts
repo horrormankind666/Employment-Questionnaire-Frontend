@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๓๐/๐๑/๒๕๖๕>
+Modify date : <๒๓/๐๔/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -10,12 +10,14 @@ Description : <>
 'use strict';
 
 import { Component, ViewChild, ElementRef, Renderer2, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, Event, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 
 import { AppService } from './app.service';
 import { AuthService } from './auth.service';
-import { Schema } from './model.service';
 import { ModalService } from './modal/modal.service';
+import { Schema } from './model.service';
+import { MSentService } from './m-sent.service';
 
 @Component({
     selector: 'app-root',
@@ -32,7 +34,7 @@ export class AppComponent implements OnInit {
 
     constructor (
         private render: Renderer2,
-        private router: Router,
+        public router: Router,
         public appService: AppService,
         public authService: AuthService,
         private modalService: ModalService
@@ -66,14 +68,14 @@ export class AppComponent implements OnInit {
         }
     };
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         this.appService.env.isFirstload = true;
         this.appService.doSetDefaultLang();
 
-        this.appService.doSetBearerToken().then((result: boolean) => {
-            if (result === true)
-                this.router.navigate(['Home']);
-        });
+        let result: any = await this.appService.doSetBearerToken();
+
+        if (result === true)
+            this.router.navigate(['Home']);
     }
 
     doWindowOnResize(): void {
