@@ -73,7 +73,7 @@ export class AuthService {
 
                             if (this.getUserInfo === null) {
                                 this.userInfo = await this.modelService.student.doGet(false);
-                                
+
                                 if (this.userInfo !== null) {
                                     this.appService.doSetAuthenInfo(this.appService.OK);
                                     this.userInfo.PPID = PPID;

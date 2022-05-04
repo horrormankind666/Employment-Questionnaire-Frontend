@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๑/๐๔/๒๕๖๕>
+Modify date : <๐๒/๐๕/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -22,18 +22,15 @@ import { Schema, ModelService } from '../../model.service';
 
 import * as _ from 'lodash';
 
-export interface QuestionnaireAnswered {
+export interface OfferedAnswer {
     question: {
         ID: string,
         errorStatus: string
     },
-    answer: {
+    answerset: {
         ID: string,
-        value?: any,
-        specify?: {
-            values: Array<any> | null
-        }
-    }
+    },
+    answer: Schema.OfferedAnswer
 }
 
 class Career {
@@ -124,6 +121,7 @@ class QuestionnaireDoneAndSet {
 
     datasource: Schema.QuestionnaireDoneAndSet = {
         done: this.modelService.questionnaire.done.doSetDefault(),
+        answered: this.modelService.questionnaire.answered.doSetListDefault(),
         set: this.modelService.questionnaire.set.doSetDefault(),
         sections: this.modelService.questionnaire.section.doSetListDefault(),
         questions: this.modelService.questionnaire.question.doSetListDefault(),
@@ -139,6 +137,15 @@ class QuestionnaireDone {
     }
 
     datasource: Schema.QuestionnaireDone | null = this.modelService.questionnaire.done.doSetDefault();
+}
+
+class QuestionnaireAnswered {
+    constructor(
+        private modelService: ModelService
+    ) {
+    }
+
+    datasource: Array<Schema.QuestionnaireAnswered> = this.modelService.questionnaire.answered.doSetListDefault();
 }
 
 class QuestionnaireSet {
@@ -287,12 +294,13 @@ export class QuestionnaireFilloutComponent implements OnInit {
         },
         doneandset: new QuestionnaireDoneAndSet(this.modelService),
         done: new QuestionnaireDone(this.modelService),
+        answered: new QuestionnaireAnswered(this.modelService),
         set: new QuestionnaireSet(this.modelService),
         section: new QuestionnaireSection(this.modelService),
         question: this.modelService.any.doSetDefault(),
         answerset: this.modelService.any.doSetDefault(),
         answer: this.modelService.any.doSetDefault(),
-        answered: this.modelService.any.doSetDefault()
+        offeredanswer: this.modelService.any.doSetDefault()
     };
     inputType = {
         singleChoice: 'single choice',
@@ -340,6 +348,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
         this.questionnaire.doneandset.datasource = this.route.snapshot.data.questionnaire.doneandset;
         this.questionnaire.done.datasource = this.questionnaire.doneandset.datasource.done;
+        this.questionnaire.answered.datasource = this.questionnaire.doneandset.datasource.answered;
         this.questionnaire.set.datasource = this.questionnaire.doneandset.datasource.set;
         this.questionnaire.section.datasource = this.questionnaire.doneandset.datasource.sections;
 
@@ -374,11 +383,11 @@ export class QuestionnaireFilloutComponent implements OnInit {
         doInit(): void {
             if (this.that.questionnaire.doneandset.datasource !== undefined) {
                 setTimeout(() => {
+                    let qtnanswered: Array<Schema.QuestionnaireAnswered> = [];
                     let qtnsections: Array<Schema.QuestionnaireSection> = Object.assign([], this.that.questionnaire.section.datasource);
                     let qtnquestionObj: any;
                     let qtnquestions: Array<Schema.QuestionnaireQuestion> = [];
                     let qtnanswersetObj: any;
-                    let qtndoneanswered: Array<QuestionnaireAnswered> = [];
                     let condition: string | null;
 
                     if (this.that.questionnaire.done.datasource !== null) {
@@ -421,8 +430,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             this.that.userInfo.race3Letter = userInfo.race3Letter;
                         }
 
-                        if (this.that.questionnaire.done.datasource.empQuestionnaireAnswer !== undefined)
-                            qtndoneanswered = Object.assign([], this.that.questionnaire.done.datasource.empQuestionnaireAnswer);
+                        if (this.that.questionnaire.answered.datasource !== null)
+                            qtnanswered = Object.assign([], this.that.questionnaire.answered.datasource);
                     }
 
                     qtnsections.forEach((qtnsection: Schema.QuestionnaireSection) => {
@@ -441,7 +450,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
                             condition = this.that.doGenerateCoditionString(qtnquestion.condition);
                             qtnquestion.disableStatus = (condition !== null ? (this.that.appService.doEval(condition) ? 'Y' : 'N') : 'N');
-                            qtnquestion.errorStatus = (qtndoneanswered.filter((dr: QuestionnaireAnswered) => (dr.question.ID === qtnquestion.ID) && (dr.question.errorStatus === 'Y')).length > 0 ? 'Y' : 'N');
+                            qtnquestion.errorStatus = (qtnanswered.filter((dr: Schema.QuestionnaireAnswered) => (dr.empQuestionnaireQuestionID === qtnquestion.ID) && (dr.errorStatus === 'Y')).length > 0 ? 'Y' : 'N');
 
                             this.that.questionnaire.answerset[qtnquestion.ID] = new QuestionnaireAnswerSet(this.that.modelService);
                             qtnanswersetObj = this.that.questionnaire.answerset[qtnquestion.ID];
@@ -452,7 +461,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                     });
 
                     this.doReset();
-                    this.that.questionnaire.answered = _.cloneDeep(this.that.questionnaire.answer);
+                    this.that.questionnaire.offeredanswer = _.cloneDeep(this.that.questionnaire.answer);
 
                     setTimeout(() => {
                         this.that.questionnaire.section.dataView.isFirstload = true;
@@ -478,16 +487,16 @@ export class QuestionnaireFilloutComponent implements OnInit {
         },
         doReset(): void {
             let qtnsections: Array<Schema.QuestionnaireSection> = Object.assign([], this.that.questionnaire.section.datasource);
-            let qtndoneanswered: Array<QuestionnaireAnswered> = [];
-            let qtndoneansweredspecifyvalues: Array<any> = [];
+            let qtnanswered: Array<Schema.QuestionnaireAnswered> = [];
+            let qtnansweredspecifyvalues: Array<any> = [];
 
             this.that.messageService.clear();
 
-            if (this.that.questionnaire.done.datasource !== null && this.that.questionnaire.done.datasource.empQuestionnaireAnswer !== undefined) {
-                qtndoneanswered = Object.assign([], this.that.questionnaire.done.datasource.empQuestionnaireAnswer);
-                qtndoneanswered.filter((dr: QuestionnaireAnswered) => (dr.answer.specify !== undefined)).forEach((qtndoneansweredspecify: QuestionnaireAnswered) => {
-                    qtndoneansweredspecify.answer.specify?.values?.forEach((qtndoneansweredspecifyvalue: any) => {
-                        qtndoneansweredspecifyvalues.push(qtndoneansweredspecifyvalue);
+            if (this.that.questionnaire.done.datasource !== null && this.that.questionnaire.answered.datasource !== null) {
+                qtnanswered = Object.assign([], this.that.questionnaire.answered.datasource);
+                qtnanswered.filter((dr: Schema.QuestionnaireAnswered) => (dr.answer.specify !== undefined)).forEach((qtnansweredspecify: Schema.QuestionnaireAnswered) => {
+                    qtnansweredspecify.answer.specify?.values?.forEach((qtnansweredspecifyvalue: any) => {
+                        qtnansweredspecifyvalues.push(qtnansweredspecifyvalue);
                     });
                 });
 
@@ -510,9 +519,9 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 if (qtnanswerset.inputType.inputType === this.that.inputType.address) {
                                     let qtnanswerID: string = qtnanswers[0].ID;
 
-                                    qtndoneanswered.filter((dr: QuestionnaireAnswered) => (dr.question.ID === qtnquestion.ID) && (dr.answer.ID === qtnanswerID)).forEach((_qtndoneanswered: QuestionnaireAnswered) => {
+                                    qtnanswered.filter((dr: Schema.QuestionnaireAnswered) => (dr.empQuestionnaireQuestionID === qtnquestion.ID) && (dr.answer.ID === qtnanswerID)).forEach((_qtnanswered: Schema.QuestionnaireAnswered) => {
                                         this.that.addressFields.forEach((addressField: Schema.InputType) => {
-                                            value = _qtndoneanswered.answer.value[addressField.name];
+                                            value = _qtnanswered.answer.value[addressField.name];
                                             value = (value !== undefined ? value : null);
 
                                             if (['country', 'province', 'district', 'subdistrict'].filter((dr: string) => dr === addressField.name).length > 0) {
@@ -549,14 +558,14 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 let isCheckbox: boolean = ((qtnanswerset.inputType.inputType === this.that.inputType.multipleChoice && qtnanswerset.inputType.type === 'checkbox') ? true : false);
 
                                 if (isRadioButton === true || isCheckbox === true) {
-                                    qtndoneanswered.filter((dr: QuestionnaireAnswered) => (dr.question.ID === qtnquestion.ID) && (dr.answer.ID === qtnanswerset.ID)).forEach((_qtndoneanswered: QuestionnaireAnswered) => {
-                                        value = _qtndoneanswered.answer.value;
+                                    qtnanswered.filter((dr: Schema.QuestionnaireAnswered) => (dr.empQuestionnaireQuestionID === qtnquestion.ID) && (dr.empQuestionnaireAnswerSetID === qtnanswerset.ID)).forEach((_qtnanswered: Schema.QuestionnaireAnswered) => {
+                                        value = _qtnanswered.answer.ID;
                                         value = (value !== undefined ? value : null);
 
                                         let values: Array<Schema.QuestionnaireAnswer> = [];
 
                                         if (isRadioButton === true) {
-                                            values = qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === (value !== null ? value.ID : value)));
+                                            values = Object.assign([], qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === value)));
 
                                             if (values.length > 0) {
                                                 qtnanswerObj.formField.singleChoice = values[0];
@@ -567,7 +576,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                         if (isCheckbox === true) {
                                             if (value !== null) {
                                                 value.forEach((_value: any) => {
-                                                    values = qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === _value.ID));
+                                                    values = Object.assign([], qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === _value)));
 
                                                     if (values.length > 0)
                                                         qtnanswerObj.formField.multipleChoices.push(values[0]);
@@ -580,7 +589,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                         let qtnanswerspecifies: Array<Schema.InputType> = Object.assign([], qtnanswer.specify);
 
                                         qtnanswerspecifies.forEach((qtnanswerspecify: Schema.InputType) => {
-                                            qtndoneansweredspecifyvalues.filter((dr: any) => dr.ID === qtnanswer.ID).forEach((qtndoneansweredspecifyvalue: any) => {
+                                            qtnansweredspecifyvalues.filter((dr: any) => dr.ID === qtnanswer.ID).forEach((qtndoneansweredspecifyvalue: any) => {
                                                 value = qtndoneansweredspecifyvalue.value;
                                                 value = (value !== undefined ? value : null);
 
@@ -613,7 +622,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                     let values: Array<Schema.QuestionnaireAnswer> = [];
 
                                                     if (qtnanswerspecify.inputType === this.that.inputType.singleChoice && qtnanswerspecify.type === 'radio') {
-                                                        values = qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === (value !== null ? value.ID : value)));
+                                                        values = qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === value));
 
                                                         if (values.length > 0) {
                                                             qtnanswerObj._formField[qtnanswer.ID].singleChoice = values[0];
@@ -627,7 +636,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                     if (qtnanswerspecify.inputType === this.that.inputType.multipleChoice && qtnanswerspecify.type === 'checkbox') {
                                                         if (value !== null) {
                                                             value.forEach((_value: any) => {
-                                                                values = qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === _value.ID));
+                                                                values = qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === _value));
 
                                                                 if (values.length > 0)
                                                                     qtnanswerObj._formField[qtnanswer.ID].multipleChoices.push(values[0]);
@@ -639,7 +648,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                         let qtnanswerspecifyitemspecifies: Array<Schema.InputType> = Object.assign([], qtnanswerspecifyitem.specify);
 
                                                         qtnanswerspecifyitemspecifies.forEach((qtnanswerspecifyitemspecify: Schema.InputType) => {
-                                                            qtndoneansweredspecifyvalues.filter((dr: any) => (dr.specify !== undefined) && (dr.specify.ID === qtnanswerspecifyitem.ID)).forEach((qtndoneansweredspecifyvalue: any) => {
+                                                            qtnansweredspecifyvalues.filter((dr: any) => (dr.specify !== undefined) && (dr.specify.ID === qtnanswerspecifyitem.ID)).forEach((qtndoneansweredspecifyvalue: any) => {
                                                                 value = qtndoneansweredspecifyvalue.specify.value;
                                                                 value = (value !== undefined ? value : null);
 
@@ -658,8 +667,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.inputType !== null && dr.inputType.inputType !== undefined && dr.specify === null)).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
                                 let value: any;
 
-                                qtndoneanswered.filter((dr: QuestionnaireAnswered) => (dr.question.ID === qtnquestion.ID) && (dr.answer.ID === qtnanswer.ID)).forEach((_qtndoneanswered: QuestionnaireAnswered) => {
-                                    value = _qtndoneanswered.answer.value;
+                                qtnanswered.filter((dr: Schema.QuestionnaireAnswered) => (dr.empQuestionnaireQuestionID === qtnquestion.ID) && (dr.answer.ID === qtnanswer.ID)).forEach((_qtnanswered: Schema.QuestionnaireAnswered) => {
+                                    value = _qtnanswered.answer.value;
                                     value = (value !== undefined ? value : null);
 
                                     if (qtnanswer.inputType.inputType === this.that.inputType.shortAnswerText && qtnanswer.inputType.type === 'text')
@@ -699,12 +708,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
             set: boolean,
             get: boolean,
             qtnsection: Schema.QuestionnaireSection
-        ): Array<QuestionnaireAnswered> {
+        ): Array<OfferedAnswer> {
             let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.that.questionnaire.question[qtnsection.ID].datasource);
             let qtnanswersets: Array<Schema.QuestionnaireAnswerSet> = [];
             let qtnanswerObj: any;
             let qtnanswers: Array<Schema.QuestionnaireAnswer> = [];
-            let qtnanswered: Array<QuestionnaireAnswered> = [];
+            let offeredanswers: Array<OfferedAnswer> = [];
 
             qtnquestions.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
                 qtnanswersets = Object.assign([], this.that.questionnaire.answerset[qtnquestion.ID].datasource);
@@ -735,10 +744,13 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                     else
                                         value = null;
 
-                                    qtnanswered.push({
+                                    offeredanswers.push({
                                         question: {
                                             ID: qtnanswerset.empQuestionnaireQuestionID,
                                             errorStatus: errorStatus
+                                        },
+                                        answerset: {
+                                            ID: qtnanswerset.ID
                                         },
                                         answer: {
                                             ID: qtnanswerID,
@@ -781,8 +793,14 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                     if (get) {
                                         value = qtnanswerObj.formField.address[addressField.name][qtnanswerID];
 
-                                        if (value !== null)
+                                        if (value !== null) {
+                                            if (['country', 'province', 'district', 'subdistrict'].filter((dr: string) => dr === addressField.name).length > 0)
+                                                value = {
+                                                    ID: value.ID
+                                                };
+
                                             address[addressField.name] = value;
+                                        }
                                     }
                                 });
 
@@ -798,10 +816,13 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                     else
                                         address = {};
 
-                                    qtnanswered.push({
+                                    offeredanswers.push({
                                         question: {
                                             ID: qtnanswerset.empQuestionnaireQuestionID,
                                             errorStatus: errorStatus
+                                        },
+                                        answerset: {
+                                            ID: qtnanswerset.ID
                                         },
                                         answer: {
                                             ID: qtnanswerID,
@@ -816,22 +837,29 @@ export class QuestionnaireFilloutComponent implements OnInit {
                         let isCheckbox: boolean = ((qtnanswerset.inputType.inputType === this.that.inputType.multipleChoice && qtnanswerset.inputType.type === 'checkbox') ? true : false);
 
                         if (isRadioButton === true || isCheckbox === true) {
-                            let qtnansweredObj: QuestionnaireAnswered | null = null;
+                            let offeredanswerObj: OfferedAnswer | null = null;
 
                             if (isRadioButton === true) {
                                 if (set)
                                     qtnanswerObj.formField.singleChoice = null;
 
                                 if (get)
-                                    value = qtnanswerObj.formField.singleChoice;
+                                    value = (qtnanswerObj.formField.singleChoice !== null ? qtnanswerObj.formField.singleChoice.ID : null)
                             }
 
                             if (isCheckbox === true) {
                                 if (set)
                                     qtnanswerObj.formField.multipleChoices = [];
 
-                                if (get)
-                                    value = (qtnanswerObj.formField.multipleChoices.length > 0 ? qtnanswerObj.formField.multipleChoices : null);
+                                if (get) {
+                                    let values: Array<string> = [];
+
+                                    qtnanswerObj.formField.multipleChoices.forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                                        values.push(qtnanswer.ID)
+                                    });
+
+                                    value = (values.length > 0 ? Object.assign([], values) : null);
+                                }
                             }
 
                             if (get) {
@@ -842,14 +870,17 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 else
                                     value = null;
 
-                                qtnansweredObj = {
+                                offeredanswerObj = {
                                     question: {
                                         ID: qtnanswerset.empQuestionnaireQuestionID,
                                         errorStatus: errorStatus
                                     },
+                                    answerset: {
+                                        ID: qtnanswerset.ID
+                                    },
                                     answer: {
-                                        ID: qtnanswerset.ID,
-                                        value: value
+                                        ID: value,
+                                        value: null
                                     }
                                 };
                             }
@@ -886,8 +917,16 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                         if (set)
                                             qtnanswerObj.formField.select[qtnanswer.ID] = null;
 
-                                        if (get)
+                                        if (get) {
                                             value = qtnanswerObj.formField.select[qtnanswer.ID];
+
+                                            if (value !== null) {
+                                                if (['career', 'program'].filter((dr: string) => dr === qtnanswerspecify.mode).length === 0)
+                                                    value = {
+                                                        ID: value.ID
+                                                    };
+                                            }
+                                        }
                                     }
 
                                     if (qtnanswerspecify.inputType === this.that.inputType.autocomplete && qtnanswerspecify.type === 'text') {
@@ -933,7 +972,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                 if (value !== null)
                                                     specifys.push({
                                                         ID: qtnanswer.ID,
-                                                        value: value
+                                                        value: value.ID
                                                     });
                                             }
                                         }
@@ -943,12 +982,16 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                 qtnanswerObj._formField[qtnanswer.ID].multipleChoices = [];
 
                                             if (get) {
-                                                value = qtnanswerObj._formField[qtnanswer.ID].multipleChoices;
+                                                let values: Array<string> = [];
 
-                                                if (value.length > 0)
+                                                qtnanswerObj._formField[qtnanswer.ID].multipleChoices.forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                                                    values.push(qtnanswer.ID)
+                                                });
+
+                                                if (values.length > 0)
                                                     specifys.push({
                                                         ID: qtnanswer.ID,
-                                                        value: value
+                                                        value: Object.assign([], values)
                                                     });
                                             }
                                         }
@@ -979,12 +1022,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 });
 
                                 if (get) {
-                                    if (qtnansweredObj !== null) {
+                                    if (offeredanswerObj !== null) {
                                         if (specifys.length > 0) {
-                                            if (qtnansweredObj.answer.specify !== undefined && qtnansweredObj.answer.specify.values !== null)
-                                                qtnansweredObj.answer.specify.values.push(specifys);
+                                            if (offeredanswerObj.answer.specify !== undefined && offeredanswerObj.answer.specify.values !== null)
+                                                offeredanswerObj.answer.specify.values.push(specifys);
                                             else
-                                                qtnansweredObj.answer.specify = {
+                                                offeredanswerObj.answer.specify = {
                                                     values: Object.assign([], specifys)
                                                 };
                                         }
@@ -998,53 +1041,85 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 let errorStatus: string = 'N';
 
                                 if (qtnsection.disableStatus === 'N') {
-                                    if (qtnansweredObj !== null && qtnansweredObj.answer.value !== null) {
+                                    if (offeredanswerObj !== null && offeredanswerObj.answer.ID !== null) {
                                         if (isRadioButton === true) {
-                                            isSpecify = (qtnansweredObj.answer.value.specify !== null ? true : false);
+                                            let offeredanswerID: string = offeredanswerObj.answer.ID;
 
-                                            if (isSpecify === true)
-                                                errorStatus = (qtnansweredObj.answer.specify !== undefined && qtnansweredObj.answer.specify.values !== null ? 'N' : 'Y');
-                                        }
-
-                                        if (isCheckbox === true) {
-                                            qtnansweredvalues = Object.assign([], qtnansweredObj.answer.value.filter((dr: Schema.QuestionnaireAnswer) => dr.specify !== null));
+                                            qtnansweredvalues = Object.assign([], qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === offeredanswerID && dr.specify !== null)));
                                             isSpecify = (qtnansweredvalues.length > 0 ? true : false);
 
                                             if (isSpecify === true)
-                                                errorStatus = (qtnansweredObj.answer.specify !== undefined && qtnansweredObj.answer.specify.values !== null && qtnansweredvalues.length === qtnansweredObj.answer.specify.values.length ? 'N' : 'Y');
+                                                errorStatus = (offeredanswerObj.answer.specify !== undefined && offeredanswerObj.answer.specify.values !== null ? 'N' : 'Y');
+                                        }
+
+                                        if (isCheckbox === true) {
+                                            offeredanswerObj.answer.ID.forEach((offeredanswerID: string) => {
+                                                qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === offeredanswerID).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                                                    if (qtnanswer.specify !== null)
+                                                        qtnansweredvalues.push(qtnanswer);
+                                                });
+                                            });
+
+                                            isSpecify = (qtnansweredvalues.length > 0 ? true : false);
+
+                                            if (isSpecify === true)
+                                                errorStatus = (offeredanswerObj.answer.specify !== undefined && offeredanswerObj.answer.specify.values !== null && qtnansweredvalues.length === offeredanswerObj.answer.specify.values.length ? 'N' : 'Y');
                                         }
                                     }
 
                                     if (isSpecify === true) {
                                         if (errorStatus === 'N') {
-                                            if (qtnansweredObj !== null && qtnansweredObj.answer.specify !== undefined && qtnansweredObj.answer.specify.values !== null) {
-                                                qtnansweredObj.answer.specify.values.forEach((qtnanswerspecify: any) => {
-                                                    if (Array.isArray(qtnanswerspecify.value)) {
-                                                        qtnanswerspecify.value.filter((dr: any) => (dr.specify !== undefined && dr.specify !== null)).forEach(() => {
-                                                            if (errorStatus === 'N')
-                                                                errorStatus = (qtnanswerspecify.specify !== undefined ? 'N' : 'Y');
+                                            if (offeredanswerObj !== null && offeredanswerObj.answer.specify !== undefined && offeredanswerObj.answer.specify.values !== null) {
+                                                offeredanswerObj.answer.specify.values.forEach((offeredanswerspecify: any) => {
+                                                    let qtnansweredspecifyitemvalues: Array<Schema.QuestionnaireAnswer> = [];
+
+                                                    qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === offeredanswerspecify.ID && dr.specify !== null).forEach((qtnanswer: Schema.QuestionnaireAnswer) => {
+                                                        let qtnanswerspecifies: Array<Schema.InputType> = Object.assign([], qtnanswer.specify);
+                                                        let qtnanswerspecifyitems: Array<Schema.QuestionnaireAnswer> = [];
+
+                                                        qtnanswerspecifies.filter((dr: Schema.InputType) => dr.items !== undefined).forEach((qtnanswerspecify: Schema.InputType) => {
+                                                            qtnanswerspecifyitems = Object.assign([], qtnanswerspecify.items);
                                                         });
-                                                    }
-                                                    else {
-                                                        if (qtnanswerspecify.value.specify !== undefined && qtnanswerspecify.value.specify !== null) {
-                                                            if (errorStatus === 'N')
-                                                                errorStatus = (qtnanswerspecify.specify !== undefined ? 'N' : 'Y');
+
+                                                        if (Array.isArray(offeredanswerspecify.value)) {
+                                                            offeredanswerspecify.value.forEach((offeredanswerspecifyitemID: string) => {
+                                                                qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === offeredanswerspecifyitemID).forEach((qtnanswerspecifyitem: Schema.QuestionnaireAnswer) => {
+                                                                    if (qtnanswerspecifyitem.specify !== null)
+                                                                        qtnansweredspecifyitemvalues.push(qtnanswerspecifyitem);
+                                                                });
+                                                            });
+
+                                                            isSpecify = (qtnansweredspecifyitemvalues.length > 0 ? true : false);
+
+                                                            if (isSpecify === true) {
+                                                                if (errorStatus === 'N')
+                                                                    errorStatus = (offeredanswerspecify.specify !== undefined ? 'N' : 'Y');
+                                                            }
                                                         }
-                                                        else
-                                                            errorStatus = (qtnanswerspecify.value !== null ? 'N' : 'Y');
-                                                    }
+                                                        else {
+                                                            qtnansweredspecifyitemvalues = Object.assign([], qtnanswerspecifyitems.filter((dr: Schema.QuestionnaireAnswer) => (dr.ID === offeredanswerspecify.value && dr.specify !== null)));
+                                                            isSpecify = (qtnansweredspecifyitemvalues.length > 0 ? true : false);
+
+                                                            if (isSpecify === true) {
+                                                                if (errorStatus === 'N')
+                                                                    errorStatus = (offeredanswerspecify.specify !== undefined ? 'N' : 'Y');
+                                                            }
+                                                            else
+                                                                errorStatus = (offeredanswerspecify.value !== null ? 'N' : 'Y');
+                                                        }
+                                                    });
                                                 });
                                             }
                                         }
 
-                                        if (qtnansweredObj !== null)
-                                            qtnansweredObj.question.errorStatus = errorStatus;
+                                        if (offeredanswerObj !== null)
+                                            offeredanswerObj.question.errorStatus = errorStatus;
                                     }
                                 }
                             }
 
-                            if (qtnansweredObj !== null)
-                                qtnanswered.push(qtnansweredObj);
+                            if (offeredanswerObj !== null)
+                                offeredanswers.push(offeredanswerObj);
                         }
                     }
 
@@ -1071,8 +1146,14 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             if (set)
                                 qtnanswerObj.formField.select[qtnanswer.ID] = null;
 
-                            if (get)
+                            if (get) {
                                 value = qtnanswerObj.formField.select[qtnanswer.ID];
+
+                                if (value !== null)
+                                    value = {
+                                        ID: value.ID
+                                    }
+                            }
                         }
 
                         if (qtnanswer.inputType.inputType === this.that.inputType.autocomplete && qtnanswer.inputType.type === 'text') {
@@ -1102,10 +1183,13 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             else
                                 value = null;
 
-                            qtnanswered.push({
+                            offeredanswers.push({
                                 question: {
                                     ID: qtnanswerset.empQuestionnaireQuestionID,
                                     errorStatus: errorStatus
+                                },
+                                answerset: {
+                                    ID: qtnanswerset.ID
                                 },
                                 answer: {
                                     ID: qtnanswer.ID,
@@ -1117,26 +1201,27 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 });
             });
 
-            return qtnanswered;
+            return offeredanswers;
         },
         doSet(
             qtnsection: Schema.QuestionnaireSection
         ): void {
             this.doProcess(true, false, qtnsection);
         },
-        doGet(qtnsection: Schema.QuestionnaireSection): Array<QuestionnaireAnswered> {
+        doGet(qtnsection: Schema.QuestionnaireSection): Array<OfferedAnswer> {
             return this.doProcess(false, true, qtnsection);
         },
     }
 
-    doReload(): void {
-        let doneandsetCUID: string | null = localStorage.getItem(this.appService.env.localStorageKey.CUID);
+    async doReload(): Promise<void> {
+        let doneandset: Schema.QuestionnaireDoneAndSet = await this.modelService.questionnaire.doneandset.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
 
-        this.modelService.questionnaire.doneandset.doGet(doneandsetCUID !== null ? doneandsetCUID : '')
-            .then((result: Schema.QuestionnaireDoneAndSet) => {
-                this.questionnaire.doneandset.datasource = result;
-                this.model.doInit();
-            });
+        if (doneandset.done !== undefined) {
+            this.questionnaire.doneandset.datasource = doneandset;
+            this.questionnaire.done.datasource = this.questionnaire.doneandset.datasource.done;
+            this.questionnaire.answered.datasource = this.questionnaire.doneandset.datasource.answered;
+            this.model.doInit();
+        }
     }
 
     doWatchModelChange(
@@ -1146,7 +1231,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
         let changeStatus: boolean = false;
         let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.questionnaire.doneandset.datasource.questions);
 
-        if (!_.isEqual(this.questionnaire.answered[qtnanswerset.ID].formField, this.questionnaire.answer[qtnanswerset.ID].formField))
+        if (!_.isEqual(this.questionnaire.offeredanswer[qtnanswerset.ID].formField, this.questionnaire.answer[qtnanswerset.ID].formField))
             changeStatus = true;
 
         this.modelChange[this.modelChange.findIndex((dr: any) => dr.empQuestionnaireQuestionID === qtnanswerset.empQuestionnaireQuestionID)].changeStatus = changeStatus;
@@ -1460,47 +1545,47 @@ export class QuestionnaireFilloutComponent implements OnInit {
         isSuccess: false,
         isSaving: false,
         isSubmitting: false,
-        doGetAnswered(): Array<QuestionnaireAnswered> {
+        doGetOfferedAnswer(): Array<OfferedAnswer> {
             let qtnsections: Array<Schema.QuestionnaireSection> = this.that.questionnaire.section.datasource.filter((dr: Schema.QuestionnaireSection) => dr.disableStatus === 'N');
-            let qtnanswered: Array<QuestionnaireAnswered> = [];
+            let offeredanswers: Array<OfferedAnswer> = [];
 
             qtnsections.forEach((qtnsection: Schema.QuestionnaireSection) => {
-                this.that.model.doGet(qtnsection).forEach((_qtnanswered: QuestionnaireAnswered) => {
-                    qtnanswered.push(_qtnanswered);
+                this.that.model.doGet(qtnsection).forEach((offeredanswer: OfferedAnswer) => {
+                    offeredanswers.push(offeredanswer);
                 });
             });
 
-            return qtnanswered;
+            return offeredanswers;
         },
-        doValidate(qtnanswered: Array<QuestionnaireAnswered>): boolean {
+        doValidate(offeredanswers: Array<OfferedAnswer>): boolean {
             let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.that.questionnaire.doneandset.datasource.questions);
 
-            qtnanswered.filter((dr: QuestionnaireAnswered) => dr.question.errorStatus === 'Y').forEach((_qtnanswered: QuestionnaireAnswered) => {
-                qtnquestions.filter((dr: Schema.QuestionnaireQuestion) => dr.ID === _qtnanswered.question.ID).forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
-                    _qtnanswered.question.errorStatus = (qtnquestion.disableStatus === 'Y' ? 'N' : _qtnanswered.question.errorStatus)
-                    qtnquestion.errorStatus = _qtnanswered.question.errorStatus;
+            offeredanswers.filter((dr: OfferedAnswer) => dr.question.errorStatus === 'Y').forEach((offeredanswer: OfferedAnswer) => {
+                qtnquestions.filter((dr: Schema.QuestionnaireQuestion) => dr.ID === offeredanswer.question.ID).forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
+                    offeredanswer.question.errorStatus = (qtnquestion.disableStatus === 'Y' ? 'N' : offeredanswer.question.errorStatus)
+                    qtnquestion.errorStatus = offeredanswer.question.errorStatus;
                 });
             });
 
             return (qtnquestions.filter((dr: Schema.QuestionnaireQuestion) => dr.errorStatus === 'Y').length > 0 ? false : true);
         },
         doGetValue(
-            qtnanswered: Array<QuestionnaireAnswered>,
+            offeredanswers: Array<OfferedAnswer>,
             submitStatus: string
         ): {} {
             let userInfo: Schema.User = Object.assign({}, this.that.userInfo);
-            let qtnanswered2str: string = JSON.stringify(qtnanswered);
-            let qtnansweredsets: Array<string | null> = [null, null, null, null, null, null, null, null, null, null];
+            let offeredanswer2str: string = JSON.stringify(offeredanswers);
+            let offeredanswersets: Array<string | null> = [null, null, null, null, null, null, null, null, null, null];
             let start: number = 0;
             let end: number = 0;
             let i: number = 0;
 
-            while(end < qtnanswered2str.length) {
+            while(end < offeredanswer2str.length) {
                 start = end;
                 end = end + 4000;
-                end = (end > qtnanswered2str.length ? qtnanswered2str.length : end);
+                end = (end > offeredanswer2str.length ? offeredanswer2str.length : end);
 
-                qtnansweredsets[i] = qtnanswered2str.substring(start, end);
+                offeredanswersets[i] = offeredanswer2str.substring(start, end);
 
                 i++;
             }
@@ -1552,16 +1637,16 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 raceNameEN: ((userInfo.raceName !== null && userInfo.raceName.en !== null) ? userInfo.raceName.en.toUpperCase() : null),
                 race2Letter: userInfo.race2Letter,
                 race3Letter: userInfo.race3Letter,
-                empQuestionnaireAnswer01: qtnansweredsets[0],
-                empQuestionnaireAnswer02: qtnansweredsets[1],
-                empQuestionnaireAnswer03: qtnansweredsets[2],
-                empQuestionnaireAnswer04: qtnansweredsets[3],
-                empQuestionnaireAnswer05: qtnansweredsets[4],
-                empQuestionnaireAnswer06: qtnansweredsets[5],
-                empQuestionnaireAnswer07: qtnansweredsets[6],
-                empQuestionnaireAnswer08: qtnansweredsets[7],
-                empQuestionnaireAnswer09: qtnansweredsets[8],
-                empQuestionnaireAnswer10: qtnansweredsets[9],
+                offeredAnswer01: offeredanswersets[0],
+                offeredAnswer02: offeredanswersets[1],
+                offeredAnswer03: offeredanswersets[2],
+                offeredAnswer04: offeredanswersets[3],
+                offeredAnswer05: offeredanswersets[4],
+                offeredAnswer06: offeredanswersets[5],
+                offeredAnswer07: offeredanswersets[6],
+                offeredAnswer08: offeredanswersets[7],
+                offeredAnswer09: offeredanswersets[8],
+                offeredAnswer10: offeredanswersets[9],
                 submitStatus: submitStatus,
                 cancelStatus: 'N',
                 actionBy: userInfo.accountName
@@ -1570,47 +1655,54 @@ export class QuestionnaireFilloutComponent implements OnInit {
             return qtndone;
         },
         async doAction(
-            qtnanswered: Array<QuestionnaireAnswered>,
+            offeredanswers: Array<OfferedAnswer>,
             submitStatus: string
         ): Promise<any>  {
             let userInfo: Schema.User = Object.assign({}, this.that.userInfo);
-            let qtndone: any = this.doGetValue(qtnanswered, submitStatus);
+            let qtndone: any = this.doGetValue(offeredanswers, submitStatus);
             let method: string = (this.that.questionnaire.done.datasource === null ? 'Post' : 'Put')
             let data: HttpParams = new HttpParams()
                 .set('jsonData', btoa(encodeURI(JSON.stringify(qtndone))));
 
             let result: any = await this.that.modelService.questionnaire.done.doSet(method, data);
 
-            if (result.ID !== undefined && result.ID !== null) {
-                this.that.questionnaire.doneandset.datasource.done = {
-                    ID: result.ID,
-                    empQuestionnaireSetID: result.empQuestionnaireSetID,
-                    userInfo: userInfo,
-                    empQuestionnaireAnswer: qtnanswered,
-                    submitStatus: result.submitStatus,
-                    cancelStatus: result.cancelStatus,
-                    actionDate: result.actionDate,
-                    doneDate: result.doneDate
+            if (result.length > 0) {
+                let ds1: any = Object.assign([], result[0]);
+                let ds2: Array<Schema.QuestionnaireAnswered> = Object.assign([], result[1]);
+
+                if (ds1[0].ID !== undefined && ds1[0].ID !== null) {
+                    this.that.questionnaire.doneandset.datasource.done = {
+                        ID: ds1[0].ID,
+                        empQuestionnaireSetID: ds1[0].empQuestionnaireSetID,
+                        userInfo: userInfo,
+                        submitStatus: ds1[0].submitStatus,
+                        cancelStatus: ds1[0].cancelStatus,
+                        actionDate: ds1[0].actionDate,
+                        doneDate: ds1[0].doneDate
+                    }
+                    this.that.submitStatus = ds1[0].submitStatus;
+                    this.that.questionnaire.done.datasource = Object.assign({}, this.that.questionnaire.doneandset.datasource.done);
+                    localStorage.setItem(
+                        this.that.appService.env.localStorageKey.CUID,
+                        this.that.appService.doGetCUID([this.that.questionnaire.doneandset.datasource.done.ID, this.that.questionnaire.doneandset.datasource.done.empQuestionnaireSetID, userInfo.perPersonID, userInfo.studentCode])
+                    );
+
+                    this.that.questionnaire.doneandset.datasource.answered = Object.assign([], ds2);
+                    this.that.questionnaire.answered.datasource = Object.assign([], this.that.questionnaire.doneandset.datasource.answered);
                 }
-                this.that.submitStatus = result.submitStatus;
-                this.that.questionnaire.done.datasource = this.that.questionnaire.doneandset.datasource.done;
-                localStorage.setItem(
-                    this.that.appService.env.localStorageKey.CUID,
-                    this.that.appService.doGetCUID([ this.that.questionnaire.doneandset.datasource.done.ID, this.that.questionnaire.doneandset.datasource.done.empQuestionnaireSetID])
-                );
             }
 
             return result;
         },
-        doSave(): void {
+        async doSave(): Promise<void> {
             this.isValid = false;
             this.isSaving = true;
 
             this.that.messageService.clear();
 
-            let qtnanswered: Array<QuestionnaireAnswered> = this.doGetAnswered();
+            let offeredanswers: Array<OfferedAnswer> = this.doGetOfferedAnswer();
 
-            if (this.doValidate(qtnanswered) === false)
+            if (this.doValidate(offeredanswers) === false)
                 this.that.messageService.add({
                     severity: 'error'
                 });
@@ -1622,9 +1714,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 });
             }
 
-            this.doAction(qtnanswered, 'N').then(() => {
-                this.isSaving = false;
-            });
+            await this.doAction(offeredanswers, 'N');
+            this.isSaving = false;
         },
         doSubmit(): void {
             this.that.appService.doSetLoading(true, false);
@@ -1632,15 +1723,15 @@ export class QuestionnaireFilloutComponent implements OnInit {
             this.isSuccess = false;
             this.isSubmitting = true;
 
-            let qtnanswered: Array<QuestionnaireAnswered> = this.doGetAnswered();
+            let offeredanswers: Array<OfferedAnswer> = this.doGetOfferedAnswer();
 
-            if (this.doValidate(qtnanswered) === false) {
+            if (this.doValidate(offeredanswers) === false) {
                 this.isSubmitting = false;
 
                 this.that.modalService.doGetModal('danger', false, 'save.error.invalid.label', 'questionnaire.submit.info.label');
             }
             else {
-                this.doAction(qtnanswered, 'Y').then(() => {
+                this.doAction(offeredanswers, 'Y').then(() => {
                     if (this.that.submitStatus == 'Y')
                         this.isSuccess = true;
 

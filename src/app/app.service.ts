@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๑๖/๐๔/๒๕๖๕>
+Modify date : <๐๒/๐๕/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -48,7 +48,7 @@ export class AppService {
         let bearerToken: string | null = localStorage.getItem(this.env.localStorageKey.bearerToken);
         let posError: number = window.location.href.indexOf('error');
         let posCode: number = window.location.href.indexOf('code');
-        
+
         if (bearerToken === null) {
             if (posError !== -1)
                 this.modalService.doGetModal('danger', false, window.location.href);
@@ -257,7 +257,7 @@ export class AppService {
     async doGetDataSource(
         routePrefix: string,
         action: string,
-        query?: string,
+        query?: string | null,
         showError?: boolean
     ): Promise<Array<any>> {
         try {
@@ -266,12 +266,13 @@ export class AppService {
             if (bearerToken !== null) {
                 routePrefix = (routePrefix === undefined ? '' : routePrefix);
                 action = (action === undefined ? '' : action);
-                query = (query === undefined || query.length === 0 ? '' : query);
+                query = (query === undefined || query === null ? '' : query);
 
-                let url = (this.env.apiURL + '/' + routePrefix + '/');
-                let route = '';
+                let url: string = (this.env.apiURL + '/' + routePrefix + '/');
+                let route: string = '';
                 let headers: HttpHeaders = new HttpHeaders()
                     .set('Authorization', ('Bearer ' + bearerToken));
+
                 let option = {
                     headers: headers
                 };

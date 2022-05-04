@@ -63,8 +63,7 @@
                             <button pButton type="button" class="button button-outlined"
                                 [disabled]="
                                     questionnaire.section.orderList.activeIndex === 0 ||
-                                    questionnaire.section.dataView.isLoading ||
-                                    saveandsubmit.isSaving
+                                    questionnaire.section.dataView.isLoading
                                 "
                                 pTooltip="{{ 'previous.label' | translate | titlecase }}"
                                 [tooltipDisabled]="questionnaire.section.orderList.activeIndex === 0 || questionnaire.section.dataView.isLoading"
@@ -80,8 +79,7 @@
                                 }"
                                 [disabled]="
                                     questionnaire.section.datasource.length === 0 ||
-                                    questionnaire.section.dataView.isLoading ||
-                                    saveandsubmit.isSaving
+                                    questionnaire.section.dataView.isLoading
                                 "
                                 (click)="questionnaireSectionPanel.toggle($event)">
                                 <span
@@ -104,8 +102,7 @@
                             <button pButton type="button" class="button button-outlined"
                                 [disabled]="
                                     (questionnaire.section.orderList.activeIndex + 1) === questionnaire.section.datasource.length ||
-                                    questionnaire.section.dataView.isLoading ||
-                                    saveandsubmit.isSaving
+                                    questionnaire.section.dataView.isLoading
                                 "
                                 pTooltip="{{ 'next.label' | translate | titlecase }}"
                                 [tooltipDisabled]="(questionnaire.section.orderList.activeIndex + 1) === questionnaire.section.datasource.length || questionnaire.section.dataView.isLoading"

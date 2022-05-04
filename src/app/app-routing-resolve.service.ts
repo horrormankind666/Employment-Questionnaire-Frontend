@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๒๑/๐๔/๒๕๖๕>
+Modify date : <๐๒/๐๕/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -32,6 +32,7 @@ export class GetQuestionnaireDoneAndSetResolve implements Resolve<{
     }> {
         let doneandset: Schema.QuestionnaireDoneAndSet = {
             done: this.modelService.questionnaire.done.doSetDefault(),
+            answered: this.modelService.questionnaire.answered.doSetListDefault(),
             set: this.modelService.questionnaire.set.doSetDefault(),
             sections: this.modelService.questionnaire.section.doSetListDefault(),
             questions: this.modelService.questionnaire.question.doSetListDefault(),
@@ -39,11 +40,8 @@ export class GetQuestionnaireDoneAndSetResolve implements Resolve<{
             answers: this.modelService.questionnaire.answer.doSetListDefault()
         };
 
-        if (this.appService.env.authenInfo.isAuthenticated) {
-            let doneandsetCUID: string | null = localStorage.getItem(this.appService.env.localStorageKey.CUID);
-
-            doneandset = await this.modelService.questionnaire.doneandset.doGet(doneandsetCUID !== null ? doneandsetCUID : '');
-        }
+        if (this.appService.env.authenInfo.isAuthenticated)
+            doneandset = await this.modelService.questionnaire.doneandset.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
 
         return {
             doneandset

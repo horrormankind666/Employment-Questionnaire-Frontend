@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๖/๐๙/๒๕๖๔>
-Modify date : <๒๓/๐๔/๒๕๖๕>
+Modify date : <๐๒/๐๕/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -153,11 +153,28 @@ export namespace Schema {
         ID?: string | null,
         empQuestionnaireSetID?: string | null,
         userInfo: Schema.User,
-        empQuestionnaireAnswer?: any,
         submitStatus?: string,
         cancelStatus?: string,
         actionDate?: string,
         doneDate?: string
+    }
+
+    export interface OfferedAnswer {
+        ID: any,
+        value: any,
+        specify?: {
+            values: Array<any> | null
+        }
+    }
+
+    export interface QuestionnaireAnswered {
+        ID: string,
+        empQuestionnaireDoneID: string,
+        empQuestionnaireQuestionID: string,
+        errorStatus: string,
+        empQuestionnaireAnswerSetID: string,
+        answer: OfferedAnswer,
+        actionDate: string
     }
 
     export interface QuestionnaireSet {
@@ -221,6 +238,7 @@ export namespace Schema {
 
     export interface QuestionnaireDoneAndSet {
         done: QuestionnaireDone | null,
+        answered: Array<QuestionnaireAnswered>,
         set: QuestionnaireSet | null,
         sections: Array<QuestionnaireSection>,
         questions: Array<QuestionnaireQuestion>,
@@ -290,7 +308,7 @@ namespace Instance {
 
         async doGet(showError?: boolean): Promise<Schema.User | null> {
             try {
-                let ds: Array<Schema.User> = await this.appService.doGetDataSource(this.routePrefix, 'get', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.User> = await this.appService.doGetDataSource(this.routePrefix, 'get', null, (showError === undefined ? true : showError));
 
                 return (ds.length > 0 ? ds[0] : this.doSetDefault());
             }
@@ -316,7 +334,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Career>> {
             try {
-                let ds: Array<Schema.Career> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.Career> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -342,7 +360,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Program>> {
             try {
-                let ds: Array<Schema.Program> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.Program> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -368,7 +386,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Country>> {
             try {
-                let ds: Array<Schema.Country> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.Country> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -394,7 +412,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Province>> {
             try {
-                let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.Province> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -420,7 +438,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.District>> {
             try {
-                let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.District> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -446,7 +464,7 @@ namespace Instance {
 
         async doGetList(showError?: boolean): Promise<Array<Schema.Subdistrict>> {
             try {
-                let ds: Array<Schema.Subdistrict> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.Subdistrict> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', null, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -470,9 +488,17 @@ namespace Instance {
             return [];
         }
 
-        async doGetList(showError?: boolean): Promise<Array<Schema.QuestionnaireSet>> {
+        async doGetList(
+            CUID: string | null,
+            showError?: boolean
+        ): Promise<Array<Schema.QuestionnaireSet>> {
+            let query: string = [
+                '',
+                (CUID !== null ? CUID : '')
+            ].join('/');
+
             try {
-                let ds: Array<Schema.QuestionnaireSet> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', '', (showError === undefined ? true : showError));
+                let ds: Array<Schema.QuestionnaireSet> = await this.appService.doGetDataSource(this.routePrefix, 'getlist', query, (showError === undefined ? true : showError));
 
                 return ds;
             }
@@ -484,12 +510,12 @@ namespace Instance {
         }
 
         async doGet(
-            CUID: string,
+            CUID: string | null,
             showError?: boolean
         ): Promise<Schema.QuestionnaireDoneAndSet> {
-            let query = [
+            let query: string = [
                 '',
-                CUID
+                (CUID !== null ? CUID : '')
             ].join('/');
 
             try {
@@ -525,13 +551,19 @@ namespace Instance {
             try {
                 let ds: Array<any> = await this.appService.doSetDataSource(this.routePrefix, method, data, (showError === undefined ? true : showError));
 
-                return (ds.length > 0 ? ds[0] : {});
+                return (ds.length > 0 ? ds : {});
             }
             catch(error) {
                 console.log(error);
 
                 return {};
             }
+        }
+    }
+
+    export class QuestionnaireAnswered {
+        doSetListDefault(): Array<Schema.QuestionnaireAnswered> {
+            return [];
         }
     }
 
@@ -593,6 +625,7 @@ export class ModelService {
     questionnaire = {
         doneandset: new Instance.QuestionnaireDoneAndSet(this.appService),
         done: new Instance.QuestionnaireDone(this.appService),
+        answered: new Instance.QuestionnaireAnswered(),
         set: new Instance.QuestionnaireSet(),
         section: new Instance.QuestionnaireSection(),
         question: new Instance.QuestionnaireQuestion(),
