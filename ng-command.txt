@@ -1,0 +1,2 @@
+ng build --base-href /Questionnaire/ --service-worker true
+ng serve --live-reload false --port 4279
