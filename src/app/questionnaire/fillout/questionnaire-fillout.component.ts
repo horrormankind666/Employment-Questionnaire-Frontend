@@ -34,9 +34,7 @@ export interface OfferedAnswer {
 }
 
 class Career {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.Career> = this.modelService.career.doSetListDefault();
@@ -48,9 +46,7 @@ class Career {
 }
 
 class Program {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.Program> = this.modelService.program.doSetListDefault();
@@ -62,9 +58,7 @@ class Program {
 }
 
 class Country {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.Country> = this.modelService.country.doSetListDefault();
@@ -75,9 +69,7 @@ class Country {
 }
 
 class Province {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.Province> = this.modelService.province.doSetListDefault();
@@ -88,9 +80,7 @@ class Province {
 }
 
 class District {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.District> = this.modelService.district.doSetListDefault();
@@ -101,9 +91,7 @@ class District {
 }
 
 class Subdistrict {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.Subdistrict> = this.modelService.subdistrict.doSetListDefault();
@@ -114,9 +102,7 @@ class Subdistrict {
 }
 
 class QuestionnaireDoneAndSet {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Schema.QuestionnaireDoneAndSet = {
@@ -131,36 +117,28 @@ class QuestionnaireDoneAndSet {
 }
 
 class QuestionnaireDone {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Schema.QuestionnaireDone | null = this.modelService.questionnaire.done.doSetDefault();
 }
 
 class QuestionnaireAnswered {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.QuestionnaireAnswered> = this.modelService.questionnaire.answered.doSetListDefault();
 }
 
 class QuestionnaireSet {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Schema.QuestionnaireSet | null = this.modelService.questionnaire.set.doSetDefault();
 }
 
 class QuestionnaireSection {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.QuestionnaireSection> = this.modelService.questionnaire.section.doSetListDefault();
@@ -197,27 +175,21 @@ class QuestionnaireSection {
 }
 
 class QuestionnaireQuestion {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.QuestionnaireQuestion> = this.modelService.questionnaire.question.doSetListDefault();
 }
 
 class QuestionnaireAnswerSet {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.QuestionnaireAnswerSet> = this.modelService.questionnaire.answerset.doSetListDefault();
 }
 
 class QuestionnaireAnswer {
-    constructor(
-        private modelService: ModelService
-    ) {
+    constructor(private modelService: ModelService) {
     }
 
     datasource: Array<Schema.QuestionnaireAnswer> = this.modelService.questionnaire.answer.doSetListDefault();
@@ -352,7 +324,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
         this.questionnaire.set.datasource = this.questionnaire.doneandset.datasource.set;
         this.questionnaire.section.datasource = this.questionnaire.doneandset.datasource.sections;
 
-        if (this.questionnaire.set.datasource !== null && this.questionnaire.doneandset.datasource.answers.length > 0) {
+        if (this.questionnaire.set.datasource !== null &&
+            this.questionnaire.doneandset.datasource.answers.length > 0) {
             this.career['master'] = new Career(this.modelService);
             this.career['master'].datasource = await this.career['master'].getDataSource();
 

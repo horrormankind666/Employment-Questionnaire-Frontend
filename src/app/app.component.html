@@ -1,36 +1,79 @@
-<ngx-loading [show]="appService.env.isLoading"></ngx-loading>
-<div class="w-full" *ngIf="!appService.env.isFirstload">
+<ngx-loading
+    [show]="appService.env.isLoading">
+</ngx-loading>
+<div
+    class="w-full"
+    *ngIf="!appService.env.isFirstload">
     <header>
-        <div class="topbar">
-            <div class="topbar-background"></div>
-            <div class="topbar-left">
-                <div class="owner-logo" [class]="appService.env.lang"></div>
+        <div
+            class="topbar">
+            <div
+                class="topbar-background">
             </div>
-            <div class="topbar-right">
-                <div class="systemname-logo" [class]="appService.env.lang"></div>
-                <ul class="topbar-items vertical-middle">
+            <div
+                class="topbar-left">
+                <div
+                    class="owner-logo"
+                    [class]="appService.env.lang">
+                </div>
+            </div>
+            <div
+                class="topbar-right">
+                <div
+                    class="systemname-logo"
+                    [class]="appService.env.lang">
+                </div>
+                <ul
+                    class="topbar-items vertical-middle">
                     <li>
-                        <div class="font-icon vertical-middle">
-                            <a href="javascript:void(0)" routerLink="/Home">
-                                <i class="fas fa-home text-xl text-0"></i>
+                        <div
+                            class="font-icon vertical-middle">
+                            <a
+                                href="javascript:void(0)"
+                                routerLink="/Home">
+                                <i
+                                    class="fas fa-home text-xl text-0">
+                                </i>
                             </a>
                         </div>
                     </li>
                     <li>
-                        <div class="font-icon vertical-middle">
-                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'en'" (click)="appService.doSetDefaultLang('th')">
-                                <i class="flag-icon flag-icon-th text-xl" aria-hidden="true"></i>
+                        <div
+                            class="font-icon vertical-middle">
+                            <a
+                                href="javascript:void(0)"
+                                *ngIf="appService.env.lang === 'en'"
+                                (click)="appService.doSetDefaultLang('th')">
+                                <i
+                                    class="flag-icon flag-icon-th text-xl"
+                                    aria-hidden="true">
+                                </i>
                             </a>
-                            <a href="javascript:void(0)" *ngIf="appService.env.lang === 'th'" (click)="appService.doSetDefaultLang('en')">
-                                <i class="flag-icon flag-icon-gb text-xl" aria-hidden="true"></i>
+                            <a
+                                href="javascript:void(0)"
+                                *ngIf="appService.env.lang === 'th'"
+                                (click)="appService.doSetDefaultLang('en')">
+                                <i
+                                    class="flag-icon flag-icon-gb text-xl"
+                                    aria-hidden="true">
+                                </i>
                             </a>
                         </div>
                     </li>
                     <li>
-                        <button pButton type="button" label="" class="signin-btn vertical-middle" *ngIf="!appService.env.authenInfo.isAuthenticated" (click)="doSignIn()">
+                        <button
+                            pButton
+                            type="button"
+                            class="signin-btn vertical-middle"
+                            label=""
+                            *ngIf="!appService.env.authenInfo.isAuthenticated"
+                            (click)="doSignIn()">
                             {{ 'signin.label' | translate | titlecase }}
                         </button>
-                        <div #userInfo class="user-info vertical-middle" *ngIf="appService.env.authenInfo.isAuthenticated">
+                        <div
+                            #userInfo
+                            class="user-info vertical-middle"
+                            *ngIf="appService.env.authenInfo.isAuthenticated">
                             <p-avatar
                                 label="{{ authService.getUserInfo !== null ? authService.getUserInfo.initials : '' }}"
                                 shape="circle"
@@ -40,7 +83,8 @@
                                 [appendTo]="userInfo"
                                 (click)="profilePanel.toggle($event)">
                             </p-avatar>
-                            <p-overlayPanel #profilePanel
+                            <p-overlayPanel
+                                #profilePanel
                                 [dismissable]="true"
                                 [showCloseIcon]="false"
                                 [appendTo]="profileTemplate"
@@ -49,26 +93,39 @@
                                 (onShow)="profile.panel.toggle = true"
                                 (onHide)="profile.panel.toggle = false"
                                 styleClass="profile-template">
-                                <ng-template pTemplate >
-                                    <div class="p-3">
+                                <ng-template
+                                    pTemplate>
+                                    <div
+                                        class="p-3">
                                         <p-avatar
                                             label="{{ authService.getUserInfo !== null ? authService.getUserInfo.initials : '' }}"
                                             shape="circle"
                                             [style]="{ 'background-color': avatarBackgroundColor }">
                                         </p-avatar>
-                                        <div class="block mt-2" *ngIf="authService.getUserInfo !== null">
-                                            <div class="text-truncate font-normal text-white text-lg">
+                                        <div
+                                            class="block mt-2"
+                                            *ngIf="authService.getUserInfo !== null">
+                                            <div
+                                                class="text-truncate font-normal text-white text-lg">
                                                 {{
                                                     (authService.getUserInfo.givenName !== undefined ? (authService.getUserInfo.givenName | titlecase) : '') +
                                                     ' ' +
                                                     (authService.getUserInfo.familyName !== undefined ? (authService.getUserInfo.familyName | titlecase) : '')
                                                 }}
                                             </div>
-                                            <div class="text-truncate font-light mt-1 text-white text-base">{{ authService.getUserInfo.email | lowercase }}</div>
+                                            <div
+                                                class="text-truncate font-light mt-1 text-white text-base">
+                                                {{ authService.getUserInfo.email | lowercase }}
+                                            </div>
                                         </div>
                                     </div>
                                     <p-divider></p-divider>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="router.navigate(['PrivacyPolicy'])"
+                                    <button
+                                        pButton
+                                        type="button"
+                                        class="signout-btn p-button-text p-button-plain text-base"
+                                        label=""
+                                        (click)="router.navigate(['PrivacyPolicy'])"
                                         *ngIf="
                                             appService.env.authenInfo.isAuthenticated &&
                                             !appService.env.authenInfo.isReAuthenticated &&
@@ -77,7 +134,12 @@
                                         {{ 'privacyPolicy.label' | translate | titlecase }}
                                     </button>
                                     <p-divider></p-divider>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="doSignIn()"
+                                    <button
+                                        pButton
+                                        type="button"
+                                        class="signout-btn p-button-text p-button-plain text-base"
+                                        label=""
+                                        (click)="doSignIn()"
                                         *ngIf="
                                             appService.env.authenInfo.isAuthenticated &&
                                             appService.env.authenInfo.isReAuthenticated &&
@@ -85,29 +147,65 @@
                                         ">
                                         {{ 'signin.again.label' | translate | titlecase }}
                                     </button>
-                                    <button pButton type="button" label="" class="signout-btn p-button-text p-button-plain text-base" (click)="doSignOut()" *ngIf="appService.env.authenInfo.isAuthenticated">
+                                    <button
+                                        pButton
+                                        type="button"
+                                        class="signout-btn p-button-text p-button-plain text-base"
+                                        label=""
+                                        (click)="doSignOut()"
+                                        *ngIf="appService.env.authenInfo.isAuthenticated">
                                         {{ 'signout.label' | translate | titlecase }}
                                     </button>
                                 </ng-template>
                             </p-overlayPanel>
-                            <div #profileTemplate></div>
+                            <div
+                                #profileTemplate>
+                            </div>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
     </header>
-    <main *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.authenInfo.isReAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
+    <main
+        *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.authenInfo.isReAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
         <router-outlet></router-outlet>
     </main>
     <footer>
         <p-divider></p-divider>
-        <div #footer class="footer heading">
-            <div #copyright class="copyright text-truncate text-base font-light">
-                <span *ngIf="appService.env.lang === 'th'"><i class="fas fa-copyright" aria-hidden="true"></i> สงวนลิขสิทธิ์ พ.ศ.{{ appService.env.devYear + 543 }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + (today.getFullYear() + 543)) : '' }} มหาวิทยาลัยมหิดล</span>
-                <span *ngIf="appService.env.lang === 'en'">Copyright <i class="fas fa-copyright" aria-hidden="true"></i> {{ appService.env.devYear }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + today.getFullYear()) : '' }} Mahidol University.</span>
+        <div
+            #footer
+            class="footer heading">
+            <div
+                #copyright
+                class="copyright text-truncate text-base font-light">
+                <span
+                    *ngIf="appService.env.lang === 'th'">
+                    <i
+                        class="fas fa-copyright"
+                        aria-hidden="true">
+                    </i>
+                    &nbsp;
+                    สงวนลิขสิทธิ์ พ.ศ.{{ appService.env.devYear + 543 }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + (today.getFullYear() + 543)) : '' }} มหาวิทยาลัยมหิดล
+                </span>
+                <span
+                    *ngIf="appService.env.lang === 'en'">
+                    Copyright
+                    &nbsp;
+                    <i
+                        class="fas fa-copyright"
+                        aria-hidden="true">
+                    </i>
+                    &nbsp;
+                    {{ appService.env.devYear }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + today.getFullYear()) : '' }}
+                    &nbsp;
+                    Mahidol University.
+                </span>
             </div>
-            <div #muitLogo class="muit-logo"></div>
+            <div
+                #muitLogo
+                class="muit-logo">
+            </div>
         </div>
     </footer>
 </div>

@@ -9,7 +9,7 @@ Description : <>
 
 'use strict';
 
-import { Directive, Pipe, PipeTransform, HostListener, ElementRef, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit } from '@angular/core';
+import { Directive, Pipe, PipeTransform, HostListener, ElementRef, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef, Input, Type, OnInit, ComponentFactory } from '@angular/core';
 import { NgModel } from '@angular/forms';
 
 @Directive({
@@ -27,7 +27,7 @@ export class DynamicComponentDirective implements OnInit {
     }
 
     ngOnInit() {
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.component)
+        const componentFactory:ComponentFactory<any> = this.componentFactoryResolver.resolveComponentFactory(this.component)
 
         this.viewContainerRef.clear();
         const newViewContainerRef = this.viewContainerRef.createComponent(componentFactory);
@@ -43,7 +43,10 @@ export class DynamicComponentDirective implements OnInit {
     selector: 'input[trimOnBlur], textarea[trimOnBlur]'
 })
 export class TrimOnBlurDirective {
-    private doDispatchEvent(el: any, eventType: any) {
+    private doDispatchEvent(
+        el: any,
+        eventType: any
+    ) {
         const event = document.createEvent('Event');
 
         event.initEvent(eventType, false, false);
@@ -51,7 +54,10 @@ export class TrimOnBlurDirective {
     }
 
     @HostListener('blur', ['$event.target', '$event.target.value'])
-    onBlur(el: any, value: string) {
+    onBlur(
+        el: any,
+        value: string
+    ) {
         if ('function' === typeof value.trim && value.trim() !== value) {
             el.value = value.trim();
 
@@ -69,7 +75,8 @@ export class NullValueDirective {
     constructor(
         private el: ElementRef,
         private model: NgModel
-    ) {}
+    ) {
+    }
 
     @HostListener('input', ['$event.target'])
     onEvent(target: HTMLInputElement) {

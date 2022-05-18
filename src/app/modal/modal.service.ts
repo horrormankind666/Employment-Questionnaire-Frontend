@@ -25,17 +25,22 @@ export interface BtnMsg {
     providedIn: 'root'
 })
 export class ModalService {
-    constructor(
-        private dialogService: DialogService
-    ) {
+    constructor(private dialogService: DialogService) {
     }
 
     openDialogRef: DynamicDialogRef[] = [];
 
-    doGetModal(type: string, checkHasOpenModal: boolean, content?: string, description?: string, btnMsg?: BtnMsg): DynamicDialogRef | undefined {
+    doGetModal(
+        type: string,
+        checkHasOpenModal: boolean,
+        content?: string,
+        description?: string,
+        btnMsg?: BtnMsg
+    ): DynamicDialogRef | undefined {
         let dialogRef: DynamicDialogRef | undefined;
 
-        if (!checkHasOpenModal || this.openDialogRef.length === 0) {
+        if (!checkHasOpenModal ||
+            this.openDialogRef.length === 0) {
             setTimeout(() => {
                 dialogRef = this.dialogService.open(ModalComponent, {
                     data: {
@@ -56,7 +61,7 @@ export class ModalService {
         return dialogRef;
     }
 
-    doCloseAllModal() {
+    doCloseAllModal(): void {
         this.openDialogRef.forEach((dialogRef: DynamicDialogRef) => dialogRef.destroy());
         this.openDialogRef = [];
     }

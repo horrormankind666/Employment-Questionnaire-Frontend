@@ -18,15 +18,28 @@ import { ModalService } from './modal.service';
 @Component({
     selector: 'app-modal',
     template: `
-        <div class="p-dialog-content child paragraph">
+        <div
+            class="p-dialog-content child paragraph">
             {{ content | translate }}
-            <div class="description" *ngIf="description">
-                <span>{{ description | translate }}</span>
+            <div
+                class="description"
+                *ngIf="description">
+                <span>
+                    {{ description | translate }}
+                </span>
             </div>
         </div>
-        <div class="p-dialog-footer">
-            <button pButton type="button" label="" class="p-button-rounded p-button-{{ type }} p-mr-0" (click)="doClose()">
-                <span>{{ (btnMsg ? btnMsg.close : 'close.label') | translate | titlecase }}</span>
+        <div
+            class="p-dialog-footer">
+            <button
+                pButton
+                type="button"
+                class="p-button-rounded p-button-{{ type }} p-mr-0"
+                label=""
+                (click)="doClose()">
+                <span>
+                    {{ (btnMsg ? btnMsg.close : 'close.label') | translate | titlecase }}
+                </span>
             </button>
         </div>
     `,

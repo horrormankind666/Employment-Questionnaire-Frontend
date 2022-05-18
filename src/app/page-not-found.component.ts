@@ -14,9 +14,13 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-page-not-found',
     template:  `
-        <div id="not-found-page" class="page-container">
-            <div class="page-header h-auto ">
-                <div class="title heading text-center text-2xl">
+        <div
+            class="page-container"
+            id="not-found-page">
+            <div
+                class="page-header h-auto">
+                <div
+                    class="title heading text-center text-2xl">
                     {{ 'error.pageNotFound.label' | translate | titlecase }}
                 </div>
             </div>

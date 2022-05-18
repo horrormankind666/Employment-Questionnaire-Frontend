@@ -102,7 +102,10 @@ export class AppService {
         });
     }
 
-    doSetLoading(isLoading: boolean, set?: boolean): void {
+    doSetLoading(
+        isLoading: boolean,
+        set?: boolean
+    ): void {
         if (set === undefined || set === true)
             this.env.isLoading = isLoading;
 

@@ -14,13 +14,22 @@
     <link href="manifest.json" rel="manifest">
 </head>
 <body>
-    <app-root class="hidden"></app-root>
-    <div id="unsupported-page" class="page-container hidden">
-        <div class="page-header h-auto text-center">
-            <div class="title heading text-3xl" id="header-title">
+    <app-root
+        class="hidden">
+    </app-root>
+    <div
+        class="page-container hidden"
+        id="unsupported-page">
+        <div
+            class="page-header h-auto text-center">
+            <div
+                class="title heading text-3xl"
+                id="header-title">
             </div>
         </div>
-        <div class="page-body paragraph text-center text-lg" id="body-content">
+        <div
+            class="page-body paragraph text-center text-lg"
+            id="body-content">
         </div>
     </div>
 </body>
@@ -45,14 +54,18 @@
             isMobile = true;
 
 
-        if (isIE || (isSafari && isWindow)) {
+        if (isIE ||
+            (isSafari && isWindow)) {
             isBrowserSupport = false;
 
-            if (isSafari && isWindow && (isTablet || isMobile))
+            if (isSafari &&
+                isWindow &&
+                (isTablet || isMobile))
                 isBrowserSupport = true;
         }
 
-        if (isTablet || isMobile)
+        if (isTablet ||
+            isMobile)
             document.getElementsByTagName('body')[0].classList.add('mobile');
 
         if (isOpera)

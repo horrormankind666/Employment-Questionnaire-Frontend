@@ -273,9 +273,7 @@ namespace Instance {
     }
 
     export class MSent {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'M-Sent';
@@ -295,9 +293,7 @@ namespace Instance {
     }
 
     export class Student {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Student';
@@ -321,9 +317,7 @@ namespace Instance {
     }
 
     export class Career {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Career';
@@ -347,9 +341,7 @@ namespace Instance {
     }
 
     export class Program {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Program';
@@ -373,9 +365,7 @@ namespace Instance {
     }
 
     export class Country {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Country';
@@ -399,9 +389,7 @@ namespace Instance {
     }
 
     export class Province {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Province';
@@ -425,9 +413,7 @@ namespace Instance {
     }
 
     export class District {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'District';
@@ -451,9 +437,7 @@ namespace Instance {
     }
 
     export class Subdistrict {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Subdistrict';
@@ -477,9 +461,7 @@ namespace Instance {
     }
 
     export class QuestionnaireDoneAndSet {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'DoneAndSet';
@@ -532,9 +514,7 @@ namespace Instance {
     }
 
     export class QuestionnaireDone {
-        constructor(
-            private appService: AppService
-        ) {
+        constructor(private appService: AppService) {
         }
 
         private routePrefix: string = 'Done';
@@ -607,9 +587,7 @@ namespace Instance {
     providedIn: 'root'
 })
 export class ModelService {
-    constructor(
-        private appService: AppService
-    ) {
+    constructor(private appService: AppService) {
     }
 
     any = new Instance.Any();
