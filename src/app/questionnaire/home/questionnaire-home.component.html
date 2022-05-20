@@ -1,24 +1,18 @@
 <div
     class="page-container"
     id="questionnaire-home-page">
-    <div
-        class="page-header h-auto">
-        <div
-            class="title heading">
-            <ul
-                class="table w-auto">
+    <div class="page-header h-auto">
+        <div class="title heading">
+            <ul class="table w-auto">
                 <li>
-                    <i
-                        class="fas fa-clipboard-list">
-                    </i>
+                    <i class="fas fa-clipboard-list"></i>
                 </li>
                 <li>
                     {{ 'systemName.questionnaire.set.label' | translate | titlecase }}
                 </li>
             </ul>
         </div>
-        <div
-            class="toolbar">
+        <div class="toolbar">
             <div
                 #reloadButton
                 class="toolbar-btn">
@@ -31,16 +25,12 @@
                     [tooltipDisabled]="questionnaire.set.dataView.isLoading"
                     [appendTo]="reloadButton"
                     (click)="questionnaire.set.getDataSource()">
-                    <i
-                        class="fas fa-sync-alt"
-                        aria-hidden="true">
-                    </i>
+                    <i class="fas fa-sync-alt" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
     </div>
-    <div
-        class="page-body">
+    <div class="page-body">
         <p-dataView
             class="questionnairesets"
             [value]="questionnaire.set.datasource"
@@ -50,22 +40,17 @@
             <ng-template
                 pTemplate="gridItem"
                 let-qtnset>
-                <div
-                    class="flex align-items-stretch col-12 sm:col-6 md:col-4 lg:col-3">
-                    <p-card
-                        class="submitstatus-{{ qtnset.submitStatus | lowercase }}">
-                        <ng-template
-                            pTemplate="title">
+                <div class="flex align-items-stretch col-12 sm:col-6 md:col-4 lg:col-3">
+                    <p-card class="submitstatus-{{ qtnset.submitStatus | lowercase }}">
+                        <ng-template pTemplate="title">
                             {{ qtnset.name[appService.env.lang] }}
                         </ng-template>
-                        <ng-template
-                            pTemplate="subtitle">
-                            <span
-                                class="paragraph">{{ qtnset.description[appService.env.lang] }}
+                        <ng-template pTemplate="subtitle">
+                            <span class="paragraph">
+                                {{ qtnset.description[appService.env.lang] }}
                             </span>
                         </ng-template>
-                        <ng-template
-                            pTemplate="footer">
+                        <ng-template pTemplate="footer">
                             <div
                                 class="text-xs font-normal"
                                 *ngIf="
@@ -84,8 +69,7 @@
                                         {{ 'questionnaire.submitted.label' | translate }}
                                     </span>
                                 </div>
-                                <div
-                                    class="mt-1">
+                                <div class="mt-1">
                                     <span
                                         class="text-orange-700"
                                         *ngIf="qtnset.submitStatus === 'N'">
@@ -106,12 +90,10 @@
                                     type="button"
                                     class="button button-outlined"
                                     (click)="getQuestionnaire(qtnset.empQuestionnaireDoneID, qtnset.ID)">
-                                    <span
-                                        *ngIf="qtnset.submitStatus === 'N'">
+                                    <span *ngIf="qtnset.submitStatus === 'N'">
                                         {{ (qtnset.empQuestionnaireDoneID === null ? 'questionnaire.fillout.label' : 'questionnaire.fillout.continue.label') | translate | lowercase }}
                                     </span>
-                                    <span
-                                        *ngIf="qtnset.submitStatus === 'Y'">
+                                    <span *ngIf="qtnset.submitStatus === 'Y'">
                                         {{ 'questionnaire.view.label' | translate | lowercase }}
                                     </span>
                                 </button>

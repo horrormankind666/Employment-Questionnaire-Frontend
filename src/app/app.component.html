@@ -1,62 +1,38 @@
-<ngx-loading
-    [show]="appService.env.isLoading">
-</ngx-loading>
+<ngx-loading [show]="appService.env.isLoading"></ngx-loading>
 <div
     class="w-full"
     *ngIf="!appService.env.isFirstload">
     <header>
-        <div
-            class="topbar">
-            <div
-                class="topbar-background">
+        <div class="topbar">
+            <div class="topbar-background"></div>
+            <div class="topbar-left">
+                <div class="owner-logo" [class]="appService.env.lang"></div>
             </div>
-            <div
-                class="topbar-left">
-                <div
-                    class="owner-logo"
-                    [class]="appService.env.lang">
-                </div>
-            </div>
-            <div
-                class="topbar-right">
-                <div
-                    class="systemname-logo"
-                    [class]="appService.env.lang">
-                </div>
-                <ul
-                    class="topbar-items vertical-middle">
+            <div class="topbar-right">
+                <div class="systemname-logo" [class]="appService.env.lang"></div>
+                <ul class="topbar-items vertical-middle">
                     <li>
-                        <div
-                            class="font-icon vertical-middle">
+                        <div class="font-icon vertical-middle">
                             <a
                                 href="javascript:void(0)"
                                 routerLink="/Home">
-                                <i
-                                    class="fas fa-home text-xl text-0">
-                                </i>
+                                <i class="fas fa-home text-xl text-0"></i>
                             </a>
                         </div>
                     </li>
                     <li>
-                        <div
-                            class="font-icon vertical-middle">
+                        <div class="font-icon vertical-middle">
                             <a
                                 href="javascript:void(0)"
                                 *ngIf="appService.env.lang === 'en'"
                                 (click)="appService.doSetDefaultLang('th')">
-                                <i
-                                    class="flag-icon flag-icon-th text-xl"
-                                    aria-hidden="true">
-                                </i>
+                                <i class="flag-icon flag-icon-th text-xl" aria-hidden="true"></i>
                             </a>
                             <a
                                 href="javascript:void(0)"
                                 *ngIf="appService.env.lang === 'th'"
                                 (click)="appService.doSetDefaultLang('en')">
-                                <i
-                                    class="flag-icon flag-icon-gb text-xl"
-                                    aria-hidden="true">
-                                </i>
+                                <i class="flag-icon flag-icon-gb text-xl" aria-hidden="true"></i>
                             </a>
                         </div>
                     </li>
@@ -93,10 +69,8 @@
                                 (onShow)="profile.panel.toggle = true"
                                 (onHide)="profile.panel.toggle = false"
                                 styleClass="profile-template">
-                                <ng-template
-                                    pTemplate>
-                                    <div
-                                        class="p-3">
+                                <ng-template pTemplate>
+                                    <div class="p-3">
                                         <p-avatar
                                             label="{{ authService.getUserInfo !== null ? authService.getUserInfo.initials : '' }}"
                                             shape="circle"
@@ -105,16 +79,14 @@
                                         <div
                                             class="block mt-2"
                                             *ngIf="authService.getUserInfo !== null">
-                                            <div
-                                                class="text-truncate font-normal text-white text-lg">
+                                            <div class="text-truncate font-normal text-white text-lg">
                                                 {{
                                                     (authService.getUserInfo.givenName !== undefined ? (authService.getUserInfo.givenName | titlecase) : '') +
                                                     ' ' +
                                                     (authService.getUserInfo.familyName !== undefined ? (authService.getUserInfo.familyName | titlecase) : '')
                                                 }}
                                             </div>
-                                            <div
-                                                class="text-truncate font-light mt-1 text-white text-base">
+                                            <div class="text-truncate font-light mt-1 text-white text-base">
                                                 {{ authService.getUserInfo.email | lowercase }}
                                             </div>
                                         </div>
@@ -158,9 +130,7 @@
                                     </button>
                                 </ng-template>
                             </p-overlayPanel>
-                            <div
-                                #profileTemplate>
-                            </div>
+                            <div #profileTemplate></div>
                         </div>
                     </li>
                 </ul>
@@ -168,7 +138,14 @@
         </div>
     </header>
     <main
-        *ngIf="(appService.env.authenInfo.isAuthenticated && !appService.env.authenInfo.isReAuthenticated && !appService.env.isLoading) || appService.env.route.path === '**'">
+        *ngIf="
+            (
+                appService.env.authenInfo.isAuthenticated &&
+                !appService.env.authenInfo.isReAuthenticated &&
+                !appService.env.isLoading
+            ) ||
+            appService.env.route.path === '**'
+        ">
         <router-outlet></router-outlet>
     </main>
     <footer>
@@ -179,33 +156,22 @@
             <div
                 #copyright
                 class="copyright text-truncate text-base font-light">
-                <span
-                    *ngIf="appService.env.lang === 'th'">
-                    <i
-                        class="fas fa-copyright"
-                        aria-hidden="true">
-                    </i>
+                <span *ngIf="appService.env.lang === 'th'">
+                    <i class="fas fa-copyright" aria-hidden="true"></i>
                     &nbsp;
                     สงวนลิขสิทธิ์ พ.ศ.{{ appService.env.devYear + 543 }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + (today.getFullYear() + 543)) : '' }} มหาวิทยาลัยมหิดล
                 </span>
-                <span
-                    *ngIf="appService.env.lang === 'en'">
+                <span *ngIf="appService.env.lang === 'en'">
                     Copyright
                     &nbsp;
-                    <i
-                        class="fas fa-copyright"
-                        aria-hidden="true">
-                    </i>
+                    <i class="fas fa-copyright" aria-hidden="true"></i>
                     &nbsp;
                     {{ appService.env.devYear }}{{ today.getFullYear() > appService.env.devYear ? (' - ' + today.getFullYear()) : '' }}
                     &nbsp;
                     Mahidol University.
                 </span>
             </div>
-            <div
-                #muitLogo
-                class="muit-logo">
-            </div>
+            <div #muitLogo class="muit-logo"></div>
         </div>
     </footer>
 </div>

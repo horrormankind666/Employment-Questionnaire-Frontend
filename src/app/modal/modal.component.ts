@@ -18,8 +18,7 @@ import { ModalService } from './modal.service';
 @Component({
     selector: 'app-modal',
     template: `
-        <div
-            class="p-dialog-content child paragraph">
+        <div class="p-dialog-content child paragraph">
             {{ content | translate }}
             <div
                 class="description"
@@ -29,8 +28,7 @@ import { ModalService } from './modal.service';
                 </span>
             </div>
         </div>
-        <div
-            class="p-dialog-footer">
+        <div class="p-dialog-footer">
             <button
                 pButton
                 type="button"

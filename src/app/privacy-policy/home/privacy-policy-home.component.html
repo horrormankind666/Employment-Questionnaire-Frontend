@@ -1,16 +1,11 @@
 <div
     class="page-container"
     id="privacy-policy-home-page">
-    <div
-        class="page-header h-auto">
-        <div
-            class="title heading">
-            <ul
-                class="table w-auto">
+    <div class="page-header h-auto">
+        <div class="title heading">
+            <ul class="table w-auto">
                 <li>
-                    <i
-                        class="fas fa-user-shield">
-                    </i>
+                    <i class="fas fa-user-shield"></i>
                 </li>
                 <li>
                     {{ 'privacyPolicy.label' | translate | titlecase }}
@@ -18,63 +13,50 @@
             </ul>
         </div>
     </div>
-    <div
-        class="page-body">
+    <div class="page-body">
         <p-dataView
             [value]="datasource"
             [loading]="dataView.isLoading"
             loadingIcon="fas fa-spin fa-spinner"
             layout="grid">
             <ng-template
-                let-pp pTemplate="gridItem">
+                pTemplate="gridItem"
+                let-pp>
                 <div
                     class="consent-tabpanel"
                     *ngIf="
                         pp.consent !== null &&
                         !dataView.isLoading
                     ">
-                    <p-panel
-                        [showHeader]="false">
-                        <div
-                            class="name">
-                            <span
-                                *ngIf="appService.env.lang === 'th'">
+                    <p-panel [showHeader]="false">
+                        <div class="name">
+                            <span *ngIf="appService.env.lang === 'th'">
                                 {{ pp.consent.nameTh }}
                             </span>
-                            <span
-                                *ngIf="appService.env.lang === 'en'">
+                            <span *ngIf="appService.env.lang === 'en'">
                                 {{ pp.consent.nameEn }}
                             </span>
                         </div>
-                        <div
-                            class="mt-1">
+                        <div class="mt-1">
                             <a
                                 class="font-medium text-base text-danger underline"
                                 href="{{ msentService.doGetPage(msentService.apiConfig.route.consent, userCode) }}">
                                 {{ 'privacyPolicy.consent.update.label' | translate | titlecase }}
                             </a>
                         </div>
-                        <div
-                            *ngFor="let topic of pp.consent.consentTopics">
-                            <div
-                                class="topic paragraph">
-                                <span
-                                    *ngIf="appService.env.lang === 'th'">
+                        <div *ngFor="let topic of pp.consent.consentTopics">
+                            <div class="topic paragraph">
+                                <span *ngIf="appService.env.lang === 'th'">
                                     {{ topic.topicTh }}
                                 </span>
-                                <span
-                                    *ngIf="appService.env.lang === 'en'">
+                                <span *ngIf="appService.env.lang === 'en'">
                                     {{ topic.topicEn }}
                                 </span>
                             </div>
-                            <div
-                                *ngFor="let choice of topic.consentChoices">
-                                <div
-                                    class="choice paragraph">
-                                    <ul
-                                        class="list-none mt-0 mb-0">
-                                        <li
-                                            class="pb-2">
+                            <div *ngFor="let choice of topic.consentChoices">
+                                <div class="choice paragraph">
+                                    <ul class="list-none mt-0 mb-0">
+                                        <li class="pb-2">
                                             <p-tag
                                                 severity="info"
                                                 [rounded]="true"
@@ -83,14 +65,8 @@
                                             </p-tag>
                                         </li>
                                         <li>
-                                            <span
-                                                *ngIf="appService.env.lang === 'th'"
-                                                [innerHTML]="choice.choiceTh | nl2br">
-                                            </span>
-                                            <span
-                                                *ngIf="appService.env.lang === 'en'"
-                                                [innerHTML]="choice.choiceEn | nl2br">
-                                            </span>
+                                            <span *ngIf="appService.env.lang === 'th'" [innerHTML]="choice.choiceTh | nl2br"></span>
+                                            <span *ngIf="appService.env.lang === 'en'" [innerHTML]="choice.choiceEn | nl2br"></span>
                                         </li>
                                     </ul>
                                 </div>

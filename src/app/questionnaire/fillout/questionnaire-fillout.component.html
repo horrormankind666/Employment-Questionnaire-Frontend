@@ -1,24 +1,18 @@
-<ngx-loading
-    [show]="saveandsubmit.isSubmitting">
-</ngx-loading>
+<ngx-loading [show]="saveandsubmit.isSubmitting"></ngx-loading>
 <div
     class="page-container"
     id="questionnaire-fillout-page">
     <p-toast>
-        <ng-template
-            pTemplate>
-            <span
-                *ngIf="!saveandsubmit.isValid">
+        <ng-template pTemplate>
+            <span *ngIf="!saveandsubmit.isValid">
                 {{ 'save.error.invalid.label' | translate }}
             </span>
-            <span
-                *ngIf="saveandsubmit.isValid">
+            <span *ngIf="saveandsubmit.isValid">
                 {{ 'questionnaire.submit.info.label' | translate }}
             </span>
         </ng-template>
     </p-toast>
-    <div
-        class="page-header block h-auto">
+    <div class="page-header block h-auto">
         <div
             *ngIf="
                 (
@@ -27,10 +21,8 @@
                 ) &&
                 questionnaire.section.dataView.isFirstload
             ">
-            <div
-                class="title block heading text-center text-2xl pt-3">
-                <span
-                    *ngIf="questionnaire.set.datasource === null">
+            <div class="title block heading text-center text-2xl pt-3">
+                <span *ngIf="questionnaire.set.datasource === null">
                     {{ 'questionnaire.error.notFound.label' | translate | titlecase }}
                 </span>
                 <span
@@ -41,17 +33,14 @@
                     {{ 'questionnaire.error.notComplete.label' | translate | titlecase }}
                 </span>
             </div>
-            <div
-                class="toolbar block text-center h-auto pt-0 mt-3">
+            <div class="toolbar block text-center h-auto pt-0 mt-3">
                 <button
                     pButton
                     type="button"
                     class="button button-outlined w-auto text-left"
                     [disabled]="questionnaire.section.dataView.isLoading"
                     (click)="router.navigate(['Home'])">
-                    <i
-                        class="fas fa-bars">
-                    </i>
+                    <i class="fas fa-bars"></i>
                     &nbsp;&nbsp;
                     <span>
                         {{ questionnaire.section.dataView.isFirstload || !questionnaire.section.dataView.isLoading ? ('questionnaire.explore.label' | translate) : '' }}
@@ -85,8 +74,7 @@
                             }">
                     </ng-container>
                 </div>
-                <div
-                    class="center">
+                <div class="center">
                     <div
                         class="questionnairesection-nav relative"
                         [ngClass]="{
@@ -110,9 +98,7 @@
                                 "
                                 [appendTo]="previousButton"
                                 (click)="questionnaire.section.navigate.doPrevious()">
-                                <i
-                                    class="fas fa-long-arrow-alt-left">
-                                </i>
+                                <i class="fas fa-long-arrow-alt-left"></i>
                             </button>
                         </div>
                         <div class="selected">
@@ -133,9 +119,7 @@
                                         questionnaire.section.dataView.isFirstload ||
                                         !questionnaire.section.dataView.isLoading
                                     ">
-                                    <i
-                                        class="fas fa-bars text-sm mr-1">
-                                    </i>
+                                    <i class="fas fa-bars text-sm mr-1"></i>
                                     {{
                                         (questionnaire.section.datasource[questionnaire.section.orderList.activeIndex].titleName[appService.env.lang] | titlecase) +
                                         ' ' +
@@ -164,9 +148,7 @@
                                 "
                                 [appendTo]="nextButton"
                                 (click)="questionnaire.section.navigate.doNext()">
-                                <i
-                                    class="fas fa-long-arrow-alt-right">
-                                </i>
+                                <i class="fas fa-long-arrow-alt-right"></i>
                             </button>
                         </div>
                         <p-overlayPanel
@@ -179,15 +161,12 @@
                             (onShow)="questionnaire.section.panel.toggle = true"
                             (onHide)="questionnaire.section.panel.toggle = false"
                             styleClass="questionnairesection-template">
-                            <ng-template
-                                pTemplate>
+                            <ng-template pTemplate>
                                 <p-orderList
                                     [value]="questionnaire.menu.items"
                                     styleClass="border-top-none border-right-none border-bottom-1 border-left-none border-dotted">
-                                    <ng-template
-                                        let-qtnmenu pTemplate="item">
-                                        <div
-                                            (click)="router.navigate([qtnmenu.routerLink])">
+                                    <ng-template let-qtnmenu pTemplate="item">
+                                        <div (click)="router.navigate([qtnmenu.routerLink])">
                                             {{ (qtnmenu.label + '') | translate | titlecase }}
                                         </div>
                                     </ng-template>
@@ -206,9 +185,7 @@
                                 </p-orderList>
                             </ng-template>
                         </p-overlayPanel>
-                        <div
-                            #questionnaireSectionTemplate>
-                        </div>
+                        <div #questionnaireSectionTemplate></div>
                     </div>
                 </div>
                 <div
@@ -257,8 +234,7 @@
                     class="questionnaireset"
                     [showHeader]="false">
                     <div>
-                        <div
-                            class="namedescription">
+                        <div class="namedescription">
                             <div
                                 class="name"
                                 *ngIf="questionnaire.set.datasource.name !== null">
@@ -300,28 +276,22 @@
                                     questionnaire.set.datasource.notice !== null &&
                                     !questionnaire.section.dataView.isLoading
                                 ">
-                                <span
-                                    class="text-pink-500 font-semibold">
+                                <span class="text-pink-500 font-semibold">
                                     {{ 'notice.label' | translate | titlecase }}
                                     &nbsp;
                                 </span>
                                 {{ questionnaire.set.datasource.notice[appService.env.lang] }}
                             </div>
                         </div>
-                        <div
-                            *ngIf="saveandsubmit.isSuccess">
-                            <div
-                                class="notice paragraph">
-                                <div
-                                    class="font-semibold text-lg">
+                        <div *ngIf="saveandsubmit.isSuccess">
+                            <div class="notice paragraph">
+                                <div class="font-semibold text-lg">
                                     {{ 'questionnaire.submitted.date.label' | translate }}
                                 </div>
-                                <div
-                                    class="font-light">
+                                <div class="font-light">
                                     {{ questionnaire.done.datasource !== null ? questionnaire.done.datasource.doneDate : '&nbsp;' }}
                                 </div>
-                                <div
-                                    class="text-xl mt-5">
+                                <div class="text-xl mt-5">
                                     {{ 'questionnaire.submitted.thankyou.label' | translate }}
                                 </div>
                                 <button
@@ -329,9 +299,7 @@
                                     type="button"
                                     class="button button-outlined w-auto text-left text-sm mt-4"
                                     (click)="router.navigate(['Home'])">
-                                    <i
-                                        class="fas fa-bars">
-                                    </i>
+                                    <i class="fas fa-bars"></i>
                                     &nbsp;&nbsp;
                                     <span>
                                         {{ 'questionnaire.explore.label' | translate }}
@@ -344,8 +312,7 @@
             </div>
         </div>
     </div>
-    <div
-        class="page-body">
+    <div class="page-body">
         <p-dataView
             class="questionnairesections"
             [value]="questionnaire.section.datasource"
@@ -366,14 +333,10 @@
                         'block': qtnsection.ID === questionnaire.section.datasource[questionnaire.section.orderList.activeIndex].ID,
                         'hidden': qtnsection.ID !== questionnaire.section.datasource[questionnaire.section.orderList.activeIndex].ID
                     }">
-                    <div
-                        class="questionnairesection">
-                        <p-panel
-                            [showHeader]="false">
-                            <div
-                                class="name">
-                                <span
-                                    class="titlename">
+                    <div class="questionnairesection">
+                        <p-panel [showHeader]="false">
+                            <div class="name">
+                                <span class="titlename">
                                     {{ (qtnsection.titleName[appService.env.lang] | titlecase) + ' ' +  qtnsection.no }}
                                 </span>
                                 &nbsp;&nbsp;
@@ -402,16 +365,15 @@
                                         qtnquestion.disableStatus === 'Y'
                                     )
                                 }">
-                                <ul
-                                    class="table">
-                                    <li
-                                        class="no">
+                                <ul class="table">
+                                    <li class="no">
                                         {{ qtnquestion.no + '.' }}
                                     </li>
-                                    <li
-                                        class="name">
+                                    <li class="name">
                                         {{ qtnquestion.name[appService.env.lang] }}
-                                        <div class="description" *ngIf="qtnquestion.description[appService.env.lang] !== null">
+                                        <div
+                                            class="description"
+                                            *ngIf="qtnquestion.description[appService.env.lang] !== null">
                                             {{ qtnquestion.description[appService.env.lang] }}
                                         </div>
                                     </li>
@@ -421,7 +383,10 @@
                                 class="questionnaireanswerset paragraph"
                                 *ngFor="let qtnanswerset of questionnaire.answerset[qtnquestion.ID].datasource"
                                 [ngClass]="{
-                                    'p-disabled': (qtnsection.disableStatus === 'Y' || qtnquestion.disableStatus === 'Y')
+                                    'p-disabled': (
+                                        qtnsection.disableStatus === 'Y' ||
+                                        qtnquestion.disableStatus === 'Y'
+                                    )
                                 }">
                                 <div
                                     class="titlename underline"
@@ -440,36 +405,27 @@
                                         <div
                                             class="institute"
                                             *ngIf="qtnanswerset.inputType.inputType === inputType.institute">
-                                            <ul
-                                                class="table name">
-                                                <li
-                                                    class="label">
+                                            <ul class="table name">
+                                                <li class="label">
                                                     {{ 'institute.name.label' | translate | titlecase }}
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.instituteName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
-                                            <ul
-                                                class="table faculty">
-                                                <li
-                                                    class="label">
+                                            <ul class="table faculty">
+                                                <li class="label">
                                                     {{ 'institute.faculty.label' | translate | titlecase }}
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.facultyName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
-                                            <ul
-                                                class="table majorsubject">
-                                                <li
-                                                    class="label">
+                                            <ul class="table majorsubject">
+                                                <li class="label">
                                                     {{ 'institute.majorSubject.label' | translate | titlecase }}
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.programName[appService.env.lang] | titlecase }}
                                                 </li>
                                             </ul>
@@ -477,49 +433,37 @@
                                         <div
                                             class="personaldetail"
                                             *ngIf="qtnanswerset.inputType.inputType === inputType.personalDetail">
-                                            <ul
-                                                class="table fullname">
-                                                <li
-                                                    class="label">
+                                            <ul class="table fullname">
+                                                <li class="label">
                                                     {{ 'personalDetail.fullName.label' | translate | titlecase }} (TH)
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.titlePrefix.th + userInfo.firstName.th + ((userInfo.middleName !== null && userInfo.middleName.th !== null) ? (' ' + userInfo.middleName.th) : '') + ' ' + userInfo.lastName.th }}
                                                 </li>
                                             </ul>
-                                            <ul
-                                                class="table fullname">
-                                                <li
-                                                    class="label">
+                                            <ul class="table fullname">
+                                                <li class="label">
                                                     {{ 'personalDetail.fullName.label' | translate | titlecase }} (EN)
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ (userInfo.titlePrefix.en | titlecase) + (userInfo.firstName.en | titlecase) + ((userInfo.middleName !== null && userInfo.middleName.en !== null) ? (' ' + (userInfo.middleName.en | titlecase)) : '') + ' ' + (userInfo.lastName.en | titlecase) }}
                                                 </li>
                                             </ul>
                                             <!--
-                                            <ul
-                                                class="table idcard">
-                                                <li
-                                                    class="label">
+                                            <ul class="table idcard">
+                                                <li class="label">
                                                     {{ 'personalDetail.IDCard.label' | translate | titlecase }}
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.IDCard }}
                                                 </li>
                                             </ul>
                                             -->
-                                            <ul
-                                                class="table studentcode">
-                                                <li
-                                                    class="label">
+                                            <ul class="table studentcode">
+                                                <li class="label">
                                                     {{ 'personalDetail.studentCode.label' | translate | titlecase }}
                                                 </li>
-                                                <li
-                                                    class="viewanswer">
+                                                <li class="viewanswer">
                                                     {{ userInfo.studentCode }}
                                                 </li>
                                             </ul>
@@ -564,8 +508,7 @@
                                         <li
                                             class="choiceorder"
                                             *ngIf="qtnanswer.choiceOrder !== null">
-                                            <label
-                                                [for]="qtnanswer.ID">
+                                            <label [for]="qtnanswer.ID">
                                                 {{ qtnanswer.choiceOrder }}
                                             </label>
                                         </li>
@@ -582,8 +525,7 @@
                                                 *ngIf="qtnanswer.description[appService.env.lang] !== null">
                                                 {{ qtnanswer.description[appService.env.lang] }}
                                             </div>
-                                            <div
-                                                *ngIf="qtnanswer.specify !== null">
+                                            <div *ngIf="qtnanswer.specify !== null">
                                                 <div
                                                     class="specify p-fluid"
                                                     *ngFor="let qtnanswerspecify of qtnanswer.specify">
@@ -615,8 +557,7 @@
                                         <li
                                             class="inputtype"
                                             *ngIf="qtnanswer.inputType !== null">
-                                            <div
-                                                class="p-fluid">
+                                            <div class="p-fluid">
                                                 <div
                                                     class="namedescription"
                                                     *ngIf="qtnanswer.name[appService.env.lang] !== null">
@@ -662,12 +603,10 @@
                                 !saveandsubmit.isValid
                             "
                             (click)="saveandsubmit.doSubmit()">
-                            <span
-                                *ngIf="!saveandsubmit.isSubmitting">
+                            <span *ngIf="!saveandsubmit.isSubmitting">
                                 {{ 'questionnaire.submit.label' | translate | titlecase }}
                             </span>
-                            <span
-                                *ngIf="saveandsubmit.isSubmitting">
+                            <span *ngIf="saveandsubmit.isSubmitting">
                                 {{ 'questionnaire.submitting.label' | translate | titlecase }}
                             </span>
                         </button>
@@ -728,9 +667,7 @@
             saveandsubmit.isSaving
         "
         [disabled]="saveandsubmit.isSaving">
-        <i
-            class="fas fa-spin fa-spinner opacity-100">
-        </i>
+        <i class="fas fa-spin fa-spinner opacity-100"></i>
     </button>
     <button
         pButton
@@ -773,10 +710,8 @@
     <ul
         class="table {{ addressField.name.toLowerCase() }}"
         *ngFor="let addressField of addressFields">
-        <li
-            class="label">
-            <label
-                [for]="addressField.name.toLowerCase() + qtnanswer.ID">
+        <li class="label">
+            <label [for]="addressField.name.toLowerCase() + qtnanswer.ID">
                 {{ 'address.' + addressField.name + '.label' | translate }}
             </label>
         </li>
@@ -802,8 +737,7 @@
                     (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
                     *ngIf="submitStatus === 'N'"
                 />
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID] : '&nbsp;' }}
                 </div>
             </div>
@@ -834,8 +768,7 @@
                     text="{{ 'error.email.invalid.label' | translate }}"
                     *ngIf="validators.isEmail[qtnanswer.ID] === false">
                 </p-message>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID] : '&nbsp;' }}
                 </div>
             </div>
@@ -857,8 +790,7 @@
                     "
                     *ngIf="submitStatus === 'N'">
                 </p-inputNumber>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID] : '&nbsp;' }}
                 </div>
             </div>
@@ -876,8 +808,7 @@
                     "
                     *ngIf="submitStatus === 'N'">
                 </p-inputMask>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID] : '&nbsp;' }}
                 </div>
             </div>
@@ -899,12 +830,12 @@
                     "
                     *ngIf="submitStatus === 'N'">
                     <ng-option
-                        *ngFor="let country of country['master'].datasource" [value]="country">
+                        *ngFor="let country of country['master'].datasource"
+                        [value]="country">
                         {{ country.name[appService.env.lang] }}
                     </ng-option>
                 </ng-select>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID].name[appService.env.lang] : '&nbsp;' }}
                 </div>
             </div>
@@ -931,8 +862,7 @@
                         {{ province.name[appService.env.lang] }}
                     </ng-option>
                 </ng-select>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID].name[appService.env.lang] : '&nbsp;' }}
                 </div>
             </div>
@@ -959,8 +889,7 @@
                         {{ district.name[appService.env.lang] }}
                     </ng-option>
                 </ng-select>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID].name[appService.env.lang] : '&nbsp;' }}
                 </div>
             </div>
@@ -978,12 +907,13 @@
                     notFoundText="{{ 'error.noItemsFound.label' | translate }}"
                     (ngModelChange)="doWatchModelChange($event, qtnanswerset)"
                     *ngIf="submitStatus === 'N'">
-                    <ng-option *ngFor="let subdistrict of subdistrict[qtnanswer.ID].datasource" [value]="subdistrict">
+                    <ng-option
+                        *ngFor="let subdistrict of subdistrict[qtnanswer.ID].datasource"
+                        [value]="subdistrict">
                         {{ subdistrict.name[appService.env.lang] }}
                     </ng-option>
                 </ng-select>
-                <div
-                    *ngIf="submitStatus === 'Y'">
+                <div *ngIf="submitStatus === 'Y'">
                     {{ (formField[addressField.name][qtnanswer.ID] !== null && formField[addressField.name][qtnanswer.ID] !== undefined) ? formField[addressField.name][qtnanswer.ID].name[appService.env.lang] : '&nbsp;' }}
                 </div>
             </div>
@@ -1133,8 +1063,7 @@
             </div>
         </div>
     </div>
-    <div
-        *ngIf="qtnanswerspecify !== undefined">
+    <div *ngIf="qtnanswerspecify !== undefined">
         <div
             *ngIf="
                 qtnanswerspecify.inputType === inputType.shortAnswerText &&
@@ -1312,10 +1241,8 @@
         <div
             class="questionnaireanswer"
             *ngFor="let qtnanswerspecifyitem of qtnanswerspecify.items">
-            <ul
-                class="table choice" >
-                <li
-                    class="inputtype">
+            <ul class="table choice" >
+                <li class="inputtype">
                     <p-radioButton
                         [(ngModel)]="formField._formField[qtnanswer.ID].singleChoice"
                         [inputId]="qtnanswerspecifyitem.ID"
@@ -1363,12 +1290,15 @@
                             )
                         "
                         (ngModelChange)="
-                            doCheckboxOnChange({
+                            doCheckboxOnChange(
+                                {
                                     selected: qtnanswer
-                                }, {
+                                },
+                                {
                                     selected: qtnanswerspecifyitem,
                                     values: formField._formField[qtnanswer.ID].multipleChoices
-                                });
+                                }
+                            );
                             doWatchModelChange($event, qtnanswerset)
                         "
                         *ngIf="
@@ -1380,8 +1310,7 @@
                 <li
                     class="choiceorder"
                     *ngIf="qtnanswerspecifyitem.choiceOrder !== null">
-                    <label
-                        [for]="qtnanswerspecifyitem.ID">
+                    <label [for]="qtnanswerspecifyitem.ID">
                         {{ qtnanswerspecifyitem.choiceOrder }}
                     </label>
                 </li>
@@ -1398,10 +1327,8 @@
                         *ngIf="qtnanswerspecifyitem.description[appService.env.lang] !== null">
                         {{ qtnanswerspecifyitem.description[appService.env.lang] }}
                     </div>
-                    <div
-                        *ngIf="qtnanswerspecifyitem.specify !== null">
-                        <div
-                            class="specify p-fluid">
+                    <div *ngIf="qtnanswerspecifyitem.specify !== null">
+                        <div class="specify p-fluid">
                             <div
                                 *ngIf="
                                     qtnanswerspecifyitem.specify[0].inputType === inputType.longAnswerText &&
