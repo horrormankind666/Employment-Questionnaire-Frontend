@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๑/๐๔/๒๕๖๕>
+Modify date : <๓๐/๐๖/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -12,7 +12,7 @@ Description : <>
 import { Routes } from '@angular/router';
 
 import { AuthGuardService } from './auth-guard.service';
-import { GetQuestionnaireDoneAndSetResolve } from './app-routing-resolve.service';
+import { GetQuestionnaireResultResolve } from './app-routing-resolve.service';
 
 import { PageNotFoundComponent } from './page-not-found.component';
 import { QuestionnaireHomeComponent } from './questionnaire/home/questionnaire-home.component';
@@ -44,7 +44,7 @@ export const appRouting: Routes = [
             hasHearderSubtitle: false
         },
         resolve: {
-            questionnaire: GetQuestionnaireDoneAndSetResolve
+            questionnaire: GetQuestionnaireResultResolve
         }
     },
     {

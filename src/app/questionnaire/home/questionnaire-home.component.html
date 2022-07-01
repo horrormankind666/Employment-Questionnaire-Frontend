@@ -31,6 +31,14 @@
         </div>
     </div>
     <div class="page-body">
+        <div
+            class="block heading text-center text-xl pt-3"
+            *ngIf="
+                questionnaire.set.dataView.isLoading === false &&
+                questionnaire.set.datasource.length === 0
+            ">
+            {{ 'questionnaire.error.notFound.label' | translate | titlecase }}
+        </div>
         <p-dataView
             class="questionnairesets"
             [value]="questionnaire.set.datasource"

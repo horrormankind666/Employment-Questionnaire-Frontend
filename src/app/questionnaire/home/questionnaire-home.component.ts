@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๔/๑๐/๒๕๖๔>
-Modify date : <๐๒/๐๕/๒๕๖๕>
+Modify date : <๓๐/๐๖/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -66,7 +66,10 @@ export class QuestionnaireHomeComponent implements OnInit {
         await this.questionnaire.set.getDataSource();
     }
 
-    getQuestionnaire(questionnaireDoneID: string, questionnaireSetID: string) {
+    getQuestionnaire(
+        questionnaireDoneID: string,
+        questionnaireSetID: string
+    ) {
         let userInfo: Schema.User = Object.assign({}, this.authService.getUserInfo);
 
         localStorage.setItem(this.appService.env.localStorageKey.CUID, this.appService.doGetCUID([questionnaireDoneID, questionnaireSetID, userInfo.perPersonID, userInfo.studentCode]));

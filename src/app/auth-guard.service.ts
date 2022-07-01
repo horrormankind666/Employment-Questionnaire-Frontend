@@ -35,6 +35,7 @@ export class AuthGuardService implements CanActivate {
         state: RouterStateSnapshot
     ): Promise<boolean> {
         this.appService.env.route.path = (route.routeConfig !== null ? (route.routeConfig.path !== undefined ? route.routeConfig.path : '') : '');
+        this.appService.ipAddress = await this.appService.doGetIPAddress();
 
         try {
             await this.authService.doGetAuthenInfo(route);

@@ -35,6 +35,7 @@ export class AppService {
     }
 
     token: string | null = null;
+    ipAddress: string | null = null;
     OK: string = 'OK';
     DATABASE_CONNECTION_FAIL: string = 'Database Connection Fail';
     UNAUTHORIZED: string = 'Unauthorized';
@@ -452,5 +453,16 @@ export class AppService {
             (value.hasOwnProperty('length') && value.length === 0) ||
             (value.constructor === Object && Object.keys(value).length === 0)
         );
+    }
+
+    async doGetIPAddress(): Promise<any | null> {
+        try {
+            let result: any = await this.http.get('https://jsonip.com').toPromise();
+
+            return result.ip;
+        }
+        catch(error: any) {
+            return null;
+        }
     }
 }

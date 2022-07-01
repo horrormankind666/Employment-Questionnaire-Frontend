@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๑๐/๐๒/๒๕๖๕>
+Modify date : <๐๑/๐๗/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -408,12 +408,14 @@ Description : <>
             & .questionnaireanswer {
                 & .institute .table,
                 & .personaldetail .table,
+                & .personaleducational .table,
                 & .address .table {
                     margin-top: 0.75rem;
                 }
                 &.submitstatus-y,
                 & .institute .table,
-                & .personaldetail .table {
+                & .personaldetail .table,
+                & .personaleducational .table {
                     & .label {
                         width: 210px;
                     }

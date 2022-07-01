@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๒/๐๕/๒๕๖๕>
+Modify date : <๐๑/๐๗/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -101,11 +101,11 @@ class Subdistrict {
     }
 }
 
-class QuestionnaireDoneAndSet {
+class Questionnaire {
     constructor(private modelService: ModelService) {
     }
 
-    datasource: Schema.QuestionnaireDoneAndSet = {
+    datasource: Schema.Questionnaire = {
         done: this.modelService.questionnaire.done.doSetDefault(),
         answered: this.modelService.questionnaire.answered.doSetListDefault(),
         set: this.modelService.questionnaire.set.doSetDefault(),
@@ -264,7 +264,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 }
             ]
         },
-        doneandset: new QuestionnaireDoneAndSet(this.modelService),
+        result: new Questionnaire(this.modelService),
         done: new QuestionnaireDone(this.modelService),
         answered: new QuestionnaireAnswered(this.modelService),
         set: new QuestionnaireSet(this.modelService),
@@ -282,6 +282,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
         dropdown: 'dropdown',
         autocomplete: 'autocomplete',
         personalDetail: 'personal detail',
+        personalEducational: 'personal educational',
         institute: 'institute',
         address: 'address'
     };
@@ -318,14 +319,14 @@ export class QuestionnaireFilloutComponent implements OnInit {
     async ngOnInit(): Promise<void> {
         this.questionnaire.section.dataView.isLoading = true;
 
-        this.questionnaire.doneandset.datasource = this.route.snapshot.data.questionnaire.doneandset;
-        this.questionnaire.done.datasource = this.questionnaire.doneandset.datasource.done;
-        this.questionnaire.answered.datasource = this.questionnaire.doneandset.datasource.answered;
-        this.questionnaire.set.datasource = this.questionnaire.doneandset.datasource.set;
-        this.questionnaire.section.datasource = this.questionnaire.doneandset.datasource.sections;
+        this.questionnaire.result.datasource = this.route.snapshot.data.questionnaire.result;
+        this.questionnaire.done.datasource = this.questionnaire.result.datasource.done;
+        this.questionnaire.answered.datasource = this.questionnaire.result.datasource.answered;
+        this.questionnaire.set.datasource = this.questionnaire.result.datasource.set;
+        this.questionnaire.section.datasource = this.questionnaire.result.datasource.sections;
 
         if (this.questionnaire.set.datasource !== null &&
-            this.questionnaire.doneandset.datasource.answers.length > 0) {
+            this.questionnaire.result.datasource.answers.length > 0) {
             this.career['master'] = new Career(this.modelService);
             this.career['master'].datasource = await this.career['master'].getDataSource();
 
@@ -354,7 +355,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
     model = {
         that: this,
         doInit(): void {
-            if (this.that.questionnaire.doneandset.datasource !== undefined) {
+            if (this.that.questionnaire.result.datasource !== undefined) {
                 setTimeout(() => {
                     let qtnanswered: Array<Schema.QuestionnaireAnswered> = [];
                     let qtnsections: Array<Schema.QuestionnaireSection> = Object.assign([], this.that.questionnaire.section.datasource);
@@ -412,7 +413,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                             this.that.questionnaire.question[qtnsection.ID] = new QuestionnaireQuestion(this.that.modelService);
 
                         qtnquestionObj = this.that.questionnaire.question[qtnsection.ID];
-                        qtnquestionObj.datasource = this.that.questionnaire.doneandset.datasource.questions.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
+                        qtnquestionObj.datasource = this.that.questionnaire.result.datasource.questions.filter((dr: Schema.QuestionnaireQuestion) => dr.empQuestionnaireSectionID === qtnsection.ID);
                         qtnquestions = Object.assign([], qtnquestionObj.datasource);
 
                         qtnquestions.forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
@@ -427,7 +428,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
                             this.that.questionnaire.answerset[qtnquestion.ID] = new QuestionnaireAnswerSet(this.that.modelService);
                             qtnanswersetObj = this.that.questionnaire.answerset[qtnquestion.ID];
-                            qtnanswersetObj.datasource = this.that.questionnaire.doneandset.datasource.answersets.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
+                            qtnanswersetObj.datasource = this.that.questionnaire.result.datasource.answersets.filter((dr: Schema.QuestionnaireAnswerSet) => dr.empQuestionnaireQuestionID === qtnquestion.ID);
                         });
 
                         this.doSet(qtnsection);
@@ -440,10 +441,10 @@ export class QuestionnaireFilloutComponent implements OnInit {
                         this.that.questionnaire.section.dataView.isFirstload = true;
                         this.that.questionnaire.section.dataView.isLoading = false;
 
-                        if (this.that.questionnaire.set.datasource !== null && this.that.questionnaire.doneandset.datasource.answers.length > 0)  {
+                        if (this.that.questionnaire.set.datasource !== null && this.that.questionnaire.result.datasource.answers.length > 0)  {
                             if (this.that.submitStatus === 'N') {
                                 if (this.that.questionnaire.done.datasource !== null) {
-                                    if (this.that.questionnaire.doneandset.datasource.questions.filter((dr: Schema.QuestionnaireQuestion) => dr.errorStatus === 'Y').length > 0)
+                                    if (this.that.questionnaire.result.datasource.questions.filter((dr: Schema.QuestionnaireQuestion) => dr.errorStatus === 'Y').length > 0)
                                         this.that.modalService.doGetModal('danger', false, 'save.error.invalid.label', 'questionnaire.submit.info.label');
                                     else {
                                         this.that.saveandsubmit.isValid = true;
@@ -454,7 +455,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                     this.that.modalService.doGetModal('info', false, 'save.error.invalid.label', 'questionnaire.submit.info.label');
                             }
                         }
-                    }, (this.that.questionnaire.set.datasource !== null && this.that.questionnaire.doneandset.datasource.answers.length > 0) ? 100 : 0);
+                    }, (this.that.questionnaire.set.datasource !== null && this.that.questionnaire.result.datasource.answers.length > 0) ? 100 : 0);
                 }, 0);
             }
         },
@@ -566,8 +567,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                                 value = qtndoneansweredspecifyvalue.value;
                                                 value = (value !== undefined ? value : null);
 
-                                                if (qtnanswerspecify.inputType === this.that.inputType.shortAnswerText && (qtnanswerspecify.type === 'text' || qtnanswerspecify.type === 'number'))
+                                                if (qtnanswerspecify.inputType === this.that.inputType.shortAnswerText && (qtnanswerspecify.type === 'text' || qtnanswerspecify.type === 'number' || qtnanswerspecify.type === 'email')) {
                                                     qtnanswerObj.formField.shortAnswerText[qtnanswer.ID] = value;
+
+                                                    if (qtnanswerspecify.type === 'email')
+                                                        qtnanswerObj.validators.isEmail[qtnanswer.ID] = this.that.appService.doValidatorEmail(qtnanswerObj.formField.shortAnswerText[qtnanswer.ID]);
+                                                }
 
                                                 if (qtnanswerspecify.inputType === this.that.inputType.longAnswerText && qtnanswerspecify.type === 'text')
                                                     qtnanswerObj.formField.longAnswerText[qtnanswer.ID] = value;
@@ -696,7 +701,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                         this.that.questionnaire.answer[qtnanswerset.ID] = new QuestionnaireAnswer(this.that.modelService);
 
                     qtnanswerObj = this.that.questionnaire.answer[qtnanswerset.ID];
-                    qtnanswerObj.datasource = this.that.questionnaire.doneandset.datasource.answers.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
+                    qtnanswerObj.datasource = this.that.questionnaire.result.datasource.answers.filter((dr: Schema.QuestionnaireAnswer) => dr.empQuestionnaireAnswerSetID === qtnanswerset.ID);
                     qtnanswers = Object.assign([], qtnanswerObj.datasource);
 
                     if (qtnanswerset.inputType !== null) {
@@ -870,12 +875,18 @@ export class QuestionnaireFilloutComponent implements OnInit {
                                 let qtnanswerspecifies: Array<Schema.InputType> = Object.assign([], qtnanswer.specify);
 
                                 qtnanswerspecifies.forEach((qtnanswerspecify: Schema.InputType) => {
-                                    if (qtnanswerspecify.inputType === this.that.inputType.shortAnswerText && (qtnanswerspecify.type === 'text' || qtnanswerspecify.type === 'number')) {
+                                    if (qtnanswerspecify.inputType === this.that.inputType.shortAnswerText && (qtnanswerspecify.type === 'text' || qtnanswerspecify.type === 'number' || qtnanswerspecify.type === 'email')) {
                                         if (set)
                                             qtnanswerObj.formField.shortAnswerText[qtnanswer.ID] = null;
 
-                                        if (get)
+                                        if (get) {
                                             value = qtnanswerObj.formField.shortAnswerText[qtnanswer.ID];
+
+                                            if (qtnanswerspecify.type === 'email') {
+                                                if (qtnanswerObj.validators.isEmail[qtnanswer.ID] !== undefined && qtnanswerObj.validators.isEmail[qtnanswer.ID] === false)
+                                                    value = null;
+                                            }
+                                        }
                                     }
 
                                     if (qtnanswerspecify.inputType === this.that.inputType.longAnswerText && qtnanswerspecify.type === 'text') {
@@ -1187,12 +1198,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
     }
 
     async doReload(): Promise<void> {
-        let doneandset: Schema.QuestionnaireDoneAndSet = await this.modelService.questionnaire.doneandset.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
+        let result: Schema.Questionnaire = await this.modelService.questionnaire.result.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
 
-        if (doneandset.done !== undefined) {
-            this.questionnaire.doneandset.datasource = doneandset;
-            this.questionnaire.done.datasource = this.questionnaire.doneandset.datasource.done;
-            this.questionnaire.answered.datasource = this.questionnaire.doneandset.datasource.answered;
+        if (result.done !== undefined) {
+            this.questionnaire.result.datasource = result;
+            this.questionnaire.done.datasource = this.questionnaire.result.datasource.done;
+            this.questionnaire.answered.datasource = this.questionnaire.result.datasource.answered;
             this.model.doInit();
         }
     }
@@ -1202,7 +1213,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
         qtnanswerset: Schema.QuestionnaireAnswerSet
     ): void {
         let changeStatus: boolean = false;
-        let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.questionnaire.doneandset.datasource.questions);
+        let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.questionnaire.result.datasource.questions);
 
         if (!_.isEqual(this.questionnaire.offeredanswer[qtnanswerset.ID].formField, this.questionnaire.answer[qtnanswerset.ID].formField))
             changeStatus = true;
@@ -1326,9 +1337,13 @@ export class QuestionnaireFilloutComponent implements OnInit {
          let qtnanswerspecifies: Array<Schema.InputType> = Object.assign([], qtnanswerselectedObj.specify);
 
          qtnanswerspecifies.forEach((qtnanswerspecify: Schema.InputType) => {
-            if (['text', 'number', 'select'].filter((type: string) => type === qtnanswerspecify.type).length > 0) {
-                if (qtnanswerspecify.inputType === this.inputType.shortAnswerText)
+            if (['text', 'number', 'email', 'select'].filter((type: string) => type === qtnanswerspecify.type).length > 0) {
+                if (qtnanswerspecify.inputType === this.inputType.shortAnswerText) {
                     formField.shortAnswerText[qtnanswerselectedObj.ID] = null;
+
+                    if (qtnanswerspecify.type === 'email')
+                        qtnanswerObj.validators.isEmail[qtnanswerselectedObj.ID] = true;
+                }
 
                 if (qtnanswerspecify.inputType === this.inputType.longAnswerText)
                     formField.longAnswerText[qtnanswerselectedObj.ID] = null;
@@ -1458,7 +1473,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
 
             if (action.copyAddress !== undefined) {
                 let copyaddressObj: any = Object.assign({}, action.copyAddress);
-                let qtnanswers: Array<Schema.QuestionnaireAnswer> = Object.assign([], this.questionnaire.doneandset.datasource.answers);
+                let qtnanswers: Array<Schema.QuestionnaireAnswer> = Object.assign([], this.questionnaire.result.datasource.answers);
                 let qtnanswerfroms: Array<Schema.QuestionnaireAnswer> = Object.assign([], qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === copyaddressObj.answer.from));
                 let qtnanswertos: Array<Schema.QuestionnaireAnswer> = Object.assign([], qtnanswers.filter((dr: Schema.QuestionnaireAnswer) => dr.ID === copyaddressObj.answer.to));
 
@@ -1484,7 +1499,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 let answersets: Array<any> = Object.assign([], clearanswersetObj.answerset);
 
                 answersets.forEach((answerset: any) => {
-                    this.questionnaire.doneandset.datasource.answersets.filter((dr: Schema.QuestionnaireAnswerSet) => dr.ID === answerset.ID).forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
+                    this.questionnaire.result.datasource.answersets.filter((dr: Schema.QuestionnaireAnswerSet) => dr.ID === answerset.ID).forEach((qtnanswerset: Schema.QuestionnaireAnswerSet) => {
                         qtnanswerObj = this.questionnaire.answer[qtnanswerset.ID];
                         qtnanswers = Object.assign([], qtnanswerObj.datasource)
 
@@ -1531,7 +1546,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
             return offeredanswers;
         },
         doValidate(offeredanswers: Array<OfferedAnswer>): boolean {
-            let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.that.questionnaire.doneandset.datasource.questions);
+            let qtnquestions: Array<Schema.QuestionnaireQuestion> = Object.assign([], this.that.questionnaire.result.datasource.questions);
 
             offeredanswers.filter((dr: OfferedAnswer) => dr.question.errorStatus === 'Y').forEach((offeredanswer: OfferedAnswer) => {
                 qtnquestions.filter((dr: Schema.QuestionnaireQuestion) => dr.ID === offeredanswer.question.ID).forEach((qtnquestion: Schema.QuestionnaireQuestion) => {
@@ -1622,7 +1637,8 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 offeredAnswer10: offeredanswersets[9],
                 submitStatus: submitStatus,
                 cancelStatus: 'N',
-                actionBy: userInfo.accountName
+                actionBy: userInfo.accountName,
+                actionIP: this.that.appService.ipAddress
             }
 
             return qtndone;
@@ -1644,7 +1660,7 @@ export class QuestionnaireFilloutComponent implements OnInit {
                 let ds2: Array<Schema.QuestionnaireAnswered> = Object.assign([], result[1]);
 
                 if (ds1[0].ID !== undefined && ds1[0].ID !== null) {
-                    this.that.questionnaire.doneandset.datasource.done = {
+                    this.that.questionnaire.result.datasource.done = {
                         ID: ds1[0].ID,
                         empQuestionnaireSetID: ds1[0].empQuestionnaireSetID,
                         userInfo: userInfo,
@@ -1654,14 +1670,14 @@ export class QuestionnaireFilloutComponent implements OnInit {
                         doneDate: ds1[0].doneDate
                     }
                     this.that.submitStatus = ds1[0].submitStatus;
-                    this.that.questionnaire.done.datasource = Object.assign({}, this.that.questionnaire.doneandset.datasource.done);
+                    this.that.questionnaire.done.datasource = Object.assign({}, this.that.questionnaire.result.datasource.done);
                     localStorage.setItem(
                         this.that.appService.env.localStorageKey.CUID,
-                        this.that.appService.doGetCUID([this.that.questionnaire.doneandset.datasource.done.ID, this.that.questionnaire.doneandset.datasource.done.empQuestionnaireSetID, userInfo.perPersonID, userInfo.studentCode])
+                        this.that.appService.doGetCUID([this.that.questionnaire.result.datasource.done.ID, this.that.questionnaire.result.datasource.done.empQuestionnaireSetID, userInfo.perPersonID, userInfo.studentCode])
                     );
 
-                    this.that.questionnaire.doneandset.datasource.answered = Object.assign([], ds2);
-                    this.that.questionnaire.answered.datasource = Object.assign([], this.that.questionnaire.doneandset.datasource.answered);
+                    this.that.questionnaire.result.datasource.answered = Object.assign([], ds2);
+                    this.that.questionnaire.answered.datasource = Object.assign([], this.that.questionnaire.result.datasource.answered);
                 }
             }
 

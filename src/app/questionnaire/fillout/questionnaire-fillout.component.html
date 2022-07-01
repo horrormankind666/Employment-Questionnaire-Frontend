@@ -17,7 +17,7 @@
             *ngIf="
                 (
                     questionnaire.set.datasource === null ||
-                    questionnaire.doneandset.datasource.answers.length === 0
+                    questionnaire.result.datasource.answers.length === 0
                 ) &&
                 questionnaire.section.dataView.isFirstload
             ">
@@ -28,7 +28,7 @@
                 <span
                     *ngIf="
                         questionnaire.set.datasource !== null &&
-                        questionnaire.doneandset.datasource.answers.length === 0
+                        questionnaire.result.datasource.answers.length === 0
                     ">
                     {{ 'questionnaire.error.notComplete.label' | translate | titlecase }}
                 </span>
@@ -51,7 +51,7 @@
         <div
             *ngIf="
                 questionnaire.set.datasource !== null &&
-                questionnaire.doneandset.datasource.answers.length > 0
+                questionnaire.result.datasource.answers.length > 0
             ">
             <div
                 class="toolbar submitstatus-{{ submitStatus.toLowerCase() }} fixed z-3"
@@ -432,7 +432,10 @@
                                         </div>
                                         <div
                                             class="personaldetail"
-                                            *ngIf="qtnanswerset.inputType.inputType === inputType.personalDetail">
+                                            *ngIf="
+                                                qtnanswerset.inputType.inputType === inputType.personalDetail ||
+                                                qtnanswerset.inputType.inputType === inputType.personalEducational
+                                            ">
                                             <ul class="table fullname">
                                                 <li class="label">
                                                     {{ 'personalDetail.fullName.label' | translate | titlecase }} (TH)
@@ -467,6 +470,34 @@
                                                     {{ userInfo.studentCode }}
                                                 </li>
                                             </ul>
+                                            <div
+                                                class="institute"
+                                                *ngIf="qtnanswerset.inputType.inputType === inputType.personalEducational">
+                                                <ul class="table name">
+                                                    <li class="label">
+                                                        {{ 'institute.name.label' | translate | titlecase }}
+                                                    </li>
+                                                    <li class="viewanswer">
+                                                        {{ userInfo.instituteName[appService.env.lang] | titlecase }}
+                                                    </li>
+                                                </ul>
+                                                <ul class="table faculty">
+                                                    <li class="label">
+                                                        {{ 'institute.faculty.label' | translate | titlecase }}
+                                                    </li>
+                                                    <li class="viewanswer">
+                                                        {{ userInfo.facultyName[appService.env.lang] | titlecase }}
+                                                    </li>
+                                                </ul>
+                                                <ul class="table majorsubject">
+                                                    <li class="label">
+                                                        {{ 'institute.majorSubject.label' | translate | titlecase }}
+                                                    </li>
+                                                    <li class="viewanswer">
+                                                        {{ userInfo.programName[appService.env.lang] | titlecase }}
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div
                                             class="address"
@@ -501,7 +532,8 @@
                                                     context: {
                                                         qtnanswerset: qtnanswerset,
                                                         qtnanswer: qtnanswer,
-                                                        formField: questionnaire.answer[qtnanswerset.ID].formField
+                                                        formField: questionnaire.answer[qtnanswerset.ID].formField,
+                                                        validators: questionnaire.answer[qtnanswerset.ID].validators
                                                     }">
                                             </ng-container>
                                         </li>
@@ -536,6 +568,7 @@
                                                                 qtnanswerset: qtnanswerset,
                                                                 qtnanswer: qtnanswer,
                                                                 formField: questionnaire.answer[qtnanswerset.ID],
+                                                                validators: questionnaire.answer[qtnanswerset.ID].validators,
                                                                 qtnanswerspecify: qtnanswerspecify
                                                             }">
                                                     </ng-container>
@@ -578,7 +611,8 @@
                                                         context: {
                                                             qtnanswerset: qtnanswerset,
                                                             qtnanswer: qtnanswer,
-                                                            formField: questionnaire.answer[qtnanswerset.ID].formField
+                                                            formField: questionnaire.answer[qtnanswerset.ID].formField,
+                                                            validators: questionnaire.answer[qtnanswerset.ID].validators
                                                         }">
                                                 </ng-container>
                                             </div>
@@ -925,6 +959,7 @@
     let-qtnanswerset="qtnanswerset"
     let-qtnanswer="qtnanswer"
     let-formField="formField"
+    let-validators="validators"
     let-qtnanswerspecify="qtnanswerspecify">
     <div
         *ngIf="
@@ -1117,6 +1152,41 @@
                 class="viewanswer"
                 *ngIf="submitStatus === 'Y'">
                 {{ (formField.formField.shortAnswerText[qtnanswer.ID] !== null && formField.formField.shortAnswerText[qtnanswer.ID] !== undefined) ? (formField.formField.shortAnswerText[qtnanswer.ID] | number: '.2') : '&nbsp;' }}
+            </div>
+        </div>
+        <div
+            *ngIf="
+                qtnanswerspecify.inputType === inputType.shortAnswerText &&
+                qtnanswerspecify.type === 'email'
+            ">
+            <input
+                pInputText
+                trimOnBlur
+                empty2Null
+                type="text"
+                [ngClass]="{
+                    'p-disabled': (
+                        !(formField.formField.singleChoice !== null && formField.formField.singleChoice.ID === qtnanswer.ID) &&
+                        !(formField.formField.multipleChoices.length > 0 && appService.doArrayFilter(formField.formField.multipleChoices, { field: 'ID', value: qtnanswer.ID }).length > 0)
+                    )
+                }"
+                [(ngModel)]="formField.formField.shortAnswerText[qtnanswer.ID]"
+                (ngModelChange)="
+                    validators.isEmail[qtnanswer.ID] = appService.doValidatorEmail(formField.formField.shortAnswerText[qtnanswer.ID]);
+                    doWatchModelChange($event, qtnanswerset)
+                "
+                [maxlength]="qtnanswerspecify.length !== null ? qtnanswerspecify.length : ''"
+                *ngIf="submitStatus === 'N'"
+            />
+            <p-message
+                severity="error"
+                text="{{ 'error.email.invalid.label' | translate }}"
+                *ngIf="validators.isEmail[qtnanswer.ID] === false">
+            </p-message>
+            <div
+                class="viewanswer"
+                *ngIf="submitStatus === 'Y'">
+                {{ (formField.formField.shortAnswerText[qtnanswer.ID] !== null && formField.formField.shortAnswerText[qtnanswer.ID] !== undefined) ? formField.formField.shortAnswerText[qtnanswer.ID] : '&nbsp;' }}
             </div>
         </div>
         <div

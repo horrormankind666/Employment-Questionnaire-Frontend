@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๒/๑๐/๒๕๖๔>
-Modify date : <๐๒/๐๕/๒๕๖๕>
+Modify date : <๓๐/๐๖/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -18,8 +18,8 @@ import { Schema, ModelService } from './model.service';
 @Injectable({
     providedIn: 'root'
 })
-export class GetQuestionnaireDoneAndSetResolve implements Resolve<{
-    doneandset: Schema.QuestionnaireDoneAndSet
+export class GetQuestionnaireResultResolve implements Resolve<{
+    result: Schema.Questionnaire
 }> {
     constructor(
         private appService: AppService,
@@ -28,9 +28,9 @@ export class GetQuestionnaireDoneAndSetResolve implements Resolve<{
     }
 
     async resolve(route?: ActivatedRouteSnapshot): Promise<{
-        doneandset: Schema.QuestionnaireDoneAndSet
+        result: Schema.Questionnaire
     }> {
-        let doneandset: Schema.QuestionnaireDoneAndSet = {
+        let result: Schema.Questionnaire = {
             done: this.modelService.questionnaire.done.doSetDefault(),
             answered: this.modelService.questionnaire.answered.doSetListDefault(),
             set: this.modelService.questionnaire.set.doSetDefault(),
@@ -41,10 +41,10 @@ export class GetQuestionnaireDoneAndSetResolve implements Resolve<{
         };
 
         if (this.appService.env.authenInfo.isAuthenticated)
-            doneandset = await this.modelService.questionnaire.doneandset.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
+            result = await this.modelService.questionnaire.result.doGet(localStorage.getItem(this.appService.env.localStorageKey.CUID));
 
         return {
-            doneandset
+            result
         };
     }
 }

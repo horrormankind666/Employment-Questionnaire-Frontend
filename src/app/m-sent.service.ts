@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๐๗/๐๔/๒๕๖๕>
-Modify date : <๒๓/๐๔/๒๕๖๕>
+Modify date : <๓๐/๐๖/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -193,7 +193,8 @@ export class MSentService {
                     let jsonData: any = {
                         perPersonID: this.authService.getUserInfo?.perPersonID,
                         consentChoiceIDs: (this.appService.doIsEmpty(consent.consentChoiceIds) === false ? consent.consentChoiceIds : null),
-                        actionBy: this.authService.getUserInfo?.accountName
+                        actionBy: this.authService.getUserInfo?.accountName,
+                        actionIP: this.appService.ipAddress
                     };
                     let data: HttpParams = new HttpParams()
                         .set('jsonData', btoa(encodeURI(JSON.stringify(jsonData))));

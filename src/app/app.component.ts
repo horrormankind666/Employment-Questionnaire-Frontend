@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๒๑/๐๙/๒๕๖๔>
-Modify date : <๒๓/๐๔/๒๕๖๕>
+Modify date : <๓๐/๐๖/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -10,14 +10,12 @@ Description : <>
 'use strict';
 
 import { Component, ViewChild, ElementRef, Renderer2, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, Event, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 
 import { AppService } from './app.service';
 import { AuthService } from './auth.service';
 import { ModalService } from './modal/modal.service';
 import { Schema } from './model.service';
-import { MSentService } from './m-sent.service';
 
 @Component({
     selector: 'app-root',

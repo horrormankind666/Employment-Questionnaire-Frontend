@@ -236,7 +236,7 @@ export namespace Schema {
         actionDate: string
     }
 
-    export interface QuestionnaireDoneAndSet {
+    export interface Questionnaire {
         done: QuestionnaireDone | null,
         answered: Array<QuestionnaireAnswered>,
         set: QuestionnaireSet | null,
@@ -464,11 +464,7 @@ namespace Instance {
         constructor(private appService: AppService) {
         }
 
-        private routePrefix: string = 'DoneAndSet';
-
-        doSetListDefault(): Array<Schema.QuestionnaireDoneAndSet> {
-            return [];
-        }
+        private routePrefix: string = 'Questionnaire/DoneAndSet';
 
         async doGetList(
             CUID: string | null,
@@ -490,18 +486,29 @@ namespace Instance {
                 return [];
             }
         }
+    }
+
+    export class QuestionnaireResult {
+        constructor(private appService: AppService) {
+        }
+
+        private routePrefix: string = 'Questionnaire/Result';
+
+        doSetListDefault(): Array<Schema.Questionnaire> {
+            return [];
+        }
 
         async doGet(
             CUID: string | null,
             showError?: boolean
-        ): Promise<Schema.QuestionnaireDoneAndSet> {
+        ): Promise<Schema.Questionnaire> {
             let query: string = [
                 '',
                 (CUID !== null ? CUID : '')
             ].join('/');
 
             try {
-                let ds: Array<Schema.QuestionnaireDoneAndSet> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, (showError === undefined ? true : showError));
+                let ds: Array<Schema.Questionnaire> = await this.appService.doGetDataSource(this.routePrefix, 'get', query, (showError === undefined ? true : showError));
 
                 return (ds.length > 0 ? ds[0] : this.doSetListDefault()[0]);
             }
@@ -517,7 +524,7 @@ namespace Instance {
         constructor(private appService: AppService) {
         }
 
-        private routePrefix: string = 'Done';
+        private routePrefix: string = 'Questionnaire/Done';
 
         doSetDefault(): Schema.QuestionnaireDone | null {
             return null;
@@ -602,6 +609,7 @@ export class ModelService {
     subdistrict = new Instance.Subdistrict(this.appService);
     questionnaire = {
         doneandset: new Instance.QuestionnaireDoneAndSet(this.appService),
+        result: new Instance.QuestionnaireResult(this.appService),
         done: new Instance.QuestionnaireDone(this.appService),
         answered: new Instance.QuestionnaireAnswered(),
         set: new Instance.QuestionnaireSet(),
