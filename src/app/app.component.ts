@@ -71,9 +71,10 @@ export class AppComponent implements OnInit {
         this.appService.doSetDefaultLang();
 
         let result: any = await this.appService.doSetBearerToken();
-
+        /*
         if (result === true)
             this.router.navigate(['Home']);
+        */
     }
 
     doWindowOnResize(): void {
