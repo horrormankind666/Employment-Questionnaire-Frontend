@@ -23,16 +23,18 @@
                     <li>
                         <div class="font-icon vertical-middle">
                             <a
+                                class="switchlang-btn"
                                 href="javascript:void(0)"
                                 *ngIf="appService.env.lang === 'en'"
                                 (click)="appService.doSetDefaultLang('th')">
-                                <i class="flag-icon flag-icon-th text-xl" aria-hidden="true"></i>
+                                <i class="switch-lang flag-icon flag-icon-th text-xl" aria-hidden="true"></i>
                             </a>
                             <a
+                                class="switchlang-btn"
                                 href="javascript:void(0)"
                                 *ngIf="appService.env.lang === 'th'"
                                 (click)="appService.doSetDefaultLang('en')">
-                                <i class="flag-icon flag-icon-gb text-xl" aria-hidden="true"></i>
+                                <i class="switch-lang flag-icon flag-icon-gb text-xl" aria-hidden="true"></i>
                             </a>
                         </div>
                     </li>
@@ -137,12 +139,6 @@
             </div>
         </div>
     </header>
-    <main>
-        <div style="font-size: 22px; text-align: center; margin-top: 1rem;">
-            ระบบปิดปรับปรุงชั่วคราว
-        </div>
-    </main>
-    <!--
     <main
         *ngIf="
             (
@@ -154,7 +150,6 @@
         ">
         <router-outlet></router-outlet>
     </main>
-    -->
     <footer>
         <p-divider></p-divider>
         <div

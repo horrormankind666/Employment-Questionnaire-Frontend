@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๗/๐๙/๒๕๖๔>
-Modify date : <๒๓/๐๔/๒๕๖๕>
+Modify date : <๐๕/๐๗/๒๕๖๕>
 Description : <>
 =============================================
 */
@@ -810,6 +810,72 @@ p-card {
             color: #6C757D;
             & strong {
                 color: #000000;
+            }
+        }
+    }
+}
+
+.cc_div {
+    font-family: $fontFamilySarabun;
+    & #cm {
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        bottom: 1rem !important;
+        box-shadow: 0 0px 2px rgba(0,0, 0, 0.5);
+        &.left {
+            left: 1rem;
+        }
+    }
+    & #c-bns {
+        justify-content: right;
+    }
+    & #c-txt {
+        font-size: 0.875rem;
+        line-height: 1.75rem;
+    }
+    & .c-bn {
+        height: 42px;
+        font-family: $fontFamilyNoto;
+        font-size: 0.875rem;
+        font-weight: normal;
+        border-radius: 50px;
+    }
+    & #s-cnt {
+        & #s-hdr {
+            & #s-ttl {
+                font-family: $fontFamilyNoto;
+                font-size: 1.5rem
+            }
+        }
+        & #s-bl {
+            padding-top: 0.5rem !important;
+            & .c-bl {
+                & .desc .p {
+                    font-size: 1rem ;
+                    font-weight: $fontStyleLight !important;
+                    line-height: 1.75;
+                }
+                &.b-ex {
+                    & .title {
+                        &.b-bn {
+                            & .b-tl.exp {
+                                font-family: $fontFamilyNoto;
+                                font-size: 1rem;
+                                line-height: 1.5;
+                            }
+                        }
+                    }
+                    & .desc .p {
+                        font-size: 0.875rem;
+                    }
+                }
+            }
+        }
+        & #s-bns {
+            height: auto;
+            text-align: right;
+            & #s-sv-bn {
+                display: none;
             }
         }
     }

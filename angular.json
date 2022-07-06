@@ -45,7 +45,9 @@
                             "node_modules/@fortawesome/fontawesome-free/scss/regular.scss",
                             "node_modules/@fortawesome/fontawesome-free/scss/brands.scss"
                         ],
-                        "scripts": [],
+                        "scripts": [
+                            "src/cookieconsent-init.js"
+                        ],
                         "serviceWorker": true,
                         "ngswConfigPath": "ngsw-config.json"
                     },
