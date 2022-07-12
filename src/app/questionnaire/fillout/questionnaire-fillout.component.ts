@@ -707,11 +707,12 @@ export class QuestionnaireFilloutComponent implements OnInit {
                     if (qtnanswerset.inputType !== null) {
                         let value: any;
 
-                        if ([this.that.inputType.institute, this.that.inputType.personalDetail, this.that.inputType.address].filter((dr: string) => dr === qtnanswerset.inputType.inputType).length > 0) {
+                        if ([this.that.inputType.institute, this.that.inputType.personalDetail, this.that.inputType.personalEducational, this.that.inputType.address].filter((dr: string) => dr === qtnanswerset.inputType.inputType).length > 0) {
                             let qtnanswerID: string = qtnanswers[0].ID;
 
                             if (qtnanswerset.inputType.inputType === this.that.inputType.institute ||
-                                qtnanswerset.inputType.inputType === this.that.inputType.personalDetail) {
+                                qtnanswerset.inputType.inputType === this.that.inputType.personalDetail ||
+                                qtnanswerset.inputType.inputType === this.that.inputType.personalEducational) {
                                 if (get) {
                                     let errorStatus: string = 'N';
 
